@@ -14,7 +14,7 @@ export const createGraphicsSystem = (app: Application) => {
     for (const eid of enterGraphicsQuery(world)) {
       const graphics = new Graphics();
       graphics.beginFill(GraphicsCircle.color[eid]);
-      graphics.drawCircle(Position.x[eid], Position.y[eid], GraphicsCircle.radius[eid]);
+      graphics.drawCircle(0, 0, GraphicsCircle.radius[eid]);
       app.stage.addChild(graphics);
       graphicsMap[eid] = graphics;
     }

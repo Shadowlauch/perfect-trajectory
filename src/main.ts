@@ -23,7 +23,7 @@ document.body.appendChild(app.view);
 
 const world = createWorld() as World;
 world.time = { delta: 0, elapsed: 0, then: performance.now() };
-const pipeline = pipe(createMovementSystem(), createGraphicsSystem(app), createTimeSystem(), createEnemySystem());
+const pipeline = pipe(createEnemySystem(), createMovementSystem(), createGraphicsSystem(app), createTimeSystem());
 
 const eid = addEntity(world);
 addComponent(world, Position, eid);
@@ -34,6 +34,8 @@ GraphicsCircle.radius[eid] = 10;
 addComponent(world, EnemyData, eid);
 Velocity.x[eid] = 0.05;
 Velocity.y[eid] = 0.05;
+Position.x[eid] = 100;
+Position.y[eid] = 100;
 
 // Add a ticker callback to move the sprite back and forth
 app.ticker.add(() => {
