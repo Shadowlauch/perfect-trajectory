@@ -17,7 +17,6 @@ export const createEnemySystem = () => {
     shootingTimer += delta
     if (shootingTimer > shootingCooldown) {
 
-
       for (const entity of enemyQuery(world)) {
         const x = Position.x[entity]
         const y = Position.y[entity]
@@ -38,7 +37,7 @@ export const createEnemySystem = () => {
 
 
       }
-      shootingTimer = -10000000
+      shootingTimer = 0
     }
     return world;
   }
