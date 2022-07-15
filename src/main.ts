@@ -6,6 +6,7 @@ import {createTimeSystem} from './systems/TimeSystem';
 import {Position} from './components/Position';
 import {Velocity} from './components/Velocity';
 import {createGraphicsSystem} from './systems/GraphicsSystem';
+import {GraphicsCircle} from './components/GraphicsCircle';
 
 export interface World extends IWorld {
   time: {
@@ -15,7 +16,7 @@ export interface World extends IWorld {
   }
 }
 
-const app = new Application({ width: 640, height: 360 });
+const app = new Application({ width: 640, height: 800 });
 document.body.appendChild(app.view);
 
 const world = createWorld() as World;
@@ -25,6 +26,9 @@ const pipeline = pipe(createMovementSystem(), createGraphicsSystem(app), createT
 const eid = addEntity(world);
 addComponent(world, Position, eid);
 addComponent(world, Velocity, eid);
+addComponent(world, GraphicsCircle, eid);
+GraphicsCircle.color[eid] = 0xffffff;
+GraphicsCircle.radius[eid] = 10;
 Velocity.x[eid] = 0.05;
 Velocity.y[eid] = 0.05;
 

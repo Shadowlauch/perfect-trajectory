@@ -1,20 +1,36 @@
-import {defineQuery} from 'bitecs';
-import {Velocity} from '../components/Velocity';
+import {defineQuery, enterQuery, exitQuery} from 'bitecs';
 import {Position} from '../components/Position';
 import {World} from '../main';
-import {Application, Sprite} from 'pixi.js';
+import {Application, Graphics} from 'pixi.js';
+import {GraphicsCircle} from '../components/GraphicsCircle';
 
 export const createGraphicsSystem = (app: Application) => {
-  const sprite = Sprite.from('sample.png');
-  app.stage.addChild(sprite);
-  const movementQuery = defineQuery([Position, Velocity]);
+  const graphicsQuery = defineQuery([Position, GraphicsCircle]);
+  const enterGraphicsQuery = enterQuery(graphicsQuery);
+  const exitGraphicsQuery = exitQuery(graphicsQuery);
+  const graphicsMap: Record<number, Graphics> = {};
 
   return (world: World) => {
-    const {time: {delta}} = world;
-    for (const entity of movementQuery(world)) {
-      sprite.x = Position.x[entity] + delta * Velocity.x[entity];
-      sprite.y = Position.y[entity] + delta * Velocity.y[entity];
+    for (const eid of enterGraphicsQuery(world)) {
+      const graphics = new Graphics();
+      graphics.beginFill(GraphicsCircle.color[eid]);
+      graphics.drawCircle(Position.x[eid], Position.y[eid], GraphicsCircle.radius[eid]);
+      app.stage.addChild(graphics);
+      graphicsMap[eid] = graphics;
     }
+
+    for (const eid of graphicsQuery(world)) {
+      const graphics = graphicsMap[eid];
+      graphics.x = Position.x[eid];
+      graphics.y = Position.y[eid];
+    }
+
+    for (const eid of exitGraphicsQuery(world)) {
+      const graphics = graphicsMap[eid];
+      graphics.destroy();
+      delete graphicsMap[eid];
+    }
+
     return world;
   }
 }
