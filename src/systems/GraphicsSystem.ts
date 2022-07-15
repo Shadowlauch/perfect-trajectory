@@ -1,10 +1,13 @@
 import {defineQuery, enterQuery, exitQuery} from 'bitecs';
 import {Position} from '../components/Position';
 import {World} from '../main';
-import {Application, Graphics} from 'pixi.js';
+import {Application, Container, Graphics} from 'pixi.js';
 import {GraphicsCircle} from '../components/GraphicsCircle';
 
 export const createGraphicsSystem = (app: Application) => {
+  const container = new Container();
+  app.stage.addChild(container);
+  //container.filters = [new AdvancedBloomFilter()];
   const graphicsQuery = defineQuery([Position, GraphicsCircle]);
   const enterGraphicsQuery = enterQuery(graphicsQuery);
   const exitGraphicsQuery = exitQuery(graphicsQuery);
@@ -15,7 +18,7 @@ export const createGraphicsSystem = (app: Application) => {
       const graphics = new Graphics();
       graphics.beginFill(GraphicsCircle.color[eid]);
       graphics.drawCircle(0, 0, GraphicsCircle.radius[eid]);
-      app.stage.addChild(graphics);
+      container.addChild(graphics);
       graphicsMap[eid] = graphics;
     }
 

@@ -9,6 +9,7 @@ import {createPlayerEntity} from './entities/Player';
 import {StInput} from './utils/StInput';
 import {createPlayerMovementSystem} from './systems/PlayerMovementSystem';
 import {createPlayerBoundarySystem} from './systems/PlayerBoundarySystem';
+import {createShowFpsSystem} from './systems/ShowFpsSystem';
 
 export interface World extends IWorld {
   time: {
@@ -37,6 +38,7 @@ const pipeline = pipe(
   createMovementSystem(),
   createPlayerBoundarySystem(),
   createGraphicsSystem(app),
+  createShowFpsSystem(app),
   createTimeSystem()
 );
 createPlayerEntity(world);
