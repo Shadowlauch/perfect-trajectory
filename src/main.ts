@@ -5,8 +5,10 @@ import {createMovementSystem} from './systems/MovementSystem';
 import {createTimeSystem} from './systems/TimeSystem';
 import {Position} from './components/Position';
 import {Velocity} from './components/Velocity';
+import {EnemyData} from './components/EnemyData';
 import {createGraphicsSystem} from './systems/GraphicsSystem';
 import {GraphicsCircle} from './components/GraphicsCircle';
+import {createEnemySystem} from './systems/EnemySystem';
 
 export interface World extends IWorld {
   time: {
@@ -21,7 +23,7 @@ document.body.appendChild(app.view);
 
 const world = createWorld() as World;
 world.time = { delta: 0, elapsed: 0, then: performance.now() };
-const pipeline = pipe(createMovementSystem(), createGraphicsSystem(app), createTimeSystem());
+const pipeline = pipe(createMovementSystem(), createGraphicsSystem(app), createTimeSystem(), createEnemySystem());
 
 const eid = addEntity(world);
 addComponent(world, Position, eid);
@@ -29,6 +31,7 @@ addComponent(world, Velocity, eid);
 addComponent(world, GraphicsCircle, eid);
 GraphicsCircle.color[eid] = 0xffffff;
 GraphicsCircle.radius[eid] = 10;
+addComponent(world, EnemyData, eid);
 Velocity.x[eid] = 0.05;
 Velocity.y[eid] = 0.05;
 
