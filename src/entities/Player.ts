@@ -15,7 +15,8 @@ export const createPlayerEntity = (world: World) => {
   addComponent(world, CollisionComponent, eid);
   GraphicsCircle.color[eid] = 0xffffff;
   GraphicsCircle.radius[eid] = 10;
-  CollisionComponent.group[eid] = 0b000001;
+  CollisionComponent.filter[eid] = 0b000001;
+  CollisionComponent.radius[eid] = 10;
   Position.x[eid] = 100;
   Position.y[eid] = 100;
 }

@@ -2,7 +2,7 @@ import {Loader} from 'pixi.js';
 import {SpriteConfig} from './SpriteConfig';
 
 export const SPRITES: SpriteConfig[] = [
-  new SpriteConfig('bullet01','/sprites/bullets/01.png', 40, 60)
+  new SpriteConfig('bullet01','/sprites/bullets/01.png', 67, 60)
 ];
 
 export const loadSpirtes = async () => {

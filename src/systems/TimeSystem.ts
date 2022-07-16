@@ -1,13 +1,13 @@
 import {World} from '../main';
+import {Ticker} from 'pixi.js';
 
-export const createTimeSystem = () => {
+export const createTimeSystem = (ticker: Ticker) => {
   return (world: World) => {
     const { time } = world
     const now = performance.now()
-    const delta = now - time.then
-    time.delta = delta
-    time.elapsed += delta
-    time.then = now
+    time.delta = ticker.deltaMS;
+    time.elapsed += ticker.elapsedMS;
+    time.then = now;
     return world
   }
 }

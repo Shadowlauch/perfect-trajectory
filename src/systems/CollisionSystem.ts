@@ -1,35 +1,49 @@
-import {defineQuery} from 'bitecs';
+import {defineQuery, enterQuery, exitQuery} from 'bitecs';
 import {Position} from '../components/Position';
 import {World} from '../main';
 import {CollisionComponent} from '../components/Collision';
-import Flatten from '@flatten-js/core';
-import circle = Flatten.circle;
-import point = Flatten.point;
-import {GraphicsCircle} from '../components/GraphicsCircle';
-import Circle = Flatten.Circle;
+import {Circle, System, Body} from 'detect-collisions';
+import {Player} from '../components/Player';
 
 export const createCollisionSystem = () => {
   const collisionQuery = defineQuery([Position, CollisionComponent]);
+  const enterCollisionQuery = enterQuery(collisionQuery);
+  const exitCollisionQuery = exitQuery(collisionQuery);
+  const playerQuery = defineQuery([Player]);
+  const circleMap: Map<number, Body> = new Map();
+  const eidMap: Map<Body, number> = new Map();
+  const system = new System();
 
   return (world: World) => {
-    //const {time: {delta}, size: {height}} = world;
-    const circles: Circle[] = [];
-    const collisionObjects = collisionQuery(world);
-    for (let a = 0; a < collisionObjects.length; a++){
-      const objA = collisionObjects[a];
-      const filter = CollisionComponent.filter[objA];
-      for (let b = a + 1; b < collisionObjects.length; b++){
-        const objB = collisionObjects[b];
-        const group = CollisionComponent.group[objB];
+    for (const eid of enterCollisionQuery(world)) {
+      const circle = new Circle({x: Position.x[eid], y: Position.y[eid]}, CollisionComponent.radius[eid]);
+      system.insert(circle);
+      circleMap.set(eid, circle);
+      eidMap.set(circle, eid);
+    }
 
-        if ((filter & group) > 0) {
-          circles[objA] = circles[objA] ?? circle(point(Position.x[objA], Position.y[objA]), GraphicsCircle.radius[objA] || 10);
-          circles[objB] = circles[objB] ?? circle(point(Position.x[objB], Position.y[objB]), GraphicsCircle.radius[objB] || 10);
-          const intersection = circles[objA].intersect(circles[objB]);
+    for (const eid of collisionQuery(world)) {
+      circleMap.get(eid)?.setPosition(Position.x[eid], Position.y[eid]);
+    }
 
-          if (intersection.length > 0) console.log('intersection')
-        }
+    for (const eid of exitCollisionQuery(world)) {
+      const circle = circleMap.get(eid)!;
+      system.remove(circle);
+      circleMap.delete(eid);
+      eidMap.delete(circle);
+    }
 
+    system.update();
+
+    const playerEid = playerQuery(world)[0];
+    const playerCircle = circleMap.get(playerEid)!;
+    const filter = CollisionComponent.filter[playerEid];
+    const potentials = system.getPotentials(playerCircle);
+    for (const potential of potentials) {
+      const potEid = eidMap.get(potential)!;
+      const group = CollisionComponent.group[potEid];
+      if ((filter & group) > 0 && system.checkCollision(playerCircle, potential)) {
+        console.log(system.response)
       }
     }
     return world;

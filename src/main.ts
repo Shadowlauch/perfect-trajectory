@@ -1,6 +1,6 @@
 import {Application, Container} from 'pixi.js';
 import './style.css';
-import {addComponent, addEntity, createWorld, IWorld, pipe} from 'bitecs';
+import {createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
 import {createTimeSystem} from './systems/TimeSystem';
 import {createGraphicsCircleSystem} from './systems/GraphicsCircleSystem';
@@ -11,11 +11,10 @@ import {createPlayerBoundarySystem} from './systems/PlayerBoundarySystem';
 import {createShowFpsSystem} from './systems/ShowFpsSystem';
 import {loadSpirtes} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
-import {Position} from './components/Position';
-import {GraphicsCircle} from './components/GraphicsCircle';
-import {CollisionComponent} from './components/Collision';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
+import {createCollisionSystem} from './systems/CollisionSystem';
+import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 
 export interface World extends IWorld {
   time: {
@@ -52,28 +51,27 @@ world.size = size;
 const pipeline = pipe(
   createPlayerMovementSystem(),
   createBulletSpawnSystem(),
+  //createBulletSpawnTestSystem(),
   createMovementSystem(),
   createPlayerBoundarySystem(),
-  //createCollisionSystem(),
+  createCollisionSystem(),
   createGraphicsCircleSystem(app),
   createSpriteSystem(container, loader),
+  createCollisionDebugSystem(container),
   createShowFpsSystem(app),
-  createTimeSystem(),
+  createTimeSystem(app.ticker),
   createKeyboardSystem(world),
 );
 
-const eid = addEntity(world);
-addComponent(world, Position, eid);
-addComponent(world, GraphicsCircle, eid);
-addComponent(world, CollisionComponent, eid);
-GraphicsCircle.color[eid] = 0xffff00;
-GraphicsCircle.radius[eid] = 30;
-CollisionComponent.filter[eid] = 0b000001;
-Position.x[eid] = 300;
-Position.y[eid] = 300;
-
 createPlayerEntity(world);
 createEnemyEntity(world);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === "p") {
+    if (app.ticker.started) app.ticker.stop();
+    else app.ticker.start();
+  }
+})
 
 // Add a ticker callback to move the sprite back and forth
 app.ticker.add(() => {

@@ -4,12 +4,10 @@ export const createKeyboardSystem = (world: World) => {
   const pressedKeys: Set<typeof KeyboardEvent.prototype["key"]> = new Set();
   document.addEventListener("keydown", (e) => {
     pressedKeys.add(e.key);
-    e.preventDefault();
   });
 
   document.addEventListener("keyup", (e) => {
     pressedKeys.delete(e.key);
-    e.preventDefault();
   });
 
   document.addEventListener("contextmenu", () => {
