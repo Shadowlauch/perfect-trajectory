@@ -16,6 +16,7 @@ import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
 import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
+import {createMediaRecorder} from './utils/recordVideo';
 
 export interface World extends IWorld {
   time: {
@@ -37,6 +38,8 @@ const app = new Application({
   powerPreference: 'high-performance'
 });
 document.body.appendChild(app.view);
+const mediaRecorder = createMediaRecorder(app);
+
 const container = new Container();
 container.interactive = false;
 container.interactiveChildren = false;
@@ -72,6 +75,9 @@ document.addEventListener('keydown', (e) => {
   if (e.key === "p") {
     if (app.ticker.started) app.ticker.stop();
     else app.ticker.start();
+  } else if (e.key === "r") {
+    if (mediaRecorder.state === "recording") mediaRecorder.stop();
+    else mediaRecorder.start();
   }
 })
 
@@ -79,4 +85,7 @@ document.addEventListener('keydown', (e) => {
 app.ticker.add(() => {
   pipeline(world);
 });
+
+
+
 
