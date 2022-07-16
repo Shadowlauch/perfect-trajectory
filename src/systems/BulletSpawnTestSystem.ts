@@ -3,6 +3,7 @@ import {Velocity} from '../components/Velocity';
 import {Position} from '../components/Position';
 import {World} from '../main';
 import {SpriteComponent} from '../components/Sprite';
+import {CollisionComponent} from '../components/Collision';
 
 export const createBulletSpawnTestSystem = () => {
   const shootingCooldown = 200
@@ -21,7 +22,9 @@ export const createBulletSpawnTestSystem = () => {
         addComponent(world, Position, bullet)
         addComponent(world, Velocity, bullet)
         addComponent(world, SpriteComponent, bullet);
+        addComponent(world, CollisionComponent, bullet);
         SpriteComponent.spriteIndex[bullet] = 0;
+        CollisionComponent.group[bullet] = 0b000001;
 
         Position.x[bullet] = -20
         Position.y[bullet] = y

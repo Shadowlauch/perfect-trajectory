@@ -44,7 +44,7 @@ export const createBulletSpawnSystem = () => {
   let velocityAngle = 0;
 
   return (world: World) => {
-    const {time: {delta}, size: {height}} = world;
+    const {time: {delta}} = world;
     shootingTimer += delta;
 
     for (const enemy of enemyQuery(world)) {
