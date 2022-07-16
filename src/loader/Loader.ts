@@ -1,15 +1,10 @@
 import {Loader} from 'pixi.js';
+import {SpriteConfig} from './SpriteConfig';
 
-export interface SpriteConfig {
-  key: string,
-  url: string
-}
 
-export const SPRITES = [
-  {
-    key: 'bullet01',
-    url: '/sprites/bullets/01.png'
-  }
+
+export const SPRITES: SpriteConfig[] = [
+  new SpriteConfig('bullet01','/sprites/bullets/01.png', 40, 60)
 ];
 
 

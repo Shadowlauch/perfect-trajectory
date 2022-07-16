@@ -15,14 +15,16 @@ export const createSpriteSystem = (container: Container, loader: Loader) => {
     for (const eid of enterSpriteQuery(world)) {
       const spriteConfig = SPRITES[SpriteComponent.spriteIndex[eid]];
       const sprite = new Sprite(loader.resources[spriteConfig.key].texture);
+      sprite.scale = {x: 0.5, y: 0.5};
       container.addChild(sprite);
       spriteMap[eid] = sprite;
     }
 
     for (const eid of spriteQuery(world)) {
+      const spriteConfig = SPRITES[SpriteComponent.spriteIndex[eid]];
       const graphics = spriteMap[eid];
-      graphics.x = Position.x[eid];
-      graphics.y = Position.y[eid];
+      graphics.x = Position.x[eid] - spriteConfig.offsetX * 0.5;
+      graphics.y = Position.y[eid] - spriteConfig.offsetY * 0.5;
     }
 
     for (const eid of exitSpriteQuery(world)) {

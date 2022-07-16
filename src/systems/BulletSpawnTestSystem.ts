@@ -1,0 +1,37 @@
+import {addEntity, addComponent} from 'bitecs';
+import {Velocity} from '../components/Velocity';
+import {Position} from '../components/Position';
+import {World} from '../main';
+import {SpriteComponent} from '../components/Sprite';
+
+export const createBulletSpawnTestSystem = () => {
+  const shootingCooldown = 200
+  let shootingTimer = 0
+
+  return (world: World) => {
+    const {time: {delta}, size: {height}} = world;
+    shootingTimer += delta
+    if (shootingTimer > shootingCooldown) {
+
+      for (let y = 5; y < height; y += 20) {
+      
+            // create the player tank
+        const bullet = addEntity(world)
+
+        addComponent(world, Position, bullet)
+        addComponent(world, Velocity, bullet)
+        addComponent(world, SpriteComponent, bullet);
+        SpriteComponent.spriteIndex[bullet] = 0;
+
+        Position.x[bullet] = -20
+        Position.y[bullet] = y
+        Velocity.x[bullet] = 0.1
+        Velocity.y[bullet] = 0
+
+
+      }
+      shootingTimer = 0
+    }
+    return world;
+  }
+}

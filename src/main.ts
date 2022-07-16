@@ -24,11 +24,15 @@ export interface World extends IWorld {
   size: {
     width: number;
     height: number;
-  }
+  };
 }
 
 const size = {width: 640, height: 800};
-const app = new Application(size);
+const app = new Application({
+  ...size,
+  antialias: false,
+  powerPreference: 'high-performance'
+});
 document.body.appendChild(app.view);
 const container = new Container();
 container.filters = [new AdvancedBloomFilter()];
@@ -43,6 +47,7 @@ world.size = size;
 const pipeline = pipe(
   createPlayerMovementSystem(),
   createEnemySystem(),
+  //createBulletSpawnTestSystem(),
   createMovementSystem(),
   createPlayerBoundarySystem(),
   createGraphicsCircleSystem(app),
