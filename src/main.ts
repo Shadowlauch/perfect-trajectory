@@ -4,8 +4,9 @@ import {createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
 import {createTimeSystem} from './systems/TimeSystem';
 import {createGraphicsCircleSystem} from './systems/GraphicsCircleSystem';
-import {createEnemySystem} from './systems/EnemySystem';
+import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createPlayerEntity} from './entities/Player';
+import {createEnemyEntity} from './entities/Enemy';
 import {StInput} from './utils/StInput';
 import {createPlayerMovementSystem} from './systems/PlayerMovementSystem';
 import {createPlayerBoundarySystem} from './systems/PlayerBoundarySystem';
@@ -46,8 +47,7 @@ world.input = new StInput(window);
 world.size = size;
 const pipeline = pipe(
   createPlayerMovementSystem(),
-  createEnemySystem(),
-  //createBulletSpawnTestSystem(),
+  createBulletSpawnSystem(),
   createMovementSystem(),
   createPlayerBoundarySystem(),
   createGraphicsCircleSystem(app),
@@ -56,6 +56,7 @@ const pipeline = pipe(
   createTimeSystem()
 );
 createPlayerEntity(world);
+createEnemyEntity(world);
 
 // Add a ticker callback to move the sprite back and forth
 app.ticker.add(() => {
