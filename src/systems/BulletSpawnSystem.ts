@@ -6,6 +6,7 @@ import {SpriteComponent} from '../components/Sprite';
 import { Player } from '../components/Player';
 import { EnemyData } from '../components/EnemyData';
 import {CollisionComponent} from '../components/Collision';
+import {BulletComponent} from '../components/Bullet';
 
 const spawnBullet = (world: World, x: number, y: number, angle: number) => {
   const speed = 0.1;
@@ -19,6 +20,7 @@ const spawnBullet = (world: World, x: number, y: number, angle: number) => {
   addComponent(world, Velocity, bullet);
   addComponent(world, SpriteComponent, bullet);
   addComponent(world, CollisionComponent, bullet);
+  addComponent(world, BulletComponent, bullet);
   SpriteComponent.spriteIndex[bullet] = 0;
 
   Position.x[bullet] = x;

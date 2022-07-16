@@ -1,4 +1,4 @@
-import {defineQuery, enterQuery, exitQuery} from 'bitecs';
+import {defineQuery, enterQuery, exitQuery, removeEntity} from 'bitecs';
 import {Position} from '../components/Position';
 import {World} from '../main';
 import {CollisionComponent} from '../components/Collision';
@@ -43,7 +43,7 @@ export const createCollisionSystem = () => {
       const potEid = eidMap.get(potential)!;
       const group = CollisionComponent.group[potEid];
       if ((filter & group) > 0 && system.checkCollision(playerCircle, potential)) {
-        console.log(system.response)
+        removeEntity(world, potEid);
       }
     }
     return world;

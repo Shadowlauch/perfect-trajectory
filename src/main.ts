@@ -15,6 +15,7 @@ import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
 import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
+import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 
 export interface World extends IWorld {
   time: {
@@ -54,6 +55,7 @@ const pipeline = pipe(
   //createBulletSpawnTestSystem(),
   createMovementSystem(),
   createPlayerBoundarySystem(),
+  createBulletCleanUpSystem(),
   createCollisionSystem(),
   createGraphicsCircleSystem(app),
   createSpriteSystem(container, loader),
