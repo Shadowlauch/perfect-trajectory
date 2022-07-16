@@ -1,15 +1,18 @@
-import {Application} from 'pixi.js';
+import {Application, Container} from 'pixi.js';
 import './style.css';
 import {createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
 import {createTimeSystem} from './systems/TimeSystem';
-import {createGraphicsSystem} from './systems/GraphicsSystem';
+import {createGraphicsCircleSystem} from './systems/GraphicsCircleSystem';
 import {createEnemySystem} from './systems/EnemySystem';
 import {createPlayerEntity} from './entities/Player';
 import {StInput} from './utils/StInput';
 import {createPlayerMovementSystem} from './systems/PlayerMovementSystem';
 import {createPlayerBoundarySystem} from './systems/PlayerBoundarySystem';
 import {createShowFpsSystem} from './systems/ShowFpsSystem';
+import {loadSpirtes} from './loader/Loader';
+import {createSpriteSystem} from './systems/SpriteSystem';
+import {AdvancedBloomFilter} from 'pixi-filters';
 
 export interface World extends IWorld {
   time: {
@@ -27,6 +30,11 @@ export interface World extends IWorld {
 const size = {width: 640, height: 800};
 const app = new Application(size);
 document.body.appendChild(app.view);
+const container = new Container();
+container.filters = [new AdvancedBloomFilter()];
+app.stage.addChild(container);
+
+const loader = await loadSpirtes();
 
 const world = createWorld() as World;
 world.time = {delta: 0, elapsed: 0, then: performance.now()};
@@ -37,7 +45,8 @@ const pipeline = pipe(
   createEnemySystem(),
   createMovementSystem(),
   createPlayerBoundarySystem(),
-  createGraphicsSystem(app),
+  createGraphicsCircleSystem(app),
+  createSpriteSystem(container, loader),
   createShowFpsSystem(app),
   createTimeSystem()
 );

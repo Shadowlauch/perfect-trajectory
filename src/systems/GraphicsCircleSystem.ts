@@ -4,7 +4,7 @@ import {World} from '../main';
 import {Application, Container, Graphics} from 'pixi.js';
 import {GraphicsCircle} from '../components/GraphicsCircle';
 
-export const createGraphicsSystem = (app: Application) => {
+export const createGraphicsCircleSystem = (app: Application) => {
   const container = new Container();
   app.stage.addChild(container);
   //container.filters = [new AdvancedBloomFilter()];

@@ -2,8 +2,8 @@ import {defineQuery, addEntity, addComponent} from 'bitecs';
 import {Velocity} from '../components/Velocity';
 import {Position} from '../components/Position';
 import {EnemyData} from '../components/EnemyData';
-import {GraphicsCircle} from '../components/GraphicsCircle';
 import {World} from '../main';
+import {SpriteComponent} from '../components/Sprite';
 
 export const createEnemySystem = () => {
 
@@ -26,13 +26,12 @@ export const createEnemySystem = () => {
 
         addComponent(world, Position, bullet)
         addComponent(world, Velocity, bullet)
-        addComponent(world, GraphicsCircle, bullet);
-        GraphicsCircle.color[bullet] = 0xff0000;
-        GraphicsCircle.radius[bullet] = 10;
+        addComponent(world, SpriteComponent, bullet);
+        SpriteComponent.spriteIndex[bullet] = 0;
 
         Position.x[bullet] = x
         Position.y[bullet] = y
-        Velocity.x[bullet] = 0.05
+        Velocity.x[bullet] = 0.5
         Velocity.y[bullet] = 0
 
 
