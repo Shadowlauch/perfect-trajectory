@@ -17,6 +17,6 @@ export const createPlayerEntity = (world: World) => {
   GraphicsCircle.radius[eid] = 10;
   CollisionComponent.filter[eid] = 0b000001;
   CollisionComponent.radius[eid] = 7;
-  Position.x[eid] = 100;
-  Position.y[eid] = 100;
+  Position.x[eid] = world.size.width / 2;
+  Position.y[eid] = world.size.height - 50;
 }

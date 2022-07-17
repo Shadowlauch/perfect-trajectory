@@ -18,6 +18,7 @@ export const spawnBullet = (world: World, x: number, y: number, angle: number, s
   addComponent(world, CollisionComponent, bullet);
   addComponent(world, BulletComponent, bullet);
   SpriteComponent.spriteIndex[bullet] = 0;
+  SpriteComponent.scale[bullet] = 0.5;
 
   Position.x[bullet] = x;
   Position.y[bullet] = y;
