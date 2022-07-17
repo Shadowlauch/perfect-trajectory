@@ -12,11 +12,10 @@ import {createShowFpsSystem} from './systems/ShowFpsSystem';
 import {loadSpirtes} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
-import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
-import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
+import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 
 export interface World extends IWorld {
   time: {
@@ -62,7 +61,7 @@ const pipeline = pipe(
   createCollisionSystem(),
   createGraphicsCircleSystem(app),
   createSpriteSystem(container, loader),
-  createCollisionDebugSystem(container),
+  //createCollisionDebugSystem(container),
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),
   createKeyboardSystem(world),

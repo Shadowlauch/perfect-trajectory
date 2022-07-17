@@ -10,7 +10,7 @@ export const createPlayerMovementSystem = () => {
     const { input, time: {delta} } = world
     const pid = playerQuery(world)[0];
 
-    const moveSpeed = 0.03 * delta;
+    const moveSpeed = 0.02 * delta;
     const dX = input.down('a') ? -1 : (input.down('d') ? 1 : 0);
     const dY = input.down('w') ? -1 : (input.down('s') ? 1 : 0);
     const angle = Math.atan2(dY, dX);
