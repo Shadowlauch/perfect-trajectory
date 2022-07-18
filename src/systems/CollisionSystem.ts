@@ -1,15 +1,16 @@
-import {defineQuery, enterQuery, exitQuery, removeEntity} from 'bitecs';
+import {defineQuery, enterQuery, exitQuery, hasComponent, removeEntity} from 'bitecs';
 import {Position} from '../components/Position';
 import {World} from '../main';
 import {CollisionComponent} from '../components/Collision';
 import {Circle, System, Body} from 'detect-collisions';
 import {Player} from '../components/Player';
+import {Enemy} from '../components/Enemy';
+import {BulletComponent} from '../components/Bullet';
 
 export const createCollisionSystem = () => {
   const collisionQuery = defineQuery([Position, CollisionComponent]);
   const enterCollisionQuery = enterQuery(collisionQuery);
   const exitCollisionQuery = exitQuery(collisionQuery);
-  const playerQuery = defineQuery([Player]);
   const circleMap: Map<number, Body> = new Map();
   const eidMap: Map<Body, number> = new Map();
   const system = new System();
@@ -35,17 +36,27 @@ export const createCollisionSystem = () => {
 
     system.update();
 
-    const playerEid = playerQuery(world)[0];
-    const playerCircle = circleMap.get(playerEid)!;
-    const filter = CollisionComponent.filter[playerEid];
-    const potentials = system.getPotentials(playerCircle);
-    for (const potential of potentials) {
-      const potEid = eidMap.get(potential)!;
-      const group = CollisionComponent.group[potEid];
-      if ((filter & group) > 0 && system.checkCollision(playerCircle, potential)) {
-        removeEntity(world, potEid);
+
+    for (const target of collisionQuery(world)) {
+      if (CollisionComponent.filter[target] === 0) continue;
+
+      const targetCircle = circleMap.get(target)!;
+      const filter = CollisionComponent.filter[target];
+      const potentials = system.getPotentials(targetCircle);
+      for (const potential of potentials) {
+        const potEid = eidMap.get(potential)!;
+        const group = CollisionComponent.group[potEid];
+        if ((filter & group) > 0 && system.checkCollision(targetCircle, potential)) {
+          //TODO: Implement event system
+          if (hasComponent(world, Player, target)) removeEntity(world, potEid);
+          if (hasComponent(world, Enemy, target) && hasComponent(world, BulletComponent, potEid)){
+            removeEntity(world, potEid);
+            Enemy.hp[target] -= BulletComponent.damage[potEid];
+          }
+        }
       }
     }
+
     return world;
   }
 }

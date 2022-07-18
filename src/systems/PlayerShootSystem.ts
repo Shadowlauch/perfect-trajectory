@@ -30,8 +30,11 @@ export const createPlayerShootSystem = () => {
       Position.y[bullet] = Position.y[pid] - 40;
       Velocity.x[bullet] = 0;
       Velocity.y[bullet] = -0.7;
-      //CollisionComponent.group[bullet] = 0b000001;
-      //CollisionComponent.radius[bullet] = 6;
+      CollisionComponent.group[bullet] = 0b000010;
+      //TODO: Collision shape does not fit at all
+      CollisionComponent.radius[bullet] = 2;
+      BulletComponent.damage[bullet] = 1;
+      BulletComponent.spawnedBy[bullet] = pid;
     }
 
 

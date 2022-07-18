@@ -6,6 +6,7 @@ import { Player } from '../components/Player';
 import { Enemy } from '../components/Enemy';
 import {spawnBullet} from '../configs/bullets/spawnBullet';
 import {ENEMIES} from '../configs/enemies/EnemyConfig';
+import {BulletComponent} from '../components/Bullet';
 
 export const createBulletSpawnSystem = () => {
   const playerQuery = defineQuery([Position, Velocity, Player]);
@@ -35,7 +36,9 @@ export const createBulletSpawnSystem = () => {
       if (currentBurstCount < config.burstCount && (intraLoopTime - (currentBurstCount * config.burstDelay) - delta) <= 0){
         const bulletSpawns = config.onBurst(world, enemy, player, currentBurstCount);
         for (const bulletSpawn of bulletSpawns) {
-          spawnBullet(world, bulletSpawn.x, bulletSpawn.y, bulletSpawn.angle, bulletSpawn.speed);
+          const bullet = spawnBullet(world, bulletSpawn.x, bulletSpawn.y, bulletSpawn.angle, bulletSpawn.speed);
+          BulletComponent.spawnedBy[bullet] = enemy;
+          BulletComponent.damage[bullet] = 1;
         }
       }
 

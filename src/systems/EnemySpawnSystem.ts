@@ -1,4 +1,4 @@
-import {addComponent, addEntity, defineQuery, exitQuery, removeEntity} from 'bitecs';
+import {addComponent, addEntity, defineQuery} from 'bitecs';
 import {Velocity} from '../components/Velocity';
 import {Position} from '../components/Position';
 import {Enemy} from '../components/Enemy';
@@ -7,11 +7,10 @@ import {StageComponent} from '../components/Stage';
 import {STAGES} from '../configs/stages/StageConfig';
 import {GraphicsCircle} from '../components/GraphicsCircle';
 import {ENEMIES} from '../configs/enemies/EnemyConfig';
+import {CollisionComponent} from '../components/Collision';
 
 export const createEnemySpawnSystem = () => {
-  const enemyQuery = defineQuery([Position, Velocity, Enemy]);
   const stageQuery = defineQuery([StageComponent]);
-  const exitStageQuery = exitQuery(stageQuery);
 
   return (world: World) => {
     const {time: {elapsed, delta}} = world;
@@ -28,21 +27,19 @@ export const createEnemySpawnSystem = () => {
         addComponent(world, Position, eid);
         addComponent(world, Velocity, eid);
         addComponent(world, Enemy, eid);
+        addComponent(world, CollisionComponent, eid);
+        CollisionComponent.filter[eid] = 0b000010;
         Position.x[eid] = enemySpawn.x;
         Position.y[eid] = enemySpawn.y;
         Enemy.spawnTime[eid] = elapsed;
         Enemy.configIndex[eid] = enemySpawn.enemyConfigIndex;
+        Enemy.hp[eid] = enemyConfig.hp;
 
         addComponent(world, GraphicsCircle, eid);
         GraphicsCircle.color[eid] = enemyConfig.display.color;
         GraphicsCircle.radius[eid] = enemyConfig.display.radius;
+        CollisionComponent.radius[eid] = enemyConfig.display.radius;
 
-      }
-    }
-
-    if (exitStageQuery(world).length > 0) {
-      for (const eid of enemyQuery(world)) {
-        removeEntity(world, eid);
       }
     }
 

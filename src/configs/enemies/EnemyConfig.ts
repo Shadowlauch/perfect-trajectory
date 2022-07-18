@@ -10,10 +10,12 @@ export interface CircleDisplay {
 export interface EnemyConfig {
   display: CircleDisplay;
   bulletSpawnConfig: BulletSpawnConfig;
+  hp: number;
 }
 
 export const ENEMIES: EnemyConfig[] = [
   {
+    hp: 100,
     display: {
       color: 0x00ff00,
       radius: 50
