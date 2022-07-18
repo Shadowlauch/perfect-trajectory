@@ -12,7 +12,7 @@ export const Stage0: StageConfig = {
       x: 500,
       y: 40,
       time: 5000,
-      enemyConfigIndex: 0
+      enemyConfigIndex: 1
     }
   ]
 }

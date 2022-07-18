@@ -19,6 +19,8 @@ import {createPlayerShootSystem} from './systems/PlayerShootSystem';
 import {StageComponent} from './components/Stage';
 import {createEnemySpawnSystem} from './systems/EnemySpawnSystem';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
+import {createEnemyMovementSystem} from './systems/EnemyMovementSystem';
+
 
 export interface World extends IWorld {
   time: {
@@ -61,6 +63,7 @@ const pipeline = pipe(
   createBulletSpawnSystem(),
   //createBulletSpawnTestSystem(),
   createMovementSystem(),
+  createEnemyMovementSystem(),
   createPlayerBoundarySystem(),
   createPlayerShootSystem(),
   createBulletCleanUpSystem(),

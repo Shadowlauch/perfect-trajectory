@@ -31,6 +31,9 @@ export const createEnemySpawnSystem = () => {
         CollisionComponent.filter[eid] = 0b000010;
         Position.x[eid] = enemySpawn.x;
         Position.y[eid] = enemySpawn.y;
+        Enemy.spawnX[eid] = enemySpawn.x;
+        Enemy.spawnY[eid] = enemySpawn.y;
+
         Enemy.spawnTime[eid] = elapsed;
         Enemy.configIndex[eid] = enemySpawn.enemyConfigIndex;
         Enemy.hp[eid] = enemyConfig.hp;
