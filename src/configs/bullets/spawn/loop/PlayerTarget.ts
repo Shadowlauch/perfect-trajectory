@@ -1,8 +1,8 @@
-import {Position} from '../../../components/Position';
-import {EnemyData} from '../../../components/EnemyData';
-import {InitFunction} from './InitFunction';
+import {Position} from '../../../../components/Position';
+import {Enemy} from '../../../../components/Enemy';
+import {LoopFunction} from './LoopFunction';
 
-export const createPlayerTargetInit = (): InitFunction => {
+export const createPlayerTargetLoop = (): LoopFunction => {
   return (_world, enemy, player) => {
     // get player position if now is the start of a burst
     const targetX = Position.x[player];
@@ -11,6 +11,6 @@ export const createPlayerTargetInit = (): InitFunction => {
     const distanceX = targetX - Position.x[enemy];
     const distanceY = targetY - Position.y[enemy];
 
-    EnemyData.bulletAngle[enemy] = Math.atan2(distanceY, distanceX);
+    Enemy.bulletAngle[enemy] = Math.atan2(distanceY, distanceX);
   }
 }

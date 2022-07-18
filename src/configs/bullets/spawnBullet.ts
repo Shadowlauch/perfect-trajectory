@@ -1,10 +1,10 @@
-import {World} from '../main';
+import {World} from '../../main';
 import {addComponent, addEntity} from 'bitecs';
-import {Position} from '../components/Position';
-import {Velocity} from '../components/Velocity';
-import {SpriteComponent} from '../components/Sprite';
-import {CollisionComponent} from '../components/Collision';
-import {BulletComponent} from '../components/Bullet';
+import {Position} from '../../components/Position';
+import {Velocity} from '../../components/Velocity';
+import {SpriteComponent} from '../../components/Sprite';
+import {CollisionComponent} from '../../components/Collision';
+import {BulletComponent} from '../../components/Bullet';
 
 export const spawnBullet = (world: World, x: number, y: number, angle: number, speed: number) => {
   const vx = speed * Math.cos(angle);

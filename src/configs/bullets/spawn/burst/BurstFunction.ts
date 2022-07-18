@@ -1,4 +1,4 @@
-import {World} from '../../../main';
+import {World} from '../../../../main';
 
 export interface BulletSpawn {
   x: number;

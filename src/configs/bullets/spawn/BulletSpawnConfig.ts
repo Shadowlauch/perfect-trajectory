@@ -1,16 +1,16 @@
-import {Position} from '../../components/Position';
+import {Position} from '../../../components/Position';
 import {createArcBurst} from './burst/Arc';
 import {BurstFunction} from './burst/BurstFunction';
-import {createPlayerTargetInit} from './init/PlayerTarget';
-import {createTurnInit} from './init/Turn';
-import {InitFunction} from './init/InitFunction';
+import {createPlayerTargetLoop} from './loop/PlayerTarget';
+import {LoopFunction} from './loop/LoopFunction';
 
 export interface BulletSpawnConfig {
-  startDelay: number;
+  startDelay?: number;
   loop: number | boolean;
+  loopDelay?: number;
   burstCount: number;
   burstDelay: number;
-  onInit?: InitFunction;
+  onLoop?: LoopFunction;
   onBurst: BurstFunction;
 }
 
@@ -19,7 +19,7 @@ export const testConfig: BulletSpawnConfig = {
   loop: true,
   burstCount: 6,
   burstDelay: 200,
-  onInit: createPlayerTargetInit(),
+  onLoop: createPlayerTargetLoop(),
   onBurst: createArcBurst(9, 20)
 };
 
@@ -35,14 +35,6 @@ export const spiralConfig: BulletSpawnConfig = {
   },
 };
 
-export const test2Config: BulletSpawnConfig = {
-  startDelay: 0,
-  loop: true,
-  burstCount: 1,
-  burstDelay: 100,
-  onInit: createTurnInit(),
-  onBurst: createArcBurst(4, 180),
-};
 
 
 

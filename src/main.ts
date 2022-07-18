@@ -1,11 +1,10 @@
 import {Application, Container} from 'pixi.js';
 import './style.css';
-import {createWorld, IWorld, pipe} from 'bitecs';
+import {addComponent, addEntity, createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
 import {createTimeSystem} from './systems/TimeSystem';
 import {createGraphicsCircleSystem} from './systems/GraphicsCircleSystem';
 import {createPlayerEntity} from './entities/Player';
-import {createEnemyEntity} from './entities/Enemy';
 import {createPlayerMovementSystem} from './systems/PlayerMovementSystem';
 import {createPlayerBoundarySystem} from './systems/PlayerBoundarySystem';
 import {createShowFpsSystem} from './systems/ShowFpsSystem';
@@ -17,6 +16,8 @@ import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createPlayerShootSystem} from './systems/PlayerShootSystem';
+import {StageComponent} from './components/Stage';
+import {createEnemySpawnSystem} from './systems/EnemySpawnSystem';
 
 export interface World extends IWorld {
   time: {
@@ -54,6 +55,7 @@ world.input = {down: () => false};
 world.size = size;
 const pipeline = pipe(
   createPlayerMovementSystem(),
+  createEnemySpawnSystem(),
   createBulletSpawnSystem(),
   //createBulletSpawnTestSystem(),
   createMovementSystem(),
@@ -70,7 +72,9 @@ const pipeline = pipe(
 );
 
 createPlayerEntity(world);
-createEnemyEntity(world);
+const stage = addEntity(world);
+addComponent(world, StageComponent, stage);
+StageComponent.stageIndex[stage] = 0;
 
 document.addEventListener('keydown', (e) => {
   if (e.key === "p") {
