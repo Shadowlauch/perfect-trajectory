@@ -18,16 +18,17 @@ export const createBulletSpawnSystem = () => {
       const config = ENEMIES[Enemy.configIndex[enemy]].bulletSpawnConfig;
       const spawnTime = Enemy.spawnTime[enemy];
       const startTime = elapsed - spawnTime - (config.startDelay ?? 0);
+      const lifeTime = elapsed - spawnTime
 
       if (startTime < 0) continue;
 
       const timePerLoop = (config.burstDelay * config.burstCount) + (config.loopDelay ?? 0);
-      const intraLoopTime = elapsed % timePerLoop;
-      const loopedTimes = Math.floor(elapsed / timePerLoop);
+      const intraLoopTime = lifeTime % timePerLoop;
+      const loopedTimes = Math.floor(lifeTime / timePerLoop);
       const infiniteLoop = typeof config.loop === "boolean" && config.loop;
       const loopTimes = config.loop === false ? 0 : config.loop
 
-      if (!infiniteLoop && loopTimes > loopedTimes) continue;
+      if (!infiniteLoop && loopTimes < loopedTimes) continue;
 
       const player = playerQuery(world)[0];
       if (intraLoopTime - delta <= 0) config.onLoop?.(world, enemy, player);
