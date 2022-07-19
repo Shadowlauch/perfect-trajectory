@@ -9,6 +9,12 @@ export const Stage0: StageConfig = {
       enemyConfigIndex: 0
     },
     {
+      x: 250,
+      y: 40,
+      time: 2000,
+      enemyConfigIndex: 2
+    },
+    {
       x: 500,
       y: 40,
       time: 5000,

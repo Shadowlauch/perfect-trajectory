@@ -2,6 +2,7 @@ import {BulletSpawnConfig} from '../bullets/spawn/BulletSpawnConfig';
 import {createTurnLoop} from '../bullets/spawn/loop/Turn';
 import {createPlayerTargetLoop} from '../bullets/spawn/loop/PlayerTarget';
 import {createArcBurst} from '../bullets/spawn/burst/Arc';
+import {createSprayBurst} from '../bullets/spawn/burst/Spray';
 
 export interface CircleDisplay {
   color: number;
@@ -53,6 +54,38 @@ export const ENEMIES: EnemyConfig[] = [
       burstDelay: 200,
       onLoop: createPlayerTargetLoop(),
       onBurst: createArcBurst(3, 60),
+    },
+    path: [
+      {
+        x: 0,
+        y: 100,
+        delay: 3000
+      },
+      {
+        x: 50,
+        y: 100,
+        delay: 3000
+      },
+      {
+        x: 50,
+        y: 0,
+        delay: 3000
+      }
+    ]
+  },
+  {
+    hp: 50,
+    display: {
+      color: 0x11aa88,
+      radius: 30
+    },
+    bulletSpawnConfig: {
+      loopDelay: 400,
+      loop: 3,
+      burstCount: 5 * 9 + 1,
+      burstDelay: 100,
+      onLoop: createPlayerTargetLoop(),
+      onBurst: createSprayBurst(10, 30),
     },
     path: [
       {
