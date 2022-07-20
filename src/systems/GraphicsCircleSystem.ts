@@ -1,5 +1,5 @@
 import {defineQuery, enterQuery, exitQuery} from 'bitecs';
-import {Position} from '../components/Position';
+import {Transform} from '../components/Transform';
 import {World} from '../main';
 import {Application, Container, Graphics} from 'pixi.js';
 import {GraphicsCircle} from '../components/GraphicsCircle';
@@ -8,7 +8,7 @@ export const createGraphicsCircleSystem = (app: Application) => {
   const container = new Container();
   app.stage.addChild(container);
   //container.filters = [new AdvancedBloomFilter()];
-  const graphicsQuery = defineQuery([Position, GraphicsCircle]);
+  const graphicsQuery = defineQuery([Transform, GraphicsCircle]);
   const enterGraphicsQuery = enterQuery(graphicsQuery);
   const exitGraphicsQuery = exitQuery(graphicsQuery);
   const graphicsMap: Record<number, Graphics> = {};
@@ -24,8 +24,8 @@ export const createGraphicsCircleSystem = (app: Application) => {
 
     for (const eid of graphicsQuery(world)) {
       const graphics = graphicsMap[eid];
-      graphics.x = Position.x[eid];
-      graphics.y = Position.y[eid];
+      graphics.x = Transform.position.x[eid];
+      graphics.y = Transform.position.y[eid];
     }
 
     for (const eid of exitGraphicsQuery(world)) {

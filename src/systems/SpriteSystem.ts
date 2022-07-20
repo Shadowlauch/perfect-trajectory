@@ -1,13 +1,13 @@
 import {defineQuery, enterQuery, exitQuery, hasComponent} from 'bitecs';
-import {Position} from '../components/Position';
+import {Transform} from '../components/Transform';
 import {World} from '../main';
 import {Container, Loader, Sprite} from 'pixi.js';
 import {SPRITES} from '../loader/Loader';
 import {SpriteComponent} from '../components/Sprite';
-import {Velocity} from '../components/Velocity';
+import {Velocity} from '../components/Physics';
 
 export const createSpriteSystem = (container: Container, loader: Loader) => {
-  const spriteQuery = defineQuery([Position, SpriteComponent]);
+  const spriteQuery = defineQuery([Transform, SpriteComponent]);
   const enterSpriteQuery = enterQuery(spriteQuery);
   const exitSpriteQuery = exitQuery(spriteQuery);
   const spriteMap: Record<number, Sprite> = {};
@@ -26,8 +26,8 @@ export const createSpriteSystem = (container: Container, loader: Loader) => {
 
     for (const eid of spriteQuery(world)) {
       const sprite = spriteMap[eid];
-      sprite.x = Position.x[eid];
-      sprite.y = Position.y[eid];
+      sprite.x = Transform.position.x[eid];
+      sprite.y = Transform.position.y[eid];
       if (hasComponent(world, Velocity, eid)) {
         //TODO: This needs to be its own thing I'm just lazy rn
         sprite.rotation = Math.atan2(Velocity.y[eid], Velocity.x[eid]);

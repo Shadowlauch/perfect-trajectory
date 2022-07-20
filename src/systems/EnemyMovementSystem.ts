@@ -1,6 +1,6 @@
 import {defineQuery} from 'bitecs';
-import {Velocity} from '../components/Velocity';
-import {Position} from '../components/Position';
+import { Velocity } from '../components/Physics';
+import { Transform } from '../components/Transform';
 import {World} from '../main';
 import { Enemy } from '../components/Enemy';
 import {ENEMIES} from '../configs/enemies/EnemyConfig';
@@ -10,7 +10,7 @@ const lerp = (a: number, b: number, t: number) => {
 }
 
 export const createEnemyMovementSystem = () => {
-  const enemyQuery = defineQuery([Position, Velocity, Enemy]);
+  const enemyQuery = defineQuery([Transform, Velocity, Enemy]);
 
   return (world: World) => {
     const {time: {elapsed}} = world;
@@ -37,9 +37,9 @@ export const createEnemyMovementSystem = () => {
           const relativeTime = (aliveTime - prevPointAbsTime) / point.delay
 
           const shiftX = lerp(prevPoint.x, point.x, relativeTime)
-          Position.x[enemy] = Enemy.spawnX[enemy] + shiftX
+          Transform.position.x[enemy] = Enemy.spawnX[enemy] + shiftX
           const shiftY = lerp(prevPoint.y, point.y, relativeTime)
-          Position.y[enemy] = Enemy.spawnY[enemy] + shiftY
+          Transform.position.y[enemy] = Enemy.spawnY[enemy] + shiftY
           break
         }
         prevPoint = point

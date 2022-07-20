@@ -1,7 +1,7 @@
 import {World} from '../../main';
 import {addComponent, addEntity} from 'bitecs';
-import {Position} from '../../components/Position';
-import {Velocity} from '../../components/Velocity';
+import {Transform} from '../../components/Transform';
+import {Velocity} from '../../components/Physics';
 import {SpriteComponent} from '../../components/Sprite';
 import {CollisionComponent} from '../../components/Collision';
 import {BulletComponent} from '../../components/Bullet';
@@ -12,7 +12,7 @@ export const spawnBullet = (world: World, x: number, y: number, angle: number, s
 
   const bullet = addEntity(world);
 
-  addComponent(world, Position, bullet);
+  addComponent(world, Transform, bullet);
   addComponent(world, Velocity, bullet);
   addComponent(world, SpriteComponent, bullet);
   addComponent(world, CollisionComponent, bullet);
@@ -20,8 +20,8 @@ export const spawnBullet = (world: World, x: number, y: number, angle: number, s
   SpriteComponent.spriteIndex[bullet] = 0;
   SpriteComponent.scale[bullet] = 0.5;
 
-  Position.x[bullet] = x;
-  Position.y[bullet] = y;
+  Transform.position.x[bullet] = x;
+  Transform.position.y[bullet] = y;
   Velocity.x[bullet] = vx;
   Velocity.y[bullet] = vy;
   CollisionComponent.group[bullet] = 0b000001;

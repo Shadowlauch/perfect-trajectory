@@ -1,6 +1,6 @@
 import {addComponent, addEntity} from 'bitecs';
-import {Position} from '../components/Position';
-import {Velocity} from '../components/Velocity';
+import {Transform} from '../components/Transform';
+import {Velocity} from '../components/Physics';
 import {GraphicsCircle} from '../components/GraphicsCircle';
 import {Player} from '../components/Player';
 import {World} from '../main';
@@ -8,7 +8,7 @@ import {CollisionComponent} from '../components/Collision';
 
 export const createPlayerEntity = (world: World) => {
   const eid = addEntity(world);
-  addComponent(world, Position, eid);
+  addComponent(world, Transform, eid);
   addComponent(world, Velocity, eid);
   addComponent(world, GraphicsCircle, eid);
   addComponent(world, Player, eid);
@@ -17,6 +17,6 @@ export const createPlayerEntity = (world: World) => {
   GraphicsCircle.radius[eid] = 10;
   CollisionComponent.filter[eid] = 0b000001;
   CollisionComponent.radius[eid] = 7;
-  Position.x[eid] = world.size.width / 2;
-  Position.y[eid] = world.size.height - 50;
+  Transform.position.x[eid] = world.size.width / 2;
+  Transform.position.y[eid] = world.size.height - 50;
 }

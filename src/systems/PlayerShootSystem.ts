@@ -1,8 +1,8 @@
 import {addComponent, addEntity, defineQuery} from 'bitecs';
 import {World} from '../main';
 import {Player} from '../components/Player';
-import {Position} from '../components/Position';
-import {Velocity} from '../components/Velocity';
+import {Transform} from '../components/Transform';
+import {Velocity} from '../components/Physics';
 import {SpriteComponent} from '../components/Sprite';
 import {CollisionComponent} from '../components/Collision';
 import {BulletComponent} from '../components/Bullet';
@@ -18,7 +18,7 @@ export const createPlayerShootSystem = () => {
       const pid = playerQuery(world)[0];
       const bullet = addEntity(world);
 
-      addComponent(world, Position, bullet);
+      addComponent(world, Transform, bullet);
       addComponent(world, Velocity, bullet);
       addComponent(world, SpriteComponent, bullet);
       addComponent(world, CollisionComponent, bullet);
@@ -26,8 +26,8 @@ export const createPlayerShootSystem = () => {
       SpriteComponent.spriteIndex[bullet] = 1;
       SpriteComponent.scale[bullet] = 0.2;
 
-      Position.x[bullet] = Position.x[pid] + GraphicsCircle.radius[pid];
-      Position.y[bullet] = Position.y[pid] - 40;
+      Transform.position.x[bullet] = Transform.position.x[pid] + GraphicsCircle.radius[pid];
+      Transform.position.y[bullet] = Transform.position.y[pid] - 40;
       Velocity.x[bullet] = 0;
       Velocity.y[bullet] = -0.7;
       CollisionComponent.group[bullet] = 0b000010;

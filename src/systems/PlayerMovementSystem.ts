@@ -1,5 +1,5 @@
 import {defineQuery} from 'bitecs';
-import {Velocity} from '../components/Velocity';
+import {Velocity} from '../components/Physics';
 import {World} from '../main';
 import {Player} from '../components/Player';
 

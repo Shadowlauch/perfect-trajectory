@@ -1,6 +1,6 @@
 import {defineQuery} from 'bitecs';
-import {Velocity} from '../components/Velocity';
-import {Position} from '../components/Position';
+import {Velocity} from '../components/Physics';
+import {Transform} from '../components/Transform';
 import {World} from '../main';
 import { Player } from '../components/Player';
 import { Enemy } from '../components/Enemy';
@@ -9,8 +9,8 @@ import {ENEMIES} from '../configs/enemies/EnemyConfig';
 import {BulletComponent} from '../components/Bullet';
 
 export const createBulletSpawnSystem = () => {
-  const playerQuery = defineQuery([Position, Velocity, Player]);
-  const enemyQuery = defineQuery([Position, Velocity, Enemy]);
+  const playerQuery = defineQuery([Transform, Velocity, Player]);
+  const enemyQuery = defineQuery([Transform, Velocity, Enemy]);
 
   return (world: World) => {
     const {time: {elapsed, delta}} = world;

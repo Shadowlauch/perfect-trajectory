@@ -1,11 +1,11 @@
 import {defineQuery, enterQuery, exitQuery} from 'bitecs';
-import {Position} from '../components/Position';
+import {Transform} from '../components/Transform';
 import {World} from '../main';
 import {Container, Graphics} from 'pixi.js';
 import {CollisionComponent} from '../components/Collision';
 
 export const createCollisionDebugSystem = (container: Container) => {
-  const collisionQuery = defineQuery([Position, CollisionComponent]);
+  const collisionQuery = defineQuery([Transform, CollisionComponent]);
   const enterCollisionQuery = enterQuery(collisionQuery);
   const exitCollisionQuery = exitQuery(collisionQuery);
   const circleMap: Record<number, Graphics> = {};
@@ -22,8 +22,8 @@ export const createCollisionDebugSystem = (container: Container) => {
 
     for (const eid of collisionQuery(world)) {
       const graphics = circleMap[eid];
-      graphics.x = Position.x[eid];
-      graphics.y = Position.y[eid];
+      graphics.x = Transform.position.x[eid];
+      graphics.y = Transform.position.y[eid];
     }
 
     for (const eid of exitCollisionQuery(world)) {

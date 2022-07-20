@@ -1,12 +1,12 @@
 import {defineQuery, exitQuery, removeEntity} from 'bitecs';
-import {Velocity} from '../components/Velocity';
-import {Position} from '../components/Position';
+import {Velocity} from '../components/Physics';
+import {Transform} from '../components/Transform';
 import {Enemy} from '../components/Enemy';
 import {World} from '../main';
 import {StageComponent} from '../components/Stage';
 
 export const createEnemyDeSpawnSystem = () => {
-  const enemyQuery = defineQuery([Position, Velocity, Enemy]);
+  const enemyQuery = defineQuery([Transform, Velocity, Enemy]);
   const stageQuery = defineQuery([StageComponent]);
   const exitStageQuery = exitQuery(stageQuery);
 

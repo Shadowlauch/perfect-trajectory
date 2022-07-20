@@ -1,5 +1,5 @@
 import {defineQuery, enterQuery, exitQuery, hasComponent, removeEntity} from 'bitecs';
-import {Position} from '../components/Position';
+import {Transform} from '../components/Transform';
 import {World} from '../main';
 import {CollisionComponent} from '../components/Collision';
 import {Circle, System, Body} from 'detect-collisions';
@@ -8,7 +8,7 @@ import {Enemy} from '../components/Enemy';
 import {BulletComponent} from '../components/Bullet';
 
 export const createCollisionSystem = () => {
-  const collisionQuery = defineQuery([Position, CollisionComponent]);
+  const collisionQuery = defineQuery([Transform, CollisionComponent]);
   const enterCollisionQuery = enterQuery(collisionQuery);
   const exitCollisionQuery = exitQuery(collisionQuery);
   const circleMap: Map<number, Body> = new Map();
@@ -17,14 +17,14 @@ export const createCollisionSystem = () => {
 
   return (world: World) => {
     for (const eid of enterCollisionQuery(world)) {
-      const circle = new Circle({x: Position.x[eid], y: Position.y[eid]}, CollisionComponent.radius[eid]);
+      const circle = new Circle({x: Transform.position.x[eid], y: Transform.position.y[eid]}, CollisionComponent.radius[eid]);
       system.insert(circle);
       circleMap.set(eid, circle);
       eidMap.set(circle, eid);
     }
 
     for (const eid of collisionQuery(world)) {
-      circleMap.get(eid)?.setPosition(Position.x[eid], Position.y[eid]);
+      circleMap.get(eid)?.setPosition(Transform.position.x[eid], Transform.position.y[eid]);
     }
 
     for (const eid of exitCollisionQuery(world)) {

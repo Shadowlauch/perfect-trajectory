@@ -1,6 +1,6 @@
 import {addComponent, addEntity, defineQuery} from 'bitecs';
-import {Velocity} from '../components/Velocity';
-import {Position} from '../components/Position';
+import {Velocity} from '../components/Physics';
+import {Transform} from '../components/Transform';
 import {Enemy} from '../components/Enemy';
 import {World} from '../main';
 import {StageComponent} from '../components/Stage';
@@ -24,13 +24,13 @@ export const createEnemySpawnSystem = () => {
       if (enemySpawn.time <= timeSinceStageStart && (timeSinceStageStart - enemySpawn.time - delta) < 0) {
         const enemyConfig = ENEMIES[enemySpawn.enemyConfigIndex];
         const eid = addEntity(world);
-        addComponent(world, Position, eid);
+        addComponent(world, Transform, eid);
         addComponent(world, Velocity, eid);
         addComponent(world, Enemy, eid);
         addComponent(world, CollisionComponent, eid);
         CollisionComponent.filter[eid] = 0b000010;
-        Position.x[eid] = enemySpawn.x;
-        Position.y[eid] = enemySpawn.y;
+        Transform.position.x[eid] = enemySpawn.x;
+        Transform.position.y[eid] = enemySpawn.y;
         Enemy.spawnX[eid] = enemySpawn.x;
         Enemy.spawnY[eid] = enemySpawn.y;
 
