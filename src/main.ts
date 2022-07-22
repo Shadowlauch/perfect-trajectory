@@ -18,7 +18,7 @@ import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createPlayerShootSystem} from './systems/PlayerShootSystem';
 import {StageComponent} from './components/Stage';
 import {createPathMovementSystem} from './systems/PathMovementSystem';
-import { EntitySpawnerSystem } from './systems/EntitySpawnerSystem';
+import { createEntitySpawnerSystem } from './systems/CreateEntitySpawnerSystem';
 import {createTimelineSystem} from './systems/TimelineSystem';
 import {TimelineComponent} from './components/Timeline';
 import {configManager} from './configs/ConfigManager';
@@ -64,6 +64,7 @@ world.time = {delta: 0, elapsed: 0, then: performance.now()};
 world.input = {down: () => false};
 world.size = size;
 
+//Todo: Exporting this for now as a workaround should probably be changed?!
 export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
 
 const pipeline = pipe(
@@ -86,7 +87,7 @@ const pipeline = pipe(
   createTimeSystem(app.ticker),
   createKeyboardSystem(world),
   //testSystem(world, entityPrefabWorld),
-  EntitySpawnerSystem(entityPrefabWorld),
+  createEntitySpawnerSystem(entityPrefabWorld),
 );
 
 createPlayerEntity(world);
