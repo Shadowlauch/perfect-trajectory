@@ -22,9 +22,9 @@ export const testSystem = (world: World, epworld: EntityPrefabWorld) => {
   addComponent(epworld, Transform, bulletBlue);
   addComponent(epworld, Velocity, bulletBlue);
   addComponent(epworld, Speed, bulletBlue);
-  Transform.position.x[bulletBlue] = 0;
-  Transform.position.y[bulletBlue] = 0;
-  Transform.rotation[bulletBlue] = Math.PI/4;
+  Transform.position.x[bulletBlue] = 0; // initial displacement 0 means that
+  Transform.position.y[bulletBlue] = 0; // spawned entity will be spawned at location of spawner
+  Transform.rotation[bulletBlue] = Math.PI/4; // This however will spawn this entity at a 90 deg angle to spawner's angle
   Speed.val[bulletBlue] = 0.1;
   addComponent(epworld, SpriteComponent, bulletBlue);
   addComponent(epworld, CollisionComponent, bulletBlue);
