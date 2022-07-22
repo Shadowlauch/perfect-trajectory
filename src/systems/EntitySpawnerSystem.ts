@@ -5,7 +5,7 @@ import { Transform } from '../components/Transform';
 import { KillAfter } from '../components/KillAfter';
 import { INT8MAX } from '../components/Common';
 
-export const createEntitySpawnerSystem = (epworld: EntityPrefabWorld) => {
+export const entitySpawnerSystem = (epworld: EntityPrefabWorld) => {
   const entitySpawnerQuery = defineQuery([Transform, EntitySpawner]);
   // world is the main world, epworld holds premade entities for spawner to spawn
   // Copy from epworld into world

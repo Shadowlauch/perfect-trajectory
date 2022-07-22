@@ -2,7 +2,7 @@ import { defineQuery, removeEntity } from 'bitecs';
 import { World } from '../main';
 import { KillAfter } from '../components/KillAfter';
 
-export const createKillSystem = () => {
+export const killSystem = () => {
   const killQuery = defineQuery([KillAfter]);
 
   return (world: World) => {

@@ -18,7 +18,7 @@ import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createPlayerShootSystem} from './systems/PlayerShootSystem';
 import {StageComponent} from './components/Stage';
 import {createPathMovementSystem} from './systems/PathMovementSystem';
-import { createEntitySpawnerSystem } from './systems/CreateEntitySpawnerSystem';
+import { entitySpawnerSystem } from './systems/EntitySpawnerSystem';
 import {createTimelineSystem} from './systems/TimelineSystem';
 import {TimelineComponent} from './components/Timeline';
 import {configManager} from './configs/ConfigManager';
@@ -87,7 +87,7 @@ const pipeline = pipe(
   createTimeSystem(app.ticker),
   createKeyboardSystem(world),
   //testSystem(world, entityPrefabWorld),
-  createEntitySpawnerSystem(entityPrefabWorld),
+  entitySpawnerSystem(entityPrefabWorld),
 );
 
 createPlayerEntity(world);
