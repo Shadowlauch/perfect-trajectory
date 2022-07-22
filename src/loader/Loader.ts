@@ -3,7 +3,9 @@ import {SpriteConfig} from './SpriteConfig';
 
 export const SPRITES: SpriteConfig[] = [
   new SpriteConfig('bullet01','/sprites/bullets/01.png', 67, 60),
-  new SpriteConfig('bullet02','/sprites/bullets/26.png', 162, 43)
+  new SpriteConfig('bullet02','/sprites/bullets/02.png', 67, 60),
+  new SpriteConfig('bullet03','/sprites/bullets/03.png', 67, 60),
+  new SpriteConfig('bullet26','/sprites/bullets/26.png', 162, 43)
 ];
 
 export const loadSpirtes = async () => {

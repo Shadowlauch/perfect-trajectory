@@ -12,6 +12,7 @@ import {loadSpirtes} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
+import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
@@ -20,6 +21,8 @@ import {StageComponent} from './components/Stage';
 import {createEnemySpawnSystem} from './systems/EnemySpawnSystem';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createEnemyMovementSystem} from './systems/EnemyMovementSystem';
+import {testSystem} from './systems/TestSystem';
+import { EntitySpawnerSystem } from './systems/EntitySpawnerSystem';
 
 
 export interface World extends IWorld {
@@ -34,6 +37,9 @@ export interface World extends IWorld {
     height: number;
   };
 }
+
+// Used by entity spawner to fetch pre-defined entities to spawn
+export interface EntityPrefabWorld extends IWorld {}
 
 const size = {width: 640, height: 800};
 const app = new Application({
@@ -56,12 +62,14 @@ const world = createWorld() as World;
 world.time = {delta: 0, elapsed: 0, then: performance.now()};
 world.input = {down: () => false};
 world.size = size;
+
+const entityPrefabWorld = createWorld() as EntityPrefabWorld;
+
 const pipeline = pipe(
   createPlayerMovementSystem(),
   createEnemySpawnSystem(),
   createEnemyDeSpawnSystem(),
   createBulletSpawnSystem(),
-  //createBulletSpawnTestSystem(),
   createMovementSystem(),
   createEnemyMovementSystem(),
   createPlayerBoundarySystem(),
@@ -74,6 +82,8 @@ const pipeline = pipe(
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),
   createKeyboardSystem(world),
+  //testSystem(world, entityPrefabWorld),
+  EntitySpawnerSystem(entityPrefabWorld),
 );
 
 createPlayerEntity(world);
@@ -93,7 +103,7 @@ document.addEventListener('keydown', (e) => {
 
 // Add a ticker callback to move the sprite back and forth
 app.ticker.add(() => {
-  pipeline(world);
+  pipeline(world, entityPrefabWorld);
 });
 
 
