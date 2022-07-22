@@ -1,7 +1,9 @@
-import { defineDeserializer, defineQuery, defineSerializer, DESERIALIZE_MODE } from 'bitecs';
+import { addComponent, defineDeserializer, defineQuery, defineSerializer, DESERIALIZE_MODE } from 'bitecs';
 import { EntityPrefabWorld, World } from '../main';
 import { EntitySpawner } from '../components/EntitySpawner';
 import { Transform } from '../components/Transform';
+import { KillAfter } from '../components/KillAfter';
+import { INT8MAX } from '../components/Common';
 
 export const EntitySpawnerSystem = (epworld: EntityPrefabWorld) => {
   const entitySpawnerQuery = defineQuery([Transform, EntitySpawner]);
@@ -12,15 +14,25 @@ export const EntitySpawnerSystem = (epworld: EntityPrefabWorld) => {
 
   return (world: World) => {
     const { time: { delta } } = world;
-    
+
     for (const eid of entitySpawnerQuery(world)) {
-      // Manage delays and loops
+      // Spawn delay time
       EntitySpawner.delay[eid] -= delta;
-      if (EntitySpawner.delay[eid] > 0) {
+      // Wait until delay time has elapsed, or skip eid if loop was initially 0 (i.e, spawn only once)
+      if (EntitySpawner.delay[eid] > 0 || EntitySpawner.loop[eid] < 0) {
         continue;
       }
-      if (!!EntitySpawner.loop[eid]) {
+      // Decrement loop
+      if (EntitySpawner.loop[eid] >= 0) {
         EntitySpawner.delay[eid] += EntitySpawner.loopInterval[eid];
+        // Infinite loop if INT8MAX
+        if (EntitySpawner.loop[eid] < INT8MAX) {
+          EntitySpawner.loop[eid]--;
+        }
+      } else if (!!EntitySpawner.killAfterLastLoop[eid]) {
+        // Kill after loop period ended
+        addComponent(world, KillAfter, eid);
+        KillAfter.ms[eid] = 0;
       }
 
       // Create a copy of the predefined entity into the main world

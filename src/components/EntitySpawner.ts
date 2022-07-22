@@ -16,8 +16,10 @@ export const EntitySpawner = defineComponent({
     // EntitySpawnerSystem will decrement this until it becomes <=0, which will then spawn the entity
     // If loop is true, delay will be reset back to loopInterval
     delay: Types.f32,
-    // boolean, whether to loop or not
-    loop: Types.ui8, 
+    // number of times to loop, INT8MAX is infinite loop
+    loop: Types.i8, 
     // Time in milliseconds between each spawn loop
     loopInterval: Types.f32,
+    // bool, if true, entity is removed after last iteration of loop
+    killAfterLastLoop: Types.ui8,
 });

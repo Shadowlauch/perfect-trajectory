@@ -23,6 +23,7 @@ import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createEnemyMovementSystem} from './systems/EnemyMovementSystem';
 import {testSystem} from './systems/TestSystem';
 import { EntitySpawnerSystem } from './systems/EntitySpawnerSystem';
+import { KillSystem } from './systems/KillSystem';
 
 
 export interface World extends IWorld {
@@ -84,6 +85,7 @@ const pipeline = pipe(
   createKeyboardSystem(world),
   //testSystem(world, entityPrefabWorld),
   EntitySpawnerSystem(entityPrefabWorld),
+  KillSystem(),
 );
 
 createPlayerEntity(world);
