@@ -1,22 +1,20 @@
 import {defineQuery} from 'bitecs';
-import {Velocity} from '../components/Physics';
 import {Transform} from '../components/Transform';
 import {World} from '../main';
-import { Player } from '../components/Player';
-import { Enemy } from '../components/Enemy';
 import {spawnBullet} from '../configs/bullets/spawnBullet';
-import {ENEMIES} from '../configs/enemies/EnemyConfig';
 import {BulletComponent} from '../components/Bullet';
+import {BulletSpawnComponent} from '../components/BulletSpawn';
+import {configManager} from '../configs/ConfigManager';
+import {BulletSpawnConfig} from '../configs/bullets/spawn/BulletSpawnConfig';
 
 export const createBulletSpawnSystem = () => {
-  const playerQuery = defineQuery([Transform, Velocity, Player]);
-  const enemyQuery = defineQuery([Transform, Velocity, Enemy]);
+  const bulletSpawnQuery = defineQuery([Transform, BulletSpawnComponent]);
 
   return (world: World) => {
     const {time: {elapsed, delta}} = world;
-    for (const enemy of enemyQuery(world)) {
-      const config = ENEMIES[Enemy.configIndex[enemy]].bulletSpawnConfig;
-      const spawnTime = Enemy.spawnTime[enemy];
+    for (const bulletSpawn of bulletSpawnQuery(world)) {
+      const config = configManager.get<BulletSpawnConfig>(BulletSpawnComponent.configIndex[bulletSpawn]);
+      const spawnTime = BulletSpawnComponent.startTime[bulletSpawn];
       const startTime = elapsed - spawnTime - (config.startDelay ?? 0);
       const lifeTime = elapsed - spawnTime
 
@@ -30,15 +28,13 @@ export const createBulletSpawnSystem = () => {
 
       if (!infiniteLoop && loopTimes < loopedTimes) continue;
 
-      const player = playerQuery(world)[0];
-      if (intraLoopTime - delta <= 0) config.onLoop?.(world, enemy, player);
+      if (intraLoopTime - delta <= 0) config.onLoop?.(world, bulletSpawn);
 
       const currentBurstCount = Math.floor(intraLoopTime / config.burstDelay);
       if (currentBurstCount < config.burstCount && (intraLoopTime - (currentBurstCount * config.burstDelay) - delta) <= 0){
-        const bulletSpawns = config.onBurst(world, enemy, player, currentBurstCount);
+        const bulletSpawns = config.onBurst(world, bulletSpawn, currentBurstCount);
         for (const bulletSpawn of bulletSpawns) {
           const bullet = spawnBullet(world, bulletSpawn.x, bulletSpawn.y, bulletSpawn.angle, bulletSpawn.speed);
-          BulletComponent.spawnedBy[bullet] = enemy;
           BulletComponent.damage[bullet] = 1;
         }
       }

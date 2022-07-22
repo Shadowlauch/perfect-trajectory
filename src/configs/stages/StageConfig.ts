@@ -1,16 +1,10 @@
-import {Stage0} from './Stage0';
+import {World} from '../../main';
 
 export interface EnemySpawnConfig {
-  x: number;
-  y: number;
   time: number;
-  enemyConfigIndex: number;
+  onSpawn: (world: World) => void;
 }
 
 export interface StageConfig {
   enemySpawns: EnemySpawnConfig[];
 }
-
-export const STAGES = [
-  Stage0
-];
