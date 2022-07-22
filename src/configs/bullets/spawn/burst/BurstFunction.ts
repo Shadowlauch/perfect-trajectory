@@ -7,4 +7,4 @@ export interface BulletSpawn {
   speed: number;
 }
 
-export type BurstFunction = (world: World, enemy: number, player: number, currentBurst: number) => BulletSpawn[];
+export type BurstFunction = (world: World, spawner: number, currentBurst: number) => BulletSpawn[];

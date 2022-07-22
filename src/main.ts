@@ -12,18 +12,18 @@ import {loadSpirtes} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
-import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createPlayerShootSystem} from './systems/PlayerShootSystem';
 import {StageComponent} from './components/Stage';
-import {createEnemySpawnSystem} from './systems/EnemySpawnSystem';
-import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
-import {createEnemyMovementSystem} from './systems/EnemyMovementSystem';
-import {testSystem} from './systems/TestSystem';
+import {createPathMovementSystem} from './systems/PathMovementSystem';
 import { EntitySpawnerSystem } from './systems/EntitySpawnerSystem';
-import { KillSystem } from './systems/KillSystem';
+import {createTimelineSystem} from './systems/TimelineSystem';
+import {TimelineComponent} from './components/Timeline';
+import {configManager} from './configs/ConfigManager';
+import {Stage0, Timeline} from './configs/stages/Stage0';
+import {createAttachmentSystem} from './systems/AttachmentSystem';
 
 
 export interface World extends IWorld {
@@ -64,16 +64,18 @@ world.time = {delta: 0, elapsed: 0, then: performance.now()};
 world.input = {down: () => false};
 world.size = size;
 
-const entityPrefabWorld = createWorld() as EntityPrefabWorld;
+export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
 
 const pipeline = pipe(
   createPlayerMovementSystem(),
-  createEnemySpawnSystem(),
-  createEnemyDeSpawnSystem(),
+  //createEnemySpawnSystem(),
+  //createEnemyDeSpawnSystem(),
+  createTimelineSystem(),
   createBulletSpawnSystem(),
   createMovementSystem(),
-  createEnemyMovementSystem(),
+  createPathMovementSystem(),
   createPlayerBoundarySystem(),
+  createAttachmentSystem(),
   createPlayerShootSystem(),
   createBulletCleanUpSystem(),
   createCollisionSystem(),
@@ -85,13 +87,15 @@ const pipeline = pipe(
   createKeyboardSystem(world),
   //testSystem(world, entityPrefabWorld),
   EntitySpawnerSystem(entityPrefabWorld),
-  KillSystem(),
 );
 
 createPlayerEntity(world);
 const stage = addEntity(world);
 addComponent(world, StageComponent, stage);
 StageComponent.stageIndex[stage] = 0;
+addComponent(world, TimelineComponent, stage);
+TimelineComponent.starTime[stage] = 0;
+TimelineComponent.configIndex[stage] = configManager.add<Timeline>(Stage0);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === "p") {

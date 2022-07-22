@@ -1,15 +1,14 @@
 import {Transform} from '../../../../components/Transform';
-import {Enemy} from '../../../../components/Enemy';
 import {BurstFunction} from './BurstFunction';
 
 export const createSprayBurst = (arcBulletCount: number, angleSpread: number, mirror: boolean = false): BurstFunction => {
-  return (_world, enemy, _player, currentBurst) => {
-    const x = Transform.position.x[enemy];
-    const y = Transform.position.y[enemy];
+  return (_world, spawner, currentBurst) => {
+    const x = Transform.position.x[spawner];
+    const y = Transform.position.y[spawner];
     const burstAngleSpread = angleSpread / 180 * Math.PI;
 
     const angleStep = burstAngleSpread / (arcBulletCount - 1);
-    const initialVelAngle = Enemy.bulletAngle[enemy] - burstAngleSpread / 2;
+    const initialVelAngle = Transform.rotation[spawner] - burstAngleSpread / 2;
 
     if (mirror) {
         currentBurst += arcBulletCount - 1

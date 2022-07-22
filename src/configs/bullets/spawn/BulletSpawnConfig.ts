@@ -1,7 +1,4 @@
-import {Transform} from '../../../components/Transform';
-import {createArcBurst} from './burst/Arc';
 import {BurstFunction} from './burst/BurstFunction';
-import {createPlayerTargetLoop} from './loop/PlayerTarget';
 import {LoopFunction} from './loop/LoopFunction';
 
 export interface BulletSpawnConfig {
@@ -13,27 +10,6 @@ export interface BulletSpawnConfig {
   onLoop?: LoopFunction;
   onBurst: BurstFunction;
 }
-
-export const testConfig: BulletSpawnConfig = {
-  startDelay: 2000,
-  loop: true,
-  burstCount: 6,
-  burstDelay: 200,
-  onLoop: createPlayerTargetLoop(),
-  onBurst: createArcBurst(9, 20)
-};
-
-export const spiralConfig: BulletSpawnConfig = {
-  startDelay: 0,
-  loop: true,
-  burstCount: 45,
-  burstDelay: 20,
-  onBurst: (_world, enemy, _player, currentBurst) => {
-    const startX = Transform.position.x[enemy];
-    const startY = Transform.position.y[enemy];
-    return [{x: startX, y: startY, angle: (currentBurst * 8) / 180 * Math.PI, speed: 0.1}];
-  },
-};
 
 
 
