@@ -34,7 +34,7 @@ export const testSystem = (world: World, epworld: EntityPrefabWorld) => {
   CollisionComponent.group[bulletBlue] = 0b000001;
   CollisionComponent.radius[bulletBlue] = 2;
 
-  // Green bullet, spawns blue bullets
+  // Purple bullet, spawns blue bullets
   const bulletPurple = addEntity(epworld);
   addComponent(epworld, Transform, bulletPurple);
   addComponent(epworld, Velocity, bulletPurple);
@@ -58,7 +58,7 @@ export const testSystem = (world: World, epworld: EntityPrefabWorld) => {
   EntitySpawner.loop[bulletPurple] = 1;
   EntitySpawner.loopInterval[bulletPurple] = 500;
 
-  // Shoot clockwise
+  // Shoot purple bullets clockwise
   const bulletSpawner = addEntity(world);
   addComponent(world, Transform, bulletSpawner);
   addComponent(world, Velocity, bulletSpawner);
@@ -77,7 +77,7 @@ export const testSystem = (world: World, epworld: EntityPrefabWorld) => {
   GraphicsCircle.color[bulletSpawner] = 0xa0a0ff;
   GraphicsCircle.radius[bulletSpawner] = 10;
 
-  // Shoot clockwise, opposite side of bulletSpawner
+  // Shoot purple bullets clockwise, opposite side of bulletSpawner
   const bulletSpawner2 = addEntity(world);
   addComponent(world, Transform, bulletSpawner2);
   addComponent(world, Velocity, bulletSpawner2);
