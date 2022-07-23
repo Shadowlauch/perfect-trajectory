@@ -1,10 +1,10 @@
 import {defineQuery} from 'bitecs';
 import {Velocity} from '../components/Physics';
 import {World} from '../main';
-import {Player} from '../components/Player';
+import {PlayerComponent} from '../components/PlayerComponent';
 
 export const createPlayerMovementSystem = () => {
-  const playerQuery = defineQuery([Player])
+  const playerQuery = defineQuery([PlayerComponent])
 
   return (world: World) => {
     const { input } = world

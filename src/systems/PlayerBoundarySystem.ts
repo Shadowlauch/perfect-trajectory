@@ -1,10 +1,10 @@
 import {defineQuery} from 'bitecs';
 import {World} from '../main';
-import {Player} from '../components/Player';
+import {PlayerComponent} from '../components/PlayerComponent';
 import {Transform} from '../components/Transform';
 
 export const createPlayerBoundarySystem = () => {
-  const playerQuery = defineQuery([Player])
+  const playerQuery = defineQuery([PlayerComponent])
 
   return (world: World) => {
     const { size: {width, height} } = world

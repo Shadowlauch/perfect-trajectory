@@ -16,7 +16,7 @@ import {AttachmentComponent} from '../../components/Attachment';
 import {BulletSpawnComponent} from '../../components/BulletSpawn';
 import {BulletSpawnConfig} from '../bullets/spawn/BulletSpawnConfig';
 import {createArcBurst} from '../bullets/spawn/burst/Arc';
-import {Player} from '../../components/Player';
+import {PlayerComponent} from '../../components/PlayerComponent';
 import {createPlayerTargetLoop} from '../bullets/spawn/loop/PlayerTarget';
 import {BossComponent} from '../../components/BossComponent';
 
@@ -143,7 +143,7 @@ export const Stage0: Timeline = [
   {
     delay: 5000,
     onTime: (world) => {
-      const player = defineQuery([Player])(world)[0];
+      const player = defineQuery([PlayerComponent])(world)[0];
       const eid = addEntity(world);
       const [x, y] = [300, 300]
 

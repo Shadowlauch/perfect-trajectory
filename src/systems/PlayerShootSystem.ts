@@ -1,6 +1,6 @@
 import {addComponent, addEntity, defineQuery} from 'bitecs';
 import {World} from '../main';
-import {Player} from '../components/Player';
+import {PlayerComponent} from '../components/PlayerComponent';
 import {Transform} from '../components/Transform';
 import {Velocity} from '../components/Physics';
 import {SpriteComponent} from '../components/Sprite';
@@ -8,7 +8,7 @@ import {CollisionComponent} from '../components/Collision';
 import {BulletComponent} from '../components/Bullet';
 
 export const createPlayerShootSystem = () => {
-  const playerQuery = defineQuery([Player]);
+  const playerQuery = defineQuery([PlayerComponent]);
   const cooldown = 80;
 
   return (world: World) => {

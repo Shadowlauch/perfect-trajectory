@@ -1,12 +1,10 @@
 import {defineQuery, enterQuery, exitQuery} from 'bitecs';
 import {Transform} from '../components/Transform';
 import {World} from '../main';
-import {Application, Container, Graphics} from 'pixi.js';
+import {Container, Graphics} from 'pixi.js';
 import {GraphicsCircle} from '../components/GraphicsCircle';
 
-export const createGraphicsCircleSystem = (app: Application) => {
-  const container = new Container();
-  app.stage.addChild(container);
+export const createGraphicsCircleSystem = (container: Container) => {
   //container.filters = [new AdvancedBloomFilter()];
   const graphicsQuery = defineQuery([Transform, GraphicsCircle]);
   const enterGraphicsQuery = enterQuery(graphicsQuery);

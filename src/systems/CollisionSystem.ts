@@ -3,7 +3,7 @@ import {Transform} from '../components/Transform';
 import {World} from '../main';
 import {CollisionComponent} from '../components/Collision';
 import {Circle, System, Body} from 'detect-collisions';
-import {Player} from '../components/Player';
+import {PlayerComponent} from '../components/PlayerComponent';
 import {Enemy} from '../components/Enemy';
 import {BulletComponent} from '../components/Bullet';
 
@@ -48,7 +48,10 @@ export const createCollisionSystem = () => {
         const group = CollisionComponent.group[potEid];
         if ((filter & group) > 0 && system.checkCollision(targetCircle, potential)) {
           //TODO: Implement event system
-          if (hasComponent(world, Player, target)) removeEntity(world, potEid);
+          if (hasComponent(world, PlayerComponent, target)) {
+            removeEntity(world, potEid);
+            PlayerComponent.lives[target] = Math.max(0, PlayerComponent.lives[target] - 1);
+          }
           if (hasComponent(world, Enemy, target) && hasComponent(world, BulletComponent, potEid)){
             removeEntity(world, potEid);
             Enemy.hp[target] -= BulletComponent.damage[potEid];

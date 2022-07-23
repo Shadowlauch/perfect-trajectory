@@ -1,4 +1,4 @@
-import {Application, Container} from 'pixi.js';
+import {Application, Container, Graphics} from 'pixi.js';
 import './style.css';
 import {addComponent, addEntity, createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
@@ -18,14 +18,16 @@ import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createPlayerShootSystem} from './systems/PlayerShootSystem';
 import {StageComponent} from './components/Stage';
 import {createPathMovementSystem} from './systems/PathMovementSystem';
-import { entitySpawnerSystem } from './systems/EntitySpawnerSystem';
+import {entitySpawnerSystem} from './systems/EntitySpawnerSystem';
 import {createTimelineSystem} from './systems/TimelineSystem';
 import {TimelineComponent} from './components/Timeline';
 import {configManager} from './configs/ConfigManager';
 import {Stage0, Timeline} from './configs/stages/Stage0';
 import {createAttachmentSystem} from './systems/AttachmentSystem';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
-import {createBossHpUiComponent} from './systems/ui/BossHpSystem';
+import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
+import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
+import {createTimeScoreSystem} from './systems/TimeScoreSystem';
 
 
 export interface World extends IWorld {
@@ -34,7 +36,7 @@ export interface World extends IWorld {
     elapsed: number;
     then: number;
   };
-  input: { down: (key: typeof KeyboardEvent.prototype["key"]) => boolean};
+  input: { down: (key: typeof KeyboardEvent.prototype['key']) => boolean };
   size: {
     width: number;
     height: number;
@@ -42,35 +44,52 @@ export interface World extends IWorld {
 }
 
 // Used by entity spawner to fetch pre-defined entities to spawn
-export interface EntityPrefabWorld extends IWorld {}
+export interface EntityPrefabWorld extends IWorld {
+}
 
-const size = {width: 640, height: 800};
+const size = {width: 1280, height: 800};
+const gameSize = {width: 640, height: 760, padding: 20};
 const app = new Application({
   ...size,
   powerPreference: 'high-performance'
 });
-app.stage.sortableChildren = true;
 document.body.appendChild(app.view);
 const mediaRecorder = createMediaRecorder(app);
 
-const container = new Container();
-container.interactive = false;
-container.interactiveChildren = false;
-//container.filters = [new AdvancedBloomFilter()];
-app.stage.addChild(container);
+let border = new Graphics();
+border.lineStyle(2, 0xffffff);
+border.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.height);
+app.stage.addChild(border);
 
-const uiContainer = new Container();
-uiContainer.interactive = false;
-uiContainer.interactiveChildren = false;
-uiContainer.zIndex = 100;
-app.stage.addChild(uiContainer);
+const gameContainer = new Container();
+gameContainer.x = gameSize.padding;
+gameContainer.y = gameSize.padding;
+gameContainer.interactive = false;
+gameContainer.interactiveChildren = false;
+gameContainer.sortableChildren = true;
+let mask = new Graphics();
+mask.beginFill(0xffffff);
+mask.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.height);
+mask.endFill();
+gameContainer.mask = mask;
+app.stage.addChild(gameContainer);
+
+const gameUiContainer = new Container();
+gameUiContainer.interactive = false;
+gameUiContainer.interactiveChildren = false;
+gameUiContainer.zIndex = 100;
+gameContainer.addChild(gameUiContainer);
+
+const infoBoxContainer = new Container();
+infoBoxContainer.x = gameSize.padding * 2 + gameSize.width;
+app.stage.addChild(infoBoxContainer);
 
 const loader = await loadSpirtes();
 
 const world = createWorld() as World;
 world.time = {delta: 0, elapsed: 0, then: performance.now()};
 world.input = {down: () => false};
-world.size = size;
+world.size = gameSize;
 
 //Todo: Exporting this for now as a workaround should probably be changed?!
 export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
@@ -88,15 +107,17 @@ const pipeline = pipe(
   createPlayerShootSystem(),
   createBulletCleanUpSystem(),
   createCollisionSystem(),
-  createBossHpUiComponent(uiContainer),
-  createGraphicsCircleSystem(app),
-  createSpriteSystem(container, loader),
+  createTimeScoreSystem(),
+  createBossHpUiSystem(gameUiContainer),
+  createGraphicsCircleSystem(gameContainer),
+  createSpriteSystem(gameContainer, loader),
   //createCollisionDebugSystem(container),
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),
   createKeyboardSystem(world),
   //testSystem(world, entityPrefabWorld),
   entitySpawnerSystem(entityPrefabWorld),
+  createInfoBoxSystem(infoBoxContainer, size.width - gameSize.width - gameSize.padding * 2)
 );
 
 createPlayerEntity(world);
@@ -107,14 +128,14 @@ addComponent(world, TimelineComponent, stage);
 TimelineComponent.configIndex[stage] = configManager.add<Timeline>(Stage0);
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === "p") {
+  if (e.key === 'p') {
     if (app.ticker.started) app.ticker.stop();
     else app.ticker.start();
-  } else if (e.key === "r") {
-    if (mediaRecorder.state === "recording") mediaRecorder.stop();
+  } else if (e.key === 'r') {
+    if (mediaRecorder.state === 'recording') mediaRecorder.stop();
     else mediaRecorder.start();
   }
-})
+});
 
 // Add a ticker callback to move the sprite back and forth
 app.ticker.add(() => {
