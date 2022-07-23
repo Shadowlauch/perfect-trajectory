@@ -96,7 +96,6 @@ const stage = addEntity(world);
 addComponent(world, StageComponent, stage);
 StageComponent.stageIndex[stage] = 0;
 addComponent(world, TimelineComponent, stage);
-TimelineComponent.starTime[stage] = 0;
 TimelineComponent.configIndex[stage] = configManager.add<Timeline>(Stage0);
 
 document.addEventListener('keydown', (e) => {

@@ -20,15 +20,21 @@ import {Player} from '../../components/Player';
 import {createPlayerTargetLoop} from '../bullets/spawn/loop/PlayerTarget';
 
 export interface TimelineEntry {
-  time: number;
+  delay: number;
   onTime: (world: World) => void;
+  canPass?: (world: World) => boolean;
 }
 
 export type Timeline = TimelineEntry[];
 
+const enemyQuery = defineQuery([Enemy]);
+
 export const Stage0: Timeline = [
   {
-    time: 1000,
+    delay: 1000,
+    canPass: (world) => {
+      return enemyQuery(world).length === 0;
+    },
     onTime: (world) => {
       const eid = addEntity(world);
       const [x, y] = [100, 100]
@@ -75,10 +81,9 @@ export const Stage0: Timeline = [
       ]);
 
       addComponent(world, TimelineComponent, eid);
-      TimelineComponent.starTime[eid] = world.time.elapsed;
       TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
         {
-          time: 0,
+          delay: 0,
           onTime: () => {
             // Purple bullet, spawns blue bullets
             const bulletPurple = addEntity(entityPrefabWorld);
@@ -121,7 +126,7 @@ export const Stage0: Timeline = [
             addComponent(world, EntitySpawner, bulletSpawner2);
             EntitySpawner.templateEntity[bulletSpawner2] = bulletPurple;
             EntitySpawner.delay[bulletSpawner2] = 500;
-            EntitySpawner.loop[bulletSpawner2] = 1;
+            EntitySpawner.loop[bulletSpawner2] = 127;
             EntitySpawner.loopInterval[bulletSpawner2] = 500;
           }
         }
@@ -129,7 +134,7 @@ export const Stage0: Timeline = [
     }
   },
   {
-    time: 1000,
+    delay: 5000,
     onTime: (world) => {
       const player = defineQuery([Player])(world)[0];
       const eid = addEntity(world);
@@ -177,10 +182,9 @@ export const Stage0: Timeline = [
       ]);
 
       addComponent(world, TimelineComponent, eid);
-      TimelineComponent.starTime[eid] = world.time.elapsed;
       TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
         {
-          time: 0,
+          delay: 0,
           onTime: () => {
             // Shoot purple bullets clockwise, opposite side of bulletSpawner
             const bulletSpawner2 = addEntity(world);
