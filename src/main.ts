@@ -24,6 +24,7 @@ import {TimelineComponent} from './components/Timeline';
 import {configManager} from './configs/ConfigManager';
 import {Stage0, Timeline} from './configs/stages/Stage0';
 import {createAttachmentSystem} from './systems/AttachmentSystem';
+import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 
 
 export interface World extends IWorld {
@@ -70,7 +71,7 @@ export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
 const pipeline = pipe(
   createPlayerMovementSystem(),
   //createEnemySpawnSystem(),
-  //createEnemyDeSpawnSystem(),
+  createEnemyDeSpawnSystem(),
   createTimelineSystem(),
   createBulletSpawnSystem(),
   createMovementSystem(),
