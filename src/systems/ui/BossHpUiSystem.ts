@@ -1,9 +1,9 @@
 import {Container, Graphics} from 'pixi.js';
-import {defineQuery, enterQuery, entityExists, exitQuery} from 'bitecs';
+import {defineQuery, enterQuery, entityExists, exitQuery, hasComponent} from 'bitecs';
 import {World} from '../../main';
 import {BossComponent} from '../../components/BossComponent';
 import {Transform} from '../../components/Transform';
-import {Enemy} from '../../components/Enemy';
+import {EnemyComponent} from '../../components/EnemyComponent';
 
 const color = 0xff0000;
 export const createBossHpUiSystem = (ui: Container) => {
@@ -34,13 +34,13 @@ export const createBossHpUiSystem = (ui: Container) => {
     for (const boss of bossQuery(world)) {
       const [container,, fillings] = hpGraphicsMap.get(boss)!;
       const enemyId = BossComponent.stageEid[boss];
-      container.visible = entityExists(world, enemyId);
+      container.visible = entityExists(world, enemyId) && hasComponent(world, EnemyComponent, enemyId);
 
       container.x = Transform.position.x[enemyId];
       container.y = Transform.position.y[enemyId];
 
       if (container.visible) {
-        const hpAngle = (1 - (Enemy.hp[enemyId] / Enemy.maxHp[enemyId])) * Math.PI * 2 || Math.PI * 4;
+        const hpAngle = (1 - (EnemyComponent.hp[enemyId] / EnemyComponent.maxHp[enemyId])) * Math.PI * 2 || Math.PI * 4;
         fillings.clear();
         fillings.lineStyle({color: color, width: 1});
         fillings.arc(0, 0, 69, -Math.PI / 2, hpAngle - Math.PI / 2, true);

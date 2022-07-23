@@ -1,14 +1,14 @@
 import {defineQuery, entityExists, exitQuery, hasComponent, removeEntity} from 'bitecs';
 import {Velocity} from '../components/Physics';
 import {Transform} from '../components/Transform';
-import {Enemy} from '../components/Enemy';
+import {EnemyComponent} from '../components/EnemyComponent';
 import {World} from '../main';
 import {StageComponent} from '../components/Stage';
 import {AttachmentComponent} from '../components/Attachment';
 
 export const createEnemyDeSpawnSystem = () => {
   const attachmentQuery = defineQuery([AttachmentComponent]);
-  const enemyQuery = defineQuery([Transform, Velocity, Enemy]);
+  const enemyQuery = defineQuery([Transform, Velocity, EnemyComponent]);
   const stageQuery = defineQuery([StageComponent]);
   const exitStageQuery = exitQuery(stageQuery);
 
@@ -24,7 +24,7 @@ export const createEnemyDeSpawnSystem = () => {
   return (world: World) => {
     const stageExit = exitStageQuery(world).length > 0;
     for (const enemy of enemyQuery(world)) {
-      if (stageExit || Enemy.hp[enemy] <= 0) {
+      if (stageExit || EnemyComponent.hp[enemy] <= 0) {
         removeEntity(world, enemy);
 
         for (const attached of attachmentQuery(world)) {

@@ -1,7 +1,7 @@
 import {addComponent, addEntity, defineQuery} from 'bitecs';
 import {Transform} from '../../components/Transform';
 import {AngularSpeed, Speed, Velocity} from '../../components/Physics';
-import {Enemy} from '../../components/Enemy';
+import {EnemyComponent} from '../../components/EnemyComponent';
 import {CollisionComponent} from '../../components/Collision';
 import {GraphicsCircle} from '../../components/GraphicsCircle';
 import {configManager} from '../ConfigManager';
@@ -28,7 +28,7 @@ export interface TimelineEntry {
 
 export type Timeline = TimelineEntry[];
 
-const enemyQuery = defineQuery([Enemy]);
+const enemyQuery = defineQuery([EnemyComponent]);
 
 let bossEid = 0;
 export const Stage0: Timeline = [
@@ -43,7 +43,7 @@ export const Stage0: Timeline = [
 
       addComponent(world, Transform, eid);
       addComponent(world, Velocity, eid);
-      addComponent(world, Enemy, eid);
+      addComponent(world, EnemyComponent, eid);
       addComponent(world, CollisionComponent, eid);
       CollisionComponent.filter[eid] = 0b000010;
       Transform.position.x[eid] = x;
@@ -52,9 +52,9 @@ export const Stage0: Timeline = [
       AngularSpeed.val[eid] = 0.01;
 
 
-      Enemy.spawnTime[eid] = world.time.elapsed;
-      Enemy.hp[eid] = 100;
-      Enemy.maxHp[eid] = 100;
+      EnemyComponent.spawnTime[eid] = world.time.elapsed;
+      EnemyComponent.hp[eid] = 100;
+      EnemyComponent.maxHp[eid] = 100;
 
       addComponent(world, GraphicsCircle, eid);
       GraphicsCircle.color[eid] = 0x00ff00;
@@ -149,7 +149,7 @@ export const Stage0: Timeline = [
 
       addComponent(world, Transform, eid);
       addComponent(world, Velocity, eid);
-      addComponent(world, Enemy, eid);
+      addComponent(world, EnemyComponent, eid);
       addComponent(world, CollisionComponent, eid);
       CollisionComponent.filter[eid] = 0b000010;
       Transform.position.x[eid] = x;
@@ -158,9 +158,9 @@ export const Stage0: Timeline = [
       AngularSpeed.val[eid] = 0.01;
 
 
-      Enemy.spawnTime[eid] = world.time.elapsed;
-      Enemy.hp[eid] = 100;
-      Enemy.maxHp[eid] = 100;
+      EnemyComponent.spawnTime[eid] = world.time.elapsed;
+      EnemyComponent.hp[eid] = 100;
+      EnemyComponent.maxHp[eid] = 100;
 
       addComponent(world, GraphicsCircle, eid);
       GraphicsCircle.color[eid] = 0x00ff00;

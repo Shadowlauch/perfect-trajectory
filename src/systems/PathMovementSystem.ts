@@ -1,7 +1,7 @@
 import {defineQuery} from 'bitecs';
 import { Transform } from '../components/Transform';
 import {World} from '../main';
-import { Enemy } from '../components/Enemy';
+import { EnemyComponent } from '../components/EnemyComponent';
 import {configManager} from '../configs/ConfigManager';
 import {PathComponent} from '../components/Path';
 import {PathPoint} from '../configs/enemies/EnemyConfig';
@@ -11,7 +11,7 @@ const lerp = (a: number, b: number, t: number) => {
 }
 
 export const createPathMovementSystem = () => {
-  const pathQuery = defineQuery([Transform, Enemy]);
+  const pathQuery = defineQuery([Transform, EnemyComponent]);
 
   return (world: World) => {
     const {time: {elapsed}} = world;
