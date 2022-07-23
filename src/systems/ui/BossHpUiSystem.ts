@@ -1,15 +1,15 @@
 import {Container, Graphics} from 'pixi.js';
-import {defineQuery, enterQuery, entityExists} from 'bitecs';
+import {defineQuery, enterQuery, entityExists, exitQuery} from 'bitecs';
 import {World} from '../../main';
 import {BossComponent} from '../../components/BossComponent';
 import {Transform} from '../../components/Transform';
 import {Enemy} from '../../components/Enemy';
 
 const color = 0xff0000;
-export const createBossHpUiComponent = (ui: Container) => {
+export const createBossHpUiSystem = (ui: Container) => {
   const bossQuery = defineQuery([BossComponent]);
   const enterSpriteQuery = enterQuery(bossQuery);
-  //const exitSpriteQuery = exitQuery(spriteQuery);
+  const exitSpriteQuery = exitQuery(bossQuery);
   const hpGraphicsMap: Map<number, [Container, Graphics, Graphics]> = new Map();
 
   return (world: World) => {
@@ -52,6 +52,11 @@ export const createBossHpUiComponent = (ui: Container) => {
       }
     }
 
+    for (const boss of exitSpriteQuery(world)) {
+      const [container] = hpGraphicsMap.get(boss)!;
+      container.destroy({children: true});
+      hpGraphicsMap.delete(boss);
+    }
 
     return world;
   };
