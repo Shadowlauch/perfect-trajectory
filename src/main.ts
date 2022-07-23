@@ -25,6 +25,7 @@ import {configManager} from './configs/ConfigManager';
 import {Stage0, Timeline} from './configs/stages/Stage0';
 import {createAttachmentSystem} from './systems/AttachmentSystem';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
+import {createBossHpUiComponent} from './systems/ui/BossHpSystem';
 
 
 export interface World extends IWorld {
@@ -46,9 +47,9 @@ export interface EntityPrefabWorld extends IWorld {}
 const size = {width: 640, height: 800};
 const app = new Application({
   ...size,
-  antialias: false,
   powerPreference: 'high-performance'
 });
+app.stage.sortableChildren = true;
 document.body.appendChild(app.view);
 const mediaRecorder = createMediaRecorder(app);
 
@@ -57,6 +58,12 @@ container.interactive = false;
 container.interactiveChildren = false;
 //container.filters = [new AdvancedBloomFilter()];
 app.stage.addChild(container);
+
+const uiContainer = new Container();
+uiContainer.interactive = false;
+uiContainer.interactiveChildren = false;
+uiContainer.zIndex = 100;
+app.stage.addChild(uiContainer);
 
 const loader = await loadSpirtes();
 
@@ -81,6 +88,7 @@ const pipeline = pipe(
   createPlayerShootSystem(),
   createBulletCleanUpSystem(),
   createCollisionSystem(),
+  createBossHpUiComponent(uiContainer),
   createGraphicsCircleSystem(app),
   createSpriteSystem(container, loader),
   //createCollisionDebugSystem(container),

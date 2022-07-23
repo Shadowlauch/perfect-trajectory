@@ -18,6 +18,7 @@ import {BulletSpawnConfig} from '../bullets/spawn/BulletSpawnConfig';
 import {createArcBurst} from '../bullets/spawn/burst/Arc';
 import {Player} from '../../components/Player';
 import {createPlayerTargetLoop} from '../bullets/spawn/loop/PlayerTarget';
+import {BossComponent} from '../../components/BossComponent';
 
 export interface TimelineEntry {
   delay: number;
@@ -29,9 +30,10 @@ export type Timeline = TimelineEntry[];
 
 const enemyQuery = defineQuery([Enemy]);
 
+let bossEid = 0;
 export const Stage0: Timeline = [
   {
-    delay: 1000,
+    delay: 0,
     canPass: (world) => {
       return enemyQuery(world).length === 0;
     },
@@ -51,12 +53,13 @@ export const Stage0: Timeline = [
 
 
       Enemy.spawnTime[eid] = world.time.elapsed;
-      Enemy.hp[eid] = 10;
+      Enemy.hp[eid] = 100;
+      Enemy.maxHp[eid] = 100;
 
       addComponent(world, GraphicsCircle, eid);
       GraphicsCircle.color[eid] = 0x00ff00;
-      GraphicsCircle.radius[eid] = 10;
-      CollisionComponent.radius[eid] = 8;
+      GraphicsCircle.radius[eid] = 30;
+      CollisionComponent.radius[eid] = 30;
 
       addComponent(world, PathComponent, eid);
       PathComponent.starTime[eid] = world.time.elapsed;
@@ -79,6 +82,10 @@ export const Stage0: Timeline = [
           delay: 3000
         }
       ]);
+
+      bossEid = addEntity(world);
+      addComponent(world, BossComponent, bossEid);
+      BossComponent.stageEid[bossEid] = eid;
 
       addComponent(world, TimelineComponent, eid);
       TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
@@ -152,12 +159,13 @@ export const Stage0: Timeline = [
 
 
       Enemy.spawnTime[eid] = world.time.elapsed;
-      Enemy.hp[eid] = 10;
+      Enemy.hp[eid] = 100;
+      Enemy.maxHp[eid] = 100;
 
       addComponent(world, GraphicsCircle, eid);
       GraphicsCircle.color[eid] = 0x00ff00;
-      GraphicsCircle.radius[eid] = 10;
-      CollisionComponent.radius[eid] = 8;
+      GraphicsCircle.radius[eid] = 30;
+      CollisionComponent.radius[eid] = 30;
 
       addComponent(world, PathComponent, eid);
       PathComponent.starTime[eid] = world.time.elapsed;
@@ -180,6 +188,8 @@ export const Stage0: Timeline = [
           delay: 3000
         }
       ]);
+
+      BossComponent.stageEid[bossEid] = eid;
 
       addComponent(world, TimelineComponent, eid);
       TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
