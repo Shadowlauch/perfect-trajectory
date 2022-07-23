@@ -6,11 +6,10 @@ import {Velocity} from '../components/Physics';
 import {SpriteComponent} from '../components/Sprite';
 import {CollisionComponent} from '../components/Collision';
 import {BulletComponent} from '../components/Bullet';
-import {GraphicsCircle} from '../components/GraphicsCircle';
 
 export const createPlayerShootSystem = () => {
   const playerQuery = defineQuery([Player]);
-  const cooldown = 50;
+  const cooldown = 80;
 
   return (world: World) => {
     const { time: {elapsed, delta} } = world
@@ -23,10 +22,10 @@ export const createPlayerShootSystem = () => {
       addComponent(world, SpriteComponent, bullet);
       addComponent(world, CollisionComponent, bullet);
       addComponent(world, BulletComponent, bullet);
-      SpriteComponent.spriteIndex[bullet] = 1;
+      SpriteComponent.spriteIndex[bullet] = 3;
       SpriteComponent.scale[bullet] = 0.2;
 
-      Transform.position.x[bullet] = Transform.position.x[pid] + GraphicsCircle.radius[pid];
+      Transform.position.x[bullet] = Transform.position.x[pid];
       Transform.position.y[bullet] = Transform.position.y[pid] - 40;
       Velocity.x[bullet] = 0;
       Velocity.y[bullet] = -0.7;

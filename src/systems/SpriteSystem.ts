@@ -18,8 +18,8 @@ export const createSpriteSystem = (container: Container, loader: Loader) => {
       const sprite = new Sprite(loader.resources[spriteConfig.key].texture);
       const scale = SpriteComponent.scale[eid] ?? 1;
       sprite.scale = {x: scale, y: scale};
-      sprite.anchor.x = 1 - sprite.width / spriteConfig.offsetX * scale;
-      sprite.anchor.y = 1 - sprite.height / spriteConfig.offsetY * scale;
+      sprite.anchor.x = spriteConfig.offsetX / sprite.width * scale;
+      sprite.anchor.y = spriteConfig.offsetY / sprite.height * scale;
       container.addChild(sprite);
       spriteMap[eid] = sprite;
     }
