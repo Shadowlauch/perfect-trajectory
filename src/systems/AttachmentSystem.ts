@@ -25,6 +25,7 @@ export const createAttachmentSystem = () => {
 
       Transform.position.x[eid] = Transform.position.x[pid] + offsetX;
       Transform.position.y[eid] = Transform.position.y[pid] + offsetY;
+      Transform.rotation[eid] = Transform.rotation[pid];
 
       done.push(eid);
       return;

@@ -1,3 +1,7 @@
 import {defineComponent, Types} from 'bitecs';
 
-export const KillAfter = defineComponent({ms: Types.f32});
+/** Kill an entity after a specified amount time */
+export const KillAfter = defineComponent({
+    /** Time to kill entity, in milliseconds */
+    ms: Types.f32
+});

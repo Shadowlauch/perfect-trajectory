@@ -1,3 +1,9 @@
 import {defineComponent, Types} from 'bitecs';
 
-export const TimelineComponent = defineComponent({starTime: Types.f32, configIndex: Types.ui8});
+/** Controls timings of stages, enemies, etc. */
+export const TimelineComponent = defineComponent({
+    /** add comment */
+    starTime: Types.f32,
+    /** Index into ConfigManager */
+    configIndex: Types.ui8
+});

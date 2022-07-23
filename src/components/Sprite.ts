@@ -1,3 +1,9 @@
 import {defineComponent, Types} from 'bitecs';
 
-export const SpriteComponent = defineComponent({spriteIndex: Types.ui8, scale: Types.f32});
+/** Give the entity a graphic */
+export const SpriteComponent = defineComponent({
+    /** Index into SPRITE inside Loader */
+    spriteIndex: Types.ui8,
+    /** Scale modifier */
+    scale: Types.f32
+});
