@@ -8,4 +8,7 @@ export const AttachmentComponent = defineComponent({
     referenceParentPosition: Types.i8,
     /** Boolean, if true, applies parent's rotation to transform */
     referenceParentRotation: Types.i8,
+    offsetX: Types.f32,
+    offsetY: Types.f32
+
 });
