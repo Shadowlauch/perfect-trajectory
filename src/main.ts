@@ -28,6 +28,7 @@ import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
 import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
 import {createTimeScoreSystem} from './systems/TimeScoreSystem';
+import {AdvancedBloomFilter} from 'pixi-filters';
 
 
 export interface World extends IWorld {
@@ -62,6 +63,7 @@ border.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.hei
 app.stage.addChild(border);
 
 const gameContainer = new Container();
+gameContainer.filters = [new AdvancedBloomFilter()];
 gameContainer.x = gameSize.padding;
 gameContainer.y = gameSize.padding;
 gameContainer.interactive = false;
@@ -107,6 +109,7 @@ const pipeline = pipe(
   createPlayerShootSystem(),
   createBulletCleanUpSystem(),
   createCollisionSystem(),
+  createTimeScoreSystem(),
   createTimeScoreSystem(),
   createBossHpUiSystem(gameUiContainer),
   createGraphicsCircleSystem(gameContainer),
