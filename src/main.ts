@@ -32,6 +32,7 @@ import {referenceTransformSystem} from './systems/ReferenceTransformSystem';
 import { killSystem } from './systems/KillSystem';
 import { removeComponentSystem } from './systems/RemoveComponentSystem';
 import {createPlayerHitSystem} from './systems/PlayerHitSystem';
+import {createTweenSystem} from './systems/TweenSystem';
 
 
 export interface World extends IWorld {
@@ -131,6 +132,7 @@ const pipeline = pipe(
   createBossHpUiSystem(gameUiContainer),
   createGraphicsCircleSystem(gameContainer),
   createSpriteSystem(gameContainer),
+  createTweenSystem(),
   //createCollisionDebugSystem(container),
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),
