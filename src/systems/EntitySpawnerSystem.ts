@@ -28,11 +28,13 @@ export const entitySpawnerSystem = (epworld: EntityPrefabWorld) => {
         // Infinite loop if INT8MAX
         if (EntitySpawner.loop[eid] < INT8MAX) {
           EntitySpawner.loop[eid]--;
-        }
-      } else if (!!EntitySpawner.killAfterLastLoop[eid]) {
-        // Kill after loop period ended
+          
+          // Kill after loop period ended if this was is the last iteration
+          if (EntitySpawner.loop[eid] < 0 && EntitySpawner.killAfterLastLoop[eid]) {
         addComponent(world, KillAfter, eid);
         KillAfter.ms[eid] = 0;
+          }
+        }
       }
 
       // Create a copy of the predefined entity into the main world

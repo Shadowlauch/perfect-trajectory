@@ -30,6 +30,7 @@ import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
 import {createTimeScoreSystem} from './systems/TimeScoreSystem';
 import {AdvancedBloomFilter} from 'pixi-filters';
 import {referenceTransformSystem} from './systems/ReferenceTransformSystem';
+import { killSystem } from './systems/KillSystem';
 
 
 export interface World extends IWorld {
@@ -117,6 +118,7 @@ const pipeline = pipe(
   referenceTransformSystem(),
   // ===========================
 
+  killSystem(),
   createBulletSpawnSystem(),
   createBulletCleanUpSystem(),
   createPlayerBoundarySystem(),
