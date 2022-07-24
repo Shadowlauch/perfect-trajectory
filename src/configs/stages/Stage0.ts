@@ -98,7 +98,7 @@ export const Stage0: Timeline = [
             addComponent(entityPrefabWorld, AngularSpeed, bulletPurple);
             Transform.position.x[bulletPurple] = 0;
             Transform.position.y[bulletPurple] = 0;
-            Transform.angle[bulletPurple] = 0;
+            Transform.rotation[bulletPurple] = 0;
             Speed.val[bulletPurple] = 0.1;
             AngularSpeed.val[bulletPurple] = -0.001;
             addComponent(entityPrefabWorld, SpriteComponent, bulletPurple);
@@ -117,11 +117,11 @@ export const Stage0: Timeline = [
             addComponent(world, AngularSpeed, bulletSpawner2);
             Transform.position.x[bulletSpawner2] = 50;
             Transform.position.y[bulletSpawner2] = 0;
-            Transform.angle[bulletSpawner2] = Math.PI;
+            Transform.rotation[bulletSpawner2] = Math.PI;
             AngularSpeed.val[bulletSpawner2] = Math.PI / 800;
             addComponent(world, AttachmentComponent, bulletSpawner2);
             AttachmentComponent.attachedTo[bulletSpawner2] = eid;
-            AttachmentComponent.applyParentAngle[bulletSpawner2] = 1;
+            AttachmentComponent.applyParentRotation[bulletSpawner2] = 1;
 
             addComponent(world, GraphicsCircle, bulletSpawner2);
             GraphicsCircle.color[bulletSpawner2] = 0xff0000;
@@ -199,11 +199,11 @@ export const Stage0: Timeline = [
             addComponent(world, AngularSpeed, bulletSpawner2);
             Transform.position.x[bulletSpawner2] = 50;
             Transform.position.y[bulletSpawner2] = 0;
-            Transform.angle[bulletSpawner2] = Math.PI;
+            Transform.rotation[bulletSpawner2] = Math.PI;
             AngularSpeed.val[bulletSpawner2] = Math.PI / 800;
             addComponent(world, AttachmentComponent, bulletSpawner2);
             AttachmentComponent.attachedTo[bulletSpawner2] = eid;
-            AttachmentComponent.applyParentAngle[bulletSpawner2] = 0;
+            AttachmentComponent.applyParentRotation[bulletSpawner2] = 0;
 
             addComponent(world, GraphicsCircle, bulletSpawner2);
             GraphicsCircle.color[bulletSpawner2] = 0xff0000;

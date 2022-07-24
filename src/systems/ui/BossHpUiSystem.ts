@@ -40,15 +40,15 @@ export const createBossHpUiSystem = (ui: Container) => {
       container.y = Transform.position.y[enemyId];
 
       if (container.visible) {
-        const hpAngle = (1 - (EnemyComponent.hp[enemyId] / EnemyComponent.maxHp[enemyId])) * Math.PI * 2 || Math.PI * 4;
+        const hpRotation = (1 - (EnemyComponent.hp[enemyId] / EnemyComponent.maxHp[enemyId])) * Math.PI * 2 || Math.PI * 4;
         fillings.clear();
         fillings.lineStyle({color: color, width: 1});
-        fillings.arc(0, 0, 69, -Math.PI / 2, hpAngle - Math.PI / 2, true);
+        fillings.arc(0, 0, 69, -Math.PI / 2, hpRotation - Math.PI / 2, true);
         fillings.endFill()
-        fillings.arc(0, 0, 63, -Math.PI / 2, hpAngle - Math.PI / 2, true);
+        fillings.arc(0, 0, 63, -Math.PI / 2, hpRotation - Math.PI / 2, true);
         fillings.endFill();
         fillings.lineStyle({color: 0xffffff, width: 4});
-        fillings.arc(0, 0, 66, -Math.PI / 2, hpAngle - Math.PI / 2, true);
+        fillings.arc(0, 0, 66, -Math.PI / 2, hpRotation - Math.PI / 2, true);
       }
     }
 

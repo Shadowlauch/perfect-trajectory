@@ -7,4 +7,4 @@ export const KillAfter = defineComponent({
 });
 
 /** Used for initializing positions when spawning entities. Entity removes AttachmentComponent at end of frame. */
-export const Unparent = defineComponent();
+export const RemoveAttachment = defineComponent();

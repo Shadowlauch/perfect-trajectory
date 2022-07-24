@@ -21,7 +21,7 @@ export const createSpriteSystem = (container: Container) => {
       sprite.anchor.y = spriteConfig.offsetY / sprite.height * scale;
       sprite.x = Transform.globalPosition.x[eid];
       sprite.y = Transform.globalPosition.y[eid];
-      sprite.rotation = Transform.globalAngle[eid];
+      sprite.rotation = Transform.globalRotation[eid];
       container.addChild(sprite);
       spriteMap[eid] = sprite;
     }
@@ -30,7 +30,7 @@ export const createSpriteSystem = (container: Container) => {
       const sprite = spriteMap[eid];
       sprite.x = Transform.globalPosition.x[eid];
       sprite.y = Transform.globalPosition.y[eid];
-      sprite.rotation = Transform.globalAngle[eid];
+      sprite.rotation = Transform.globalRotation[eid];
       sprite.zIndex = SpriteComponent.zIndex[eid];
       // if (hasComponent(world, Velocity, eid)) {
       //   //TODO: This needs to be its own thing I'm just lazy rn

@@ -2,7 +2,7 @@ import { addComponent, defineDeserializer, defineQuery, defineSerializer, DESERI
 import { EntityPrefabWorld, World } from '../main';
 import { EntitySpawner } from '../components/EntitySpawner';
 import { Transform } from '../components/Transform';
-import { KillAfter, Unparent } from '../components/KillAfter';
+import { KillAfter, RemoveAttachment } from '../components/KillAfter';
 import { INT8MAX } from '../components/Common';
 import { AttachmentComponent } from '../components/Attachment';
 
@@ -52,8 +52,8 @@ export const entitySpawnerSystem = (epworld: EntityPrefabWorld) => {
           continue;
         }
         addComponent(world, AttachmentComponent, spawnedEnt);
-        addComponent(world, Unparent, spawnedEnt);
-        AttachmentComponent.applyParentAngle[spawnedEnt] = 1;
+        addComponent(world, RemoveAttachment, spawnedEnt);
+        AttachmentComponent.applyParentRotation[spawnedEnt] = 1;
         AttachmentComponent.attachedTo[spawnedEnt] = eid;
       }
     }

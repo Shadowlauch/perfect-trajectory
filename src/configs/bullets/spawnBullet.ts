@@ -7,7 +7,7 @@ import {CollisionComponent} from '../../components/Collision';
 import {BulletComponent} from '../../components/Bullet';
 import {spriteLoader} from '../../loader/Loader';
 
-export const spawnBullet = (world: World, x: number, y: number, angle: number, speed: number) => {
+export const spawnBullet = (world: World, x: number, y: number, rotation: number, speed: number) => {
   const bullet = addEntity(world);
 
   addComponent(world, Transform, bullet);
@@ -22,10 +22,10 @@ export const spawnBullet = (world: World, x: number, y: number, angle: number, s
 
   Transform.position.x[bullet] = x;
   Transform.position.y[bullet] = y;
-  Transform.angle[bullet] = angle;
+  Transform.rotation[bullet] = rotation;
   Transform.origin.x[bullet] = 0;
   Transform.origin.y[bullet] = 0;
-  Transform.frameAngle[bullet] = 0;
+  Transform.frameRotation[bullet] = 0;
   Speed.val[bullet] = speed;
   CollisionComponent.group[bullet] = 0b000001;
   CollisionComponent.radius[bullet] = 6;

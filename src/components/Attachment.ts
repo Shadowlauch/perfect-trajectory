@@ -7,6 +7,6 @@ import {defineComponent, Types} from 'bitecs';
 export const AttachmentComponent = defineComponent({
     /** EID of parent */
     attachedTo: Types.eid,
-    /** Boolean, if true, applies parent's angle to local reference frame */
-    applyParentAngle: Types.i8,
+    /** Boolean, if true, applies parent's rotation to local reference frame */
+    applyParentRotation: Types.i8,
 });

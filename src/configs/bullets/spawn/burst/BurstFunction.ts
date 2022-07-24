@@ -3,7 +3,7 @@ import {World} from '../../../../main';
 export interface BulletSpawn {
   x: number;
   y: number;
-  angle: number;
+  rotation: number;
   speed: number;
 }
 

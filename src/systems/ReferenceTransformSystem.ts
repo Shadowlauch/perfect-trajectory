@@ -14,16 +14,16 @@ export const referenceTransformSystem = () => {
     let s = 0;
     let rotatedX = Transform.position.x[eid];
     let rotatedY = Transform.position.y[eid];
-    if (Transform.frameAngle[eid] !== 0) {
-      s = Math.sin(Transform.frameAngle[eid]);
-      c = Math.cos(Transform.frameAngle[eid]);
+    if (Transform.frameRotation[eid] !== 0) {
+      s = Math.sin(Transform.frameRotation[eid]);
+      c = Math.cos(Transform.frameRotation[eid]);
       [rotatedX, rotatedY] = [rotatedX * c - rotatedY * s, rotatedX * s + rotatedY * c];
     }
     // Offset own displacement by parent's displacement, gets the final global position
     Transform.globalPosition.x[eid] = rotatedX + Transform.origin.x[eid];
     Transform.globalPosition.y[eid] = rotatedY + Transform.origin.y[eid];
-    // Resultant global angle
-    Transform.globalAngle[eid] = Transform.angle[eid] + Transform.frameAngle[eid];
+    // Resultant global rotation
+    Transform.globalRotation[eid] = Transform.rotation[eid] + Transform.frameRotation[eid];
   };
 
   const updatePosition = (world: World, eid: number) => {
@@ -37,8 +37,8 @@ export const referenceTransformSystem = () => {
       // Entity's local reference frame is parent's final transforms
       Transform.origin.x[eid] = Transform.globalPosition.x[pid];
       Transform.origin.y[eid] = Transform.globalPosition.y[pid];
-      if (AttachmentComponent.applyParentAngle[eid]) {
-        Transform.frameAngle[eid] = Transform.globalAngle[pid];
+      if (AttachmentComponent.applyParentRotation[eid]) {
+        Transform.frameRotation[eid] = Transform.globalRotation[pid];
       }
 
       // Compute final positions of this entity after all reference frame manipulations.

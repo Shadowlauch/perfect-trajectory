@@ -11,7 +11,7 @@ export const createArcBurst = (burstBulletCount: number, angleSpread: number): B
     const bullets = [];
     for (let i = 0; i < burstBulletCount; ++i) {
       const velAngel = initialVelAngle + i * angleStep;
-      bullets.push({x, y, angle: velAngel, speed: 0.1})
+      bullets.push({x, y, rotation: velAngel, speed: 0.1})
     }
     return bullets;
   }

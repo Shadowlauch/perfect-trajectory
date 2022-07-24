@@ -10,6 +10,6 @@ export const createPlayerTargetLoop = (player: number): LoopFunction => {
     const distanceX = targetX - Transform.globalPosition.x[spawner];
     const distanceY = targetY - Transform.globalPosition.y[spawner];
 
-    Transform.angle[spawner] = Math.atan2(distanceY, distanceX);
+    Transform.rotation[spawner] = Math.atan2(distanceY, distanceX);
   }
 }

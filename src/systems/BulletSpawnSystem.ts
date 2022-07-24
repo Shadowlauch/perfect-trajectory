@@ -34,7 +34,7 @@ export const createBulletSpawnSystem = () => {
       if (currentBurstCount < config.burstCount && (intraLoopTime - (currentBurstCount * config.burstDelay) - delta) <= 0){
         const bulletSpawns = config.onBurst(world, bulletSpawn, currentBurstCount);
         for (const bulletSpawn of bulletSpawns) {
-          const bullet = spawnBullet(world, bulletSpawn.x, bulletSpawn.y, bulletSpawn.angle, bulletSpawn.speed);
+          const bullet = spawnBullet(world, bulletSpawn.x, bulletSpawn.y, bulletSpawn.rotation, bulletSpawn.speed);
           BulletComponent.damage[bullet] = 1;
         }
       }
