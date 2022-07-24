@@ -10,8 +10,8 @@ export const createPlayerBoundarySystem = () => {
     const { size: {width, height} } = world
     const pid = playerQuery(world)[0];
 
-    Transform.position.x[pid] = Math.max(0, Math.min(width, Transform.position.x[pid]));
-    Transform.position.y[pid] = Math.max(0, Math.min(height, Transform.position.y[pid]));
+    Transform.finalPosition.x[pid] = Math.max(0, Math.min(width, Transform.finalPosition.x[pid]));
+    Transform.finalPosition.y[pid] = Math.max(0, Math.min(height, Transform.finalPosition.y[pid]));
 
     return world
   }

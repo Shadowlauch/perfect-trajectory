@@ -28,6 +28,9 @@ export const createPlayerShootSystem = () => {
 
       Transform.position.x[bullet] = Transform.position.x[pid] + GraphicsCircle.radius[pid];
       Transform.position.y[bullet] = Transform.position.y[pid] - 40;
+      Transform.origin.x[bullet] = 0;
+      Transform.origin.y[bullet] = 0;
+      Transform.frameRotation[bullet] = 0;
       Velocity.x[bullet] = 0;
       Velocity.y[bullet] = -0.7;
       CollisionComponent.group[bullet] = 0b000010;

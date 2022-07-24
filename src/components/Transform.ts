@@ -3,12 +3,20 @@ import { Vector2 } from './Common';
 
 /**
  * Displacement of entity in world frame.
- * If {@link LocalTransform} is also on the entity, it is applied to this
- * component to obtain the final entity position.
- * */
-export const Transform = defineComponent({position: Vector2, rotation: Types.f32});
-/**
- * Displacement of entity in local origin frame.
- * MovementSystem applies {@link Transform} to this component to obtain the final entity position.
+ * If {@link Attachment} component is also on the entity, origin and frameRotation are
+ * updated to reflect changes to the local reference frame.
  */
-export const LocalTransform = defineComponent({position: Vector2, rotation: Types.f32});
+export const Transform = defineComponent({
+    /** Position displacement relative to origin */
+    position: Vector2,
+    /** Rotational offset relative to origin */
+    rotation: Types.f32,
+    /** Origin of entity. If entity isn't parented to any entity, will probably stay (0,0). */
+    origin: Vector2,
+    /** Rotation of local reference frame. If entity isn't parented to any entity, will probably stay 0. */
+    frameRotation: Types.f32,
+    /** Do not touch. Final position of entity. */
+    finalPosition: Vector2,
+    /** Do not touch. Final rotation of entity */
+    finalRotation: Types.f32,
+});
