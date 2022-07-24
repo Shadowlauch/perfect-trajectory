@@ -6,6 +6,7 @@ import {Speed, Velocity} from '../components/Physics';
 import {SpriteComponent} from '../components/Sprite';
 import {CollisionComponent} from '../components/Collision';
 import {BulletComponent} from '../components/Bullet';
+import {spriteLoader} from '../loader/Loader';
 
 export const createPlayerShootSystem = () => {
   const playerQuery = defineQuery([PlayerComponent]);
@@ -23,7 +24,7 @@ export const createPlayerShootSystem = () => {
       addComponent(world, SpriteComponent, bullet);
       addComponent(world, CollisionComponent, bullet);
       addComponent(world, BulletComponent, bullet);
-      SpriteComponent.spriteIndex[bullet] = 3;
+      SpriteComponent.spriteIndex[bullet] = spriteLoader.getIndex('bullet26');
       SpriteComponent.scale[bullet] = 0.2;
 
       Transform.position.x[bullet] = Transform.position.x[pid];

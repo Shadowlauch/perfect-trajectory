@@ -4,6 +4,7 @@ import {Transform} from '../components/Transform';
 import {World} from '../main';
 import {SpriteComponent} from '../components/Sprite';
 import {CollisionComponent} from '../components/Collision';
+import {spriteLoader} from '../loader/Loader';
 
 export const createBulletSpawnTestSystem = () => {
   const shootingCooldown = 200
@@ -23,7 +24,7 @@ export const createBulletSpawnTestSystem = () => {
         addComponent(world, Velocity, bullet)
         addComponent(world, SpriteComponent, bullet);
         addComponent(world, CollisionComponent, bullet);
-        SpriteComponent.spriteIndex[bullet] = 0;
+        SpriteComponent.spriteIndex[bullet] = spriteLoader.getIndex('bullet01');
         CollisionComponent.group[bullet] = 0b000001;
 
         Transform.position.x[bullet] = -20

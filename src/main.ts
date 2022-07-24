@@ -8,7 +8,7 @@ import {createPlayerEntity} from './entities/Player';
 import {createPlayerMovementSystem} from './systems/PlayerMovementSystem';
 import {createPlayerBoundarySystem} from './systems/PlayerBoundarySystem';
 import {createShowFpsSystem} from './systems/ShowFpsSystem';
-import {loadSpirtes} from './loader/Loader';
+import {spriteLoader} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
@@ -58,7 +58,7 @@ const app = new Application({
 document.body.appendChild(app.view);
 const mediaRecorder = createMediaRecorder(app);
 
-const loader = await loadSpirtes();
+await spriteLoader.load();
 
 let border = new Graphics();
 border.lineStyle(2, 0xffffff);
@@ -78,7 +78,7 @@ mask.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.heigh
 mask.endFill();
 gameContainer.mask = mask;
 app.stage.addChild(gameContainer);
-const background = new Sprite(loader.resources['background1'].texture);
+const background = new Sprite(spriteLoader.getResource('background1'));
 gameContainer.addChild(background);
 
 const gameUiContainer = new Container();
@@ -126,7 +126,7 @@ const pipeline = pipe(
   createPlayerHitSystem(world),
   createBossHpUiSystem(gameUiContainer),
   createGraphicsCircleSystem(gameContainer),
-  createSpriteSystem(gameContainer, loader),
+  createSpriteSystem(gameContainer),
   //createCollisionDebugSystem(container),
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),

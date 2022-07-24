@@ -1,2 +1,3 @@
 background: https://deep-fold.itch.io/space-background-generator
 bullets: https://wenrexa.itch.io/laser2020
+test characters: https://joori.itch.io/free-graphics

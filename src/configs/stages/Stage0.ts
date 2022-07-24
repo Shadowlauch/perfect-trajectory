@@ -19,6 +19,7 @@ import {createArcBurst} from '../bullets/spawn/burst/Arc';
 import {PlayerComponent} from '../../components/PlayerComponent';
 import {createPlayerTargetLoop} from '../bullets/spawn/loop/PlayerTarget';
 import {BossComponent} from '../../components/BossComponent';
+import {spriteLoader} from '../../loader/Loader';
 
 export interface TimelineEntry {
   delay: number;
@@ -48,17 +49,15 @@ export const Stage0: Timeline = [
       CollisionComponent.filter[eid] = 0b000010;
       Transform.position.x[eid] = x;
       Transform.position.y[eid] = y;
-      addComponent(world, AngularSpeed, eid);
-      AngularSpeed.val[eid] = 0.01;
-
 
       EnemyComponent.spawnTime[eid] = world.time.elapsed;
       EnemyComponent.hp[eid] = 100;
       EnemyComponent.maxHp[eid] = 100;
 
-      addComponent(world, GraphicsCircle, eid);
-      GraphicsCircle.color[eid] = 0x00ff00;
-      GraphicsCircle.radius[eid] = 30;
+      addComponent(world, SpriteComponent, eid);
+      SpriteComponent.spriteIndex[eid] = spriteLoader.getIndex('enemy-test');
+      SpriteComponent.scale[eid] = 0.3;
+      SpriteComponent.zIndex[eid] = 20;
       CollisionComponent.radius[eid] = 30;
 
       addComponent(world, PathComponent, eid);
@@ -105,7 +104,7 @@ export const Stage0: Timeline = [
             addComponent(entityPrefabWorld, SpriteComponent, bulletPurple);
             addComponent(entityPrefabWorld, CollisionComponent, bulletPurple);
             addComponent(entityPrefabWorld, BulletComponent, bulletPurple);
-            SpriteComponent.spriteIndex[bulletPurple] = 2;
+            SpriteComponent.spriteIndex[bulletPurple] = spriteLoader.getIndex('bullet03');
             SpriteComponent.scale[bulletPurple] = 0.5;
             CollisionComponent.group[bulletPurple] = 0b000001;
             CollisionComponent.radius[bulletPurple] = 5;
@@ -153,17 +152,15 @@ export const Stage0: Timeline = [
       CollisionComponent.filter[eid] = 0b000010;
       Transform.position.x[eid] = x;
       Transform.position.y[eid] = y;
-      addComponent(world, AngularSpeed, eid);
-      AngularSpeed.val[eid] = 0.01;
-
 
       EnemyComponent.spawnTime[eid] = world.time.elapsed;
       EnemyComponent.hp[eid] = 100;
       EnemyComponent.maxHp[eid] = 100;
 
-      addComponent(world, GraphicsCircle, eid);
-      GraphicsCircle.color[eid] = 0x00ff00;
-      GraphicsCircle.radius[eid] = 30;
+      addComponent(world, SpriteComponent, eid);
+      SpriteComponent.spriteIndex[eid] = spriteLoader.getIndex('enemy-test');
+      SpriteComponent.scale[eid] = 0.3;
+      SpriteComponent.zIndex[eid] = 20;
       CollisionComponent.radius[eid] = 30;
 
       addComponent(world, PathComponent, eid);
