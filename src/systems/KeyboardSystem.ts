@@ -4,7 +4,7 @@ export const createKeyboardSystem = (world: World) => {
   const pressedKeys: Set<typeof KeyboardEvent.prototype["key"]> = new Set();
   document.addEventListener("keydown", (e) => {
     pressedKeys.add(e.key.toLowerCase());
-    e.preventDefault();
+    if (!e.key.match(/F[0-9]+/)) e.preventDefault();
   });
 
   document.addEventListener("keyup", (e) => {
