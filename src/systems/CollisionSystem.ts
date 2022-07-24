@@ -3,9 +3,9 @@ import {Transform} from '../components/Transform';
 import {World} from '../main';
 import {CollisionComponent} from '../components/Collision';
 import {Circle, System, Body} from 'detect-collisions';
-import {PlayerComponent} from '../components/PlayerComponent';
 import {EnemyComponent} from '../components/EnemyComponent';
 import {BulletComponent} from '../components/Bullet';
+import {eventManager} from '../events/EventManager';
 
 export const createCollisionSystem = () => {
   const collisionQuery = defineQuery([Transform, CollisionComponent]);
@@ -47,11 +47,11 @@ export const createCollisionSystem = () => {
         const potEid = eidMap.get(potential)!;
         const group = CollisionComponent.group[potEid];
         if ((filter & group) > 0 && system.checkCollision(targetCircle, potential)) {
-          //TODO: Implement event system
-          if (hasComponent(world, PlayerComponent, target)) {
-            removeEntity(world, potEid);
-            PlayerComponent.lives[target] = Math.max(0, PlayerComponent.lives[target] - 1);
-          }
+          eventManager.trigger('collision', {
+            first: target,
+            second: potEid
+          });
+
           if (hasComponent(world, EnemyComponent, target) && hasComponent(world, BulletComponent, potEid)){
             removeEntity(world, potEid);
             EnemyComponent.hp[target] -= BulletComponent.damage[potEid];

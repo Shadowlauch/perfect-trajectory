@@ -8,11 +8,10 @@ import {createPlayerEntity} from './entities/Player';
 import {createPlayerMovementSystem} from './systems/PlayerMovementSystem';
 import {createPlayerBoundarySystem} from './systems/PlayerBoundarySystem';
 import {createShowFpsSystem} from './systems/ShowFpsSystem';
-import {loadSpirtes} from './loader/Loader';
+import {spriteLoader} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
-import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
@@ -32,6 +31,7 @@ import {AdvancedBloomFilter} from 'pixi-filters';
 import {referenceTransformSystem} from './systems/ReferenceTransformSystem';
 import { killSystem } from './systems/KillSystem';
 import { removeComponentSystem } from './systems/RemoveComponentSystem';
+import {createPlayerHitSystem} from './systems/PlayerHitSystem';
 
 
 export interface World extends IWorld {
@@ -60,7 +60,7 @@ const app = new Application({
 document.body.appendChild(app.view);
 const mediaRecorder = createMediaRecorder(app);
 
-const loader = await loadSpirtes();
+await spriteLoader.load();
 
 let border = new Graphics();
 border.lineStyle(2, 0xffffff);
@@ -80,7 +80,7 @@ mask.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.heigh
 mask.endFill();
 gameContainer.mask = mask;
 app.stage.addChild(gameContainer);
-const background = new Sprite(loader.resources['background1'].texture);
+const background = new Sprite(spriteLoader.getResource('background1'));
 gameContainer.addChild(background);
 
 const gameUiContainer = new Container();
@@ -101,10 +101,10 @@ world.size = gameSize;
 export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
 
 const pipeline = pipe(
+  createKeyboardSystem(world),
   createPlayerMovementSystem(),
   //createEnemySpawnSystem(),
   createEnemyDeSpawnSystem(),
-  createKeyboardSystem(world),
   createTimelineSystem(),
   createPlayerMovementSystem(),
   createPlayerShootSystem(),
@@ -127,10 +127,11 @@ const pipeline = pipe(
   createCollisionSystem(),
   createTimeScoreSystem(),
   createTimeScoreSystem(),
+  createPlayerHitSystem(world),
   createBossHpUiSystem(gameUiContainer),
   createGraphicsCircleSystem(gameContainer),
-  createSpriteSystem(gameContainer, loader),
-  // createCollisionDebugSystem(gameContainer),
+  createSpriteSystem(gameContainer),
+  //createCollisionDebugSystem(container),
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),
   createInfoBoxSystem(infoBoxContainer, size.width - gameSize.width - gameSize.padding * 2),

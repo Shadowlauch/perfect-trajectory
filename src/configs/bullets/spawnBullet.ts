@@ -5,6 +5,7 @@ import {Speed,Velocity} from '../../components/Physics';
 import {SpriteComponent} from '../../components/Sprite';
 import {CollisionComponent} from '../../components/Collision';
 import {BulletComponent} from '../../components/Bullet';
+import {spriteLoader} from '../../loader/Loader';
 
 export const spawnBullet = (world: World, x: number, y: number, angle: number, speed: number) => {
   const bullet = addEntity(world);
@@ -15,7 +16,8 @@ export const spawnBullet = (world: World, x: number, y: number, angle: number, s
   addComponent(world, SpriteComponent, bullet);
   addComponent(world, CollisionComponent, bullet);
   addComponent(world, BulletComponent, bullet);
-  SpriteComponent.spriteIndex[bullet] = 0;
+  SpriteComponent.spriteIndex[bullet] = spriteLoader.getIndex('bullet01');
+  SpriteComponent.zIndex[bullet] = 30;
   SpriteComponent.scale[bullet] = 0.5;
 
   Transform.position.x[bullet] = x;

@@ -24,6 +24,7 @@ export const createGraphicsCircleSystem = (container: Container) => {
       const graphics = graphicsMap[eid];
       graphics.x = Transform.globalPosition.x[eid];
       graphics.y = Transform.globalPosition.y[eid];
+      graphics.zIndex = GraphicsCircle.zIndex[eid];
     }
 
     for (const eid of exitGraphicsQuery(world)) {

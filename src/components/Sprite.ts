@@ -5,5 +5,6 @@ export const SpriteComponent = defineComponent({
     /** Index into SPRITE inside Loader */
     spriteIndex: Types.ui8,
     /** Scale modifier */
-    scale: Types.f32
+    scale: Types.f32,
+    zIndex: Types.ui8
 });
