@@ -1,4 +1,4 @@
-import {Application, Container, Graphics} from 'pixi.js';
+import {Application, Container, Graphics, Sprite} from 'pixi.js';
 import './style.css';
 import {addComponent, addEntity, createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
@@ -57,6 +57,8 @@ const app = new Application({
 document.body.appendChild(app.view);
 const mediaRecorder = createMediaRecorder(app);
 
+const loader = await loadSpirtes();
+
 let border = new Graphics();
 border.lineStyle(2, 0xffffff);
 border.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.height);
@@ -75,6 +77,8 @@ mask.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.heigh
 mask.endFill();
 gameContainer.mask = mask;
 app.stage.addChild(gameContainer);
+const background = new Sprite(loader.resources['background1'].texture);
+gameContainer.addChild(background);
 
 const gameUiContainer = new Container();
 gameUiContainer.interactive = false;
@@ -85,9 +89,6 @@ gameContainer.addChild(gameUiContainer);
 const infoBoxContainer = new Container();
 infoBoxContainer.x = gameSize.padding * 2 + gameSize.width;
 app.stage.addChild(infoBoxContainer);
-
-const loader = await loadSpirtes();
-
 const world = createWorld() as World;
 world.time = {delta: 0, elapsed: 0, then: performance.now()};
 world.input = {down: () => false};
