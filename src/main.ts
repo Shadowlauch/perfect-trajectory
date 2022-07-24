@@ -12,7 +12,6 @@ import {loadSpirtes} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
-import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
@@ -30,6 +29,7 @@ import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
 import {createTimeScoreSystem} from './systems/TimeScoreSystem';
 import {AdvancedBloomFilter} from 'pixi-filters';
 import {referenceTransformSystem} from './systems/ReferenceTransformSystem';
+import {createPlayerHitSystem} from './systems/PlayerHitSystem';
 
 
 export interface World extends IWorld {
@@ -99,10 +99,10 @@ world.size = gameSize;
 export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
 
 const pipeline = pipe(
+  createKeyboardSystem(world),
   createPlayerMovementSystem(),
   //createEnemySpawnSystem(),
   createEnemyDeSpawnSystem(),
-  createKeyboardSystem(world),
   createTimelineSystem(),
   createPlayerMovementSystem(),
   createPlayerShootSystem(),
@@ -123,6 +123,7 @@ const pipeline = pipe(
   createCollisionSystem(),
   createTimeScoreSystem(),
   createTimeScoreSystem(),
+  createPlayerHitSystem(world),
   createBossHpUiSystem(gameUiContainer),
   createGraphicsCircleSystem(gameContainer),
   createSpriteSystem(gameContainer, loader),
