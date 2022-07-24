@@ -17,14 +17,14 @@ export const createCollisionSystem = () => {
 
   return (world: World) => {
     for (const eid of enterCollisionQuery(world)) {
-      const circle = new Circle({x: Transform.finalPosition.x[eid], y: Transform.finalPosition.y[eid]}, CollisionComponent.radius[eid]);
+      const circle = new Circle({x: Transform.globalPosition.x[eid], y: Transform.globalPosition.y[eid]}, CollisionComponent.radius[eid]);
       system.insert(circle);
       circleMap.set(eid, circle);
       eidMap.set(circle, eid);
     }
 
     for (const eid of collisionQuery(world)) {
-      circleMap.get(eid)?.setPosition(Transform.finalPosition.x[eid], Transform.finalPosition.y[eid]);
+      circleMap.get(eid)?.setPosition(Transform.globalPosition.x[eid], Transform.globalPosition.y[eid]);
     }
 
     for (const eid of exitCollisionQuery(world)) {

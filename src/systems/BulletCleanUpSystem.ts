@@ -12,8 +12,8 @@ export const createBulletCleanUpSystem = () => {
       const offset = 100;
       const bullets = bulletQuery(world);
       for (const bulletId of bullets) {
-        const x = Transform.finalPosition.x[bulletId];
-        const y = Transform.finalPosition.y[bulletId];
+        const x = Transform.globalPosition.x[bulletId];
+        const y = Transform.globalPosition.y[bulletId];
         if (x < -offset || x > width + offset || y < -offset || y > height + offset) removeEntity(world, bulletId);
 
       }

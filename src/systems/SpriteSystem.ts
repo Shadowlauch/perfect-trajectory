@@ -25,9 +25,9 @@ export const createSpriteSystem = (container: Container, loader: Loader) => {
 
     for (const eid of spriteQuery(world)) {
       const sprite = spriteMap[eid];
-      sprite.x = Transform.finalPosition.x[eid];
-      sprite.y = Transform.finalPosition.y[eid];
-      sprite.rotation = Transform.finalRotation[eid];
+      sprite.x = Transform.globalPosition.x[eid];
+      sprite.y = Transform.globalPosition.y[eid];
+      sprite.rotation = Transform.globalAngle[eid];
       // if (hasComponent(world, Velocity, eid)) {
       //   //TODO: This needs to be its own thing I'm just lazy rn
       //   sprite.rotation = Math.atan2(Velocity.y[eid], Velocity.x[eid]);

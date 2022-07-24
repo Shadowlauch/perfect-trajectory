@@ -22,8 +22,8 @@ export const createGraphicsCircleSystem = (container: Container) => {
 
     for (const eid of graphicsQuery(world)) {
       const graphics = graphicsMap[eid];
-      graphics.x = Transform.finalPosition.x[eid];
-      graphics.y = Transform.finalPosition.y[eid];
+      graphics.x = Transform.globalPosition.x[eid];
+      graphics.y = Transform.globalPosition.y[eid];
     }
 
     for (const eid of exitGraphicsQuery(world)) {

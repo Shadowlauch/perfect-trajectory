@@ -24,13 +24,13 @@ export const createMovementSystem = () => {
 
     for (let i = 0; i < angspd.length; i++) {
       const eid = angspd[i];
-      Transform.rotation[eid] += AngularSpeed.val[eid];
+      Transform.angle[eid] += AngularSpeed.val[eid];
     }
 
     for (let i = 0; i < speed.length; i++) {
       const eid = speed[i];
-      Velocity.x[eid] = Math.cos(Transform.rotation[eid]) * Speed.val[eid];
-      Velocity.y[eid] = Math.sin(Transform.rotation[eid]) * Speed.val[eid];
+      Velocity.x[eid] = Math.cos(Transform.angle[eid]) * Speed.val[eid];
+      Velocity.y[eid] = Math.sin(Transform.angle[eid]) * Speed.val[eid];
     }
 
     for (let i = 0; i < move.length; i++) {

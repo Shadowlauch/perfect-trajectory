@@ -20,10 +20,10 @@ export const spawnBullet = (world: World, x: number, y: number, angle: number, s
 
   Transform.position.x[bullet] = x;
   Transform.position.y[bullet] = y;
-  Transform.rotation[bullet] = angle;
+  Transform.angle[bullet] = angle;
   Transform.origin.x[bullet] = 0;
   Transform.origin.y[bullet] = 0;
-  Transform.frameRotation[bullet] = 0;
+  Transform.frameAngle[bullet] = 0;
   Speed.val[bullet] = speed;
   CollisionComponent.group[bullet] = 0b000001;
   CollisionComponent.radius[bullet] = 6;

@@ -22,8 +22,8 @@ export const createCollisionDebugSystem = (container: Container) => {
 
     for (const eid of collisionQuery(world)) {
       const graphics = circleMap[eid];
-      graphics.x = Transform.finalPosition.x[eid];
-      graphics.y = Transform.finalPosition.y[eid];
+      graphics.x = Transform.globalPosition.x[eid];
+      graphics.y = Transform.globalPosition.y[eid];
     }
 
     for (const eid of exitCollisionQuery(world)) {

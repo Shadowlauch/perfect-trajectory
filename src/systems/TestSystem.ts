@@ -28,7 +28,7 @@ const arcShooter = (
   addComponent(epworld, Speed, bulletBlue);
   Transform.position.x[bulletBlue] = 0; // initial displacement 0 means that
   Transform.position.y[bulletBlue] = 0; // spawned entity will be spawned at location of spawner
-  Transform.rotation[bulletBlue] = 0; // This however will spawn this entity at a 90 deg angle to spawner's angle
+  Transform.angle[bulletBlue] = 0; // This however will spawn this entity at a 90 deg angle to spawner's angle
   Speed.val[bulletBlue] = 0.1;
   addComponent(epworld, SpriteComponent, bulletBlue);
   addComponent(epworld, CollisionComponent, bulletBlue);
@@ -45,7 +45,7 @@ const arcShooter = (
   addComponent(epworld, AngularSpeed, burst);
   Transform.position.x[burst] = 0;
   Transform.position.y[burst] = 0;
-  Transform.rotation[burst] = 0;
+  Transform.angle[burst] = 0;
   AngularSpeed.val[burst] = 0;
   // spawn purple bullets
   addComponent(epworld, EntitySpawner, burst);
@@ -66,7 +66,7 @@ const arcShooter = (
     addComponent(world, AngularSpeed, bulletSpawner);
     Transform.position.x[bulletSpawner] = 0;
     Transform.position.y[bulletSpawner] = 0;
-    Transform.rotation[bulletSpawner] = -halfAngle + angleSpread*i;
+    Transform.angle[bulletSpawner] = -halfAngle + angleSpread*i;
     AngularSpeed.val[bulletSpawner] = Math.PI/200;
     addComponent(world, CollisionComponent, bulletSpawner);
     CollisionComponent.group[bulletSpawner] = 0b000001;

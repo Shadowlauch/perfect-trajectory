@@ -28,10 +28,10 @@ export const createPlayerShootSystem = () => {
 
       Transform.position.x[bullet] = Transform.position.x[pid];
       Transform.position.y[bullet] = Transform.position.y[pid] - 40;
-      Transform.rotation[bullet] = 3*Math.PI/2;
+      Transform.angle[bullet] = 3*Math.PI/2;
       Transform.origin.x[bullet] = 0;
       Transform.origin.y[bullet] = 0;
-      Transform.frameRotation[bullet] = 0;
+      Transform.frameAngle[bullet] = 0;
       Speed.val[bullet] = 0.7;
       CollisionComponent.group[bullet] = 0b000010;
       //TODO: Collision shape does not fit at all
