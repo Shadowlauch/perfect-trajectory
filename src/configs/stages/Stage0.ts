@@ -92,7 +92,6 @@ export const Stage0: Timeline = [
         {
           delay: 0,
           onTime: () => {
-            // Purple bullet, spawns blue bullets
             const bulletPurple = addEntity(entityPrefabWorld);
             addComponent(entityPrefabWorld, Transform, bulletPurple);
             addComponent(entityPrefabWorld, Velocity, bulletPurple);
@@ -117,13 +116,13 @@ export const Stage0: Timeline = [
             addComponent(world, Transform, bulletSpawner2);
             addComponent(world, Velocity, bulletSpawner2);
             addComponent(world, AngularSpeed, bulletSpawner2);
-            Transform.position.x[bulletSpawner2] = x;
-            Transform.position.y[bulletSpawner2] = y;
+            Transform.position.x[bulletSpawner2] = 50;
+            Transform.position.y[bulletSpawner2] = 0;
             Transform.rotation[bulletSpawner2] = Math.PI;
             AngularSpeed.val[bulletSpawner2] = Math.PI / 800;
             addComponent(world, AttachmentComponent, bulletSpawner2);
             AttachmentComponent.attachedTo[bulletSpawner2] = eid;
-            AttachmentComponent.offsetX[bulletSpawner2] = 50;
+            AttachmentComponent.applyParentRotation[bulletSpawner2] = 1;
 
             addComponent(world, GraphicsCircle, bulletSpawner2);
             GraphicsCircle.color[bulletSpawner2] = 0xff0000;
@@ -201,13 +200,13 @@ export const Stage0: Timeline = [
             addComponent(world, Transform, bulletSpawner2);
             addComponent(world, Velocity, bulletSpawner2);
             addComponent(world, AngularSpeed, bulletSpawner2);
-            Transform.position.x[bulletSpawner2] = x;
-            Transform.position.y[bulletSpawner2] = y;
+            Transform.position.x[bulletSpawner2] = 50;
+            Transform.position.y[bulletSpawner2] = 0;
             Transform.rotation[bulletSpawner2] = Math.PI;
             AngularSpeed.val[bulletSpawner2] = Math.PI / 800;
             addComponent(world, AttachmentComponent, bulletSpawner2);
             AttachmentComponent.attachedTo[bulletSpawner2] = eid;
-            AttachmentComponent.offsetX[bulletSpawner2] = 50;
+            AttachmentComponent.applyParentRotation[bulletSpawner2] = 0;
 
             addComponent(world, GraphicsCircle, bulletSpawner2);
             GraphicsCircle.color[bulletSpawner2] = 0xff0000;

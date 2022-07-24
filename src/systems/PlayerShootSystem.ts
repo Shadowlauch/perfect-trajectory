@@ -2,7 +2,7 @@ import {addComponent, addEntity, defineQuery} from 'bitecs';
 import {World} from '../main';
 import {PlayerComponent} from '../components/PlayerComponent';
 import {Transform} from '../components/Transform';
-import {Velocity} from '../components/Physics';
+import {Speed, Velocity} from '../components/Physics';
 import {SpriteComponent} from '../components/Sprite';
 import {CollisionComponent} from '../components/Collision';
 import {BulletComponent} from '../components/Bullet';
@@ -19,6 +19,7 @@ export const createPlayerShootSystem = () => {
 
       addComponent(world, Transform, bullet);
       addComponent(world, Velocity, bullet);
+      addComponent(world, Speed, bullet);
       addComponent(world, SpriteComponent, bullet);
       addComponent(world, CollisionComponent, bullet);
       addComponent(world, BulletComponent, bullet);
@@ -27,8 +28,11 @@ export const createPlayerShootSystem = () => {
 
       Transform.position.x[bullet] = Transform.position.x[pid];
       Transform.position.y[bullet] = Transform.position.y[pid] - 40;
-      Velocity.x[bullet] = 0;
-      Velocity.y[bullet] = -0.7;
+      Transform.rotation[bullet] = 3*Math.PI/2;
+      Transform.origin.x[bullet] = 0;
+      Transform.origin.y[bullet] = 0;
+      Transform.frameRotation[bullet] = 0;
+      Speed.val[bullet] = 0.7;
       CollisionComponent.group[bullet] = 0b000010;
       //TODO: Collision shape does not fit at all
       CollisionComponent.radius[bullet] = 2;

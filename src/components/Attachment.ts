@@ -1,14 +1,12 @@
 import {defineComponent, Types} from 'bitecs';
 
-/** Parent an entity to another entity */
+/**
+ * Parent an entity to another entity.
+ * MovementSystem applies {@link Transform} to this local transform to obtain the final entity position.
+ */
 export const AttachmentComponent = defineComponent({
     /** EID of parent */
     attachedTo: Types.eid,
-    /** Boolean, if true, applies parent's position to transform */
-    referenceParentPosition: Types.i8,
-    /** Boolean, if true, applies parent's rotation to transform */
-    referenceParentRotation: Types.i8,
-    offsetX: Types.f32,
-    offsetY: Types.f32
-
+    /** Boolean, if true, applies parent's rotation to local reference frame */
+    applyParentRotation: Types.i8,
 });

@@ -42,10 +42,14 @@ export const entitySpawnerSystem = (epworld: EntityPrefabWorld) => {
         continue;
       }
       for (const spawnedEnt of spawnedEnts) {
-        // Perform initial positioning using EntitySpawner's transform
-        Transform.position.x[spawnedEnt] += Transform.position.x[eid];
-        Transform.position.y[spawnedEnt] += Transform.position.y[eid];
-        Transform.rotation[spawnedEnt] += Transform.rotation[eid];
+        // Perform initial positioning using EntitySpawner's final position.
+        // If spawnedEnt is a child, ReferenceTransformSystem will automatically
+        // recalculate origin based on parent's transforms.
+        // This solves the problem of non-parented entities needing to have their
+        // initial position relative to the spawner.
+        Transform.origin.x[spawnedEnt] += Transform.finalPosition.x[eid];
+        Transform.origin.y[spawnedEnt] += Transform.finalPosition.y[eid];
+        Transform.rotation[spawnedEnt] += Transform.finalRotation[eid];
       }
     }
 

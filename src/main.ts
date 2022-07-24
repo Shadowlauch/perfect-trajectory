@@ -12,6 +12,7 @@ import {loadSpirtes} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
+import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
@@ -23,12 +24,12 @@ import {createTimelineSystem} from './systems/TimelineSystem';
 import {TimelineComponent} from './components/Timeline';
 import {configManager} from './configs/ConfigManager';
 import {Stage0, Timeline} from './configs/stages/Stage0';
-import {createAttachmentSystem} from './systems/AttachmentSystem';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
 import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
 import {createTimeScoreSystem} from './systems/TimeScoreSystem';
 import {AdvancedBloomFilter} from 'pixi-filters';
+import {referenceTransformSystem} from './systems/ReferenceTransformSystem';
 
 
 export interface World extends IWorld {
@@ -101,14 +102,24 @@ const pipeline = pipe(
   createPlayerMovementSystem(),
   //createEnemySpawnSystem(),
   createEnemyDeSpawnSystem(),
+  createKeyboardSystem(world),
   createTimelineSystem(),
-  createBulletSpawnSystem(),
-  createMovementSystem(),
-  createPathMovementSystem(),
-  createPlayerBoundarySystem(),
-  createAttachmentSystem(),
+  createPlayerMovementSystem(),
   createPlayerShootSystem(),
+  createPathMovementSystem(),
+  entitySpawnerSystem(entityPrefabWorld),
+
+  // Movement and reference transform must happen in this order
+  // Don't touch position/movement after this.
+  // Do all positional modifying stuff before this.
+  // ===========================
+  createMovementSystem(),
+  referenceTransformSystem(),
+  // ===========================
+
+  createBulletSpawnSystem(),
   createBulletCleanUpSystem(),
+  createPlayerBoundarySystem(),
   createCollisionSystem(),
   createTimeScoreSystem(),
   createTimeScoreSystem(),
@@ -118,9 +129,7 @@ const pipeline = pipe(
   //createCollisionDebugSystem(container),
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),
-  createKeyboardSystem(world),
   //testSystem(world, entityPrefabWorld),
-  entitySpawnerSystem(entityPrefabWorld),
   createInfoBoxSystem(infoBoxContainer, size.width - gameSize.width - gameSize.padding * 2)
 );
 
@@ -140,6 +149,9 @@ document.addEventListener('keydown', (e) => {
     else mediaRecorder.start();
   }
 });
+
+// some sample script to stick somewhere else eventually
+
 
 // Add a ticker callback to move the sprite back and forth
 app.ticker.add(() => {
