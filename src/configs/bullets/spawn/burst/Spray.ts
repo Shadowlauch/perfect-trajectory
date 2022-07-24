@@ -8,7 +8,7 @@ export const createSprayBurst = (arcBulletCount: number, angleSpread: number, mi
     const burstAngleSpread = angleSpread / 180 * Math.PI;
 
     const angleStep = burstAngleSpread / (arcBulletCount - 1);
-    const initialVelAngle = Transform.globalAngle[spawner] - burstAngleSpread / 2;
+    const initialVelAngle = Transform.globalRotation[spawner] - burstAngleSpread / 2;
 
     if (mirror) {
         currentBurst += arcBulletCount - 1
