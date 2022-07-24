@@ -19,6 +19,9 @@ export const createSpriteSystem = (container: Container, loader: Loader) => {
       sprite.scale = {x: scale, y: scale};
       sprite.anchor.x = spriteConfig.offsetX / sprite.width * scale;
       sprite.anchor.y = spriteConfig.offsetY / sprite.height * scale;
+      sprite.x = Transform.globalPosition.x[eid];
+      sprite.y = Transform.globalPosition.y[eid];
+      sprite.rotation = Transform.globalAngle[eid];
       container.addChild(sprite);
       spriteMap[eid] = sprite;
     }

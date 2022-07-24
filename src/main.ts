@@ -31,6 +31,7 @@ import {createTimeScoreSystem} from './systems/TimeScoreSystem';
 import {AdvancedBloomFilter} from 'pixi-filters';
 import {referenceTransformSystem} from './systems/ReferenceTransformSystem';
 import { killSystem } from './systems/KillSystem';
+import { removeComponentSystem } from './systems/RemoveComponentSystem';
 
 
 export interface World extends IWorld {
@@ -108,6 +109,7 @@ const pipeline = pipe(
   createPlayerMovementSystem(),
   createPlayerShootSystem(),
   createPathMovementSystem(),
+  // testSystem(world, entityPrefabWorld),
   entitySpawnerSystem(entityPrefabWorld),
 
   // Movement and reference transform must happen in this order
@@ -128,11 +130,11 @@ const pipeline = pipe(
   createBossHpUiSystem(gameUiContainer),
   createGraphicsCircleSystem(gameContainer),
   createSpriteSystem(gameContainer, loader),
-  //createCollisionDebugSystem(container),
+  // createCollisionDebugSystem(gameContainer),
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),
-  //testSystem(world, entityPrefabWorld),
-  createInfoBoxSystem(infoBoxContainer, size.width - gameSize.width - gameSize.padding * 2)
+  createInfoBoxSystem(infoBoxContainer, size.width - gameSize.width - gameSize.padding * 2),
+  removeComponentSystem(),
 );
 
 createPlayerEntity(world);

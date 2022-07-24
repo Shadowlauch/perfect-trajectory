@@ -54,6 +54,9 @@ const arcShooter = (
   EntitySpawner.loop[burst] = burstCount-1;
   EntitySpawner.loopInterval[burst] = burstDelay;
   EntitySpawner.killAfterLastLoop[burst] = 1;
+  addComponent(epworld, CollisionComponent, burst);
+  CollisionComponent.group[burst] = 0b000001;
+  CollisionComponent.radius[burst] = 15;
 
   let newArcSpawners = [];
   const halfAngle = (angleSpread * burstBulletCount)/2;
@@ -75,7 +78,7 @@ const arcShooter = (
     addComponent(world, EntitySpawner, bulletSpawner);
     EntitySpawner.templateEntity[bulletSpawner] = burst;
     EntitySpawner.delay[bulletSpawner] = 0;
-    EntitySpawner.loop[bulletSpawner] = loop;
+    EntitySpawner.loop[bulletSpawner] = loop-1;
     EntitySpawner.loopInterval[bulletSpawner] = actualLoopDelay;
     newArcSpawners.push(bulletSpawner);
   }
@@ -102,7 +105,6 @@ export const testSystem = (world: World, epworld: EntityPrefabWorld) => {
   for (const eid of arc) {
     Transform.position.x[eid] = 200;
     Transform.position.y[eid] = 200;
-    addComponent(world, Velocity, eid);
     Velocity.x[eid] = 0.03;
     Velocity.y[eid] = 0.03;
   }
