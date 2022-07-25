@@ -12,7 +12,7 @@ import {defineComponent, Types} from 'bitecs';
 export const EntitySpawner = defineComponent({
     /** EID of the template to be spawned by the EntitySpawner */
     // note: don't use Types.eid
-    templateEntity: Types.f32,
+    templateEntity: Types.ui32,
     /**
      * Time in milliseconds before entity is spawned.
      * EntitySpawnerSystem will decrement this until it becomes <=0, which will then spawn the entity.
@@ -25,4 +25,6 @@ export const EntitySpawner = defineComponent({
     loopInterval: Types.f32,
     /** Boolean, if true, entity is removed after last iteration of loop */
     killAfterLastLoop: Types.ui8,
+    /** Boolean, if true, adds spawner as parent to spawned entity */
+    parentOfSpawned: Types.ui8,
 });
