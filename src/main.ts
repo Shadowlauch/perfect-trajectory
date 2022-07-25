@@ -12,7 +12,6 @@ import {spriteLoader} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
-// import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
@@ -29,12 +28,12 @@ import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
 import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
 import {createTimeScoreSystem} from './systems/TimeScoreSystem';
 import {referenceTransformSystem} from './systems/ReferenceTransformSystem';
-import { killSystem } from './systems/KillSystem';
-import { removeComponentSystem } from './systems/RemoveComponentSystem';
+import {killSystem} from './systems/KillSystem';
+import {removeComponentSystem} from './systems/RemoveComponentSystem';
 import {createPlayerHitSystem} from './systems/PlayerHitSystem';
 import {createTweenSystem} from './systems/TweenSystem';
 import { Stage1 } from './configs/stages/Stage1';
-
+import {createAnimatedSpriteSystem} from './systems/AnimatedSpriteSystem';
 
 export interface World extends IWorld {
   time: {
@@ -132,6 +131,7 @@ const pipeline = pipe(
   createBossHpUiSystem(gameUiContainer),
   createGraphicsCircleSystem(gameContainer),
   createSpriteSystem(gameContainer),
+  createAnimatedSpriteSystem(gameContainer),
   createTweenSystem(),
   //createCollisionDebugSystem(container),
   createShowFpsSystem(app),

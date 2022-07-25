@@ -1,9 +1,10 @@
-import {defineQuery, entityExists, exitQuery, hasComponent, removeEntity} from 'bitecs';
+import {addComponent, addEntity, defineQuery, entityExists, exitQuery, hasComponent, removeEntity} from 'bitecs';
 import {Transform} from '../components/Transform';
 import {EnemyComponent} from '../components/EnemyComponent';
 import {World} from '../main';
 import {StageComponent} from '../components/Stage';
 import {AttachmentComponent} from '../components/Attachment';
+import {addAnimatedSpriteComponent} from '../components/Sprite';
 
 export const createEnemyDeSpawnSystem = () => {
   const attachmentQuery = defineQuery([AttachmentComponent]);
@@ -47,6 +48,14 @@ export const createEnemyDeSpawnSystem = () => {
     const stageExit = exitStageQuery(world).length > 0;
     for (const enemy of enemyQuery(world)) {
       if (stageExit || EnemyComponent.hp[enemy] <= 0) {
+        const explosion = addEntity(world);
+        addComponent(world, Transform, explosion);
+        Transform.position.x[explosion] = Transform.position.x[enemy];
+        Transform.position.y[explosion] = Transform.position.y[enemy];
+        addAnimatedSpriteComponent(world, explosion, 'explosion', 'base', {
+          zIndex: 30
+        });
+
         removeEntity(world, enemy);
 
         // First remove immediate children of enemy
