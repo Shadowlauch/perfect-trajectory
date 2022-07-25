@@ -4,10 +4,10 @@ import { Transform } from '../../../../components/Transform';
 import { AngularSpeed, Speed, Velocity} from '../../../../components/Physics';
 import { EntitySpawner } from '../../../../components/EntitySpawner';
 import { SpriteComponent } from '../../../../components/Sprite';
-import { GraphicsCircle } from '../../../../components/GraphicsCircle';
 import { CollisionComponent } from '../../../../components/Collision';
 import  {BulletComponent } from '../../../../components/Bullet';
 import { AttachmentComponent } from '../../../../components/Attachment';
+import {spriteLoader} from '../../../../loader/Loader';
 
 /** Generic spread-style shooter */
 const arcShooter = (
@@ -32,8 +32,8 @@ const arcShooter = (
   addComponent(epworld, SpriteComponent, bulletBlue);
   addComponent(epworld, CollisionComponent, bulletBlue);
   addComponent(epworld, BulletComponent, bulletBlue);
-  SpriteComponent.spriteIndex[bulletBlue] = 0;
-  SpriteComponent.scale[bulletBlue] = 0.5;
+  SpriteComponent.spriteIndex[bulletBlue] = spriteLoader.getIndex('white01');
+  SpriteComponent.scale[bulletBlue] = 0.8;
   CollisionComponent.group[bulletBlue] = 0b000001;
   CollisionComponent.radius[bulletBlue] = 2;
 
@@ -112,9 +112,9 @@ export const TestAttack01 = (world: World, epworld: EntityPrefabWorld, eid: numb
   AttachmentComponent.attachedTo[orbitingPet] = bossPos;
   AttachmentComponent.applyParentRotation[orbitingPet] = 1;
 
-  addComponent(world, GraphicsCircle, orbitingPet);
+  /*addComponent(world, GraphicsCircle, orbitingPet);
   GraphicsCircle.color[orbitingPet] = 0xff0000;
-  GraphicsCircle.radius[orbitingPet] = 10;
+  GraphicsCircle.radius[orbitingPet] = 10;*/
   addComponent(world, CollisionComponent, orbitingPet);
   CollisionComponent.filter[orbitingPet] = 0b000010;
   CollisionComponent.radius[orbitingPet] = 30;

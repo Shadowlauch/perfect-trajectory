@@ -3,7 +3,6 @@ import {Transform} from '../../../components/Transform';
 import {AngularSpeed, Velocity} from '../../../components/Physics';
 import {EnemyComponent} from '../../../components/EnemyComponent';
 import {CollisionComponent} from '../../../components/Collision';
-import {GraphicsCircle} from '../../../components/GraphicsCircle';
 import {configManager} from '../../ConfigManager';
 import {TimelineComponent} from '../../../components/Timeline';
 import {entityPrefabWorld, World} from '../../../main';
@@ -163,9 +162,9 @@ export const Stage0: Timeline = [
             AttachmentComponent.attachedTo[bulletSpawner2] = eid;
             AttachmentComponent.applyParentRotation[bulletSpawner2] = 0;
 
-            addComponent(world, GraphicsCircle, bulletSpawner2);
+            /*addComponent(world, GraphicsCircle, bulletSpawner2);
             GraphicsCircle.color[bulletSpawner2] = 0xff0000;
-            GraphicsCircle.radius[bulletSpawner2] = 10;
+            GraphicsCircle.radius[bulletSpawner2] = 10;*/
 
             addComponent(world, BulletSpawnComponent, bulletSpawner2);
             BulletSpawnComponent.startTime[bulletSpawner2] = world.time.elapsed;

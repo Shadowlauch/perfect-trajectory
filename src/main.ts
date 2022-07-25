@@ -28,7 +28,6 @@ import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
 import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
 import {createTimeScoreSystem} from './systems/TimeScoreSystem';
-import {AdvancedBloomFilter} from 'pixi-filters';
 import {referenceTransformSystem} from './systems/ReferenceTransformSystem';
 import { killSystem } from './systems/KillSystem';
 import { removeComponentSystem } from './systems/RemoveComponentSystem';
@@ -70,7 +69,6 @@ border.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.hei
 app.stage.addChild(border);
 
 const gameContainer = new Container();
-gameContainer.filters = [new AdvancedBloomFilter()];
 gameContainer.x = gameSize.padding;
 gameContainer.y = gameSize.padding;
 gameContainer.interactive = false;
@@ -82,7 +80,9 @@ mask.drawRect(gameSize.padding, gameSize.padding, gameSize.width, gameSize.heigh
 mask.endFill();
 gameContainer.mask = mask;
 app.stage.addChild(gameContainer);
-const background = new Sprite(spriteLoader.getResource('background1'));
+const background = new Graphics();
+background.beginFill(0x1c1521);
+background.drawRect(0, 0, gameSize.width, gameSize.height);
 gameContainer.addChild(background);
 
 const gameUiContainer = new Container();
