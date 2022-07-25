@@ -3,12 +3,15 @@ import {SpriteConfig} from './SpriteConfig';
 
 const sprites: SpriteConfig[] = [
   new SpriteConfig('bullet01','/sprites/bullets/01.png', 67, 60),
+  new SpriteConfig('red01','/sprites/bullets/test/red.png', 25, 16),
+  new SpriteConfig('white01','/sprites/bullets/test/white.png', 25, 16),
+  new SpriteConfig('needle01','/sprites/bullets/test/needle.png', 27, 16),
   new SpriteConfig('bullet02','/sprites/bullets/02.png', 67, 60),
   new SpriteConfig('bullet03','/sprites/bullets/03.png', 67, 60),
   new SpriteConfig('bullet26','/sprites/bullets/26.png', 162, 43),
   new SpriteConfig('background1','/sprites/backgrounds/1.png'),
   new SpriteConfig('player-test','/sprites/characters/$silverstar.png', 133, 156),
-  new SpriteConfig('enemy-test','/sprites/characters/grant cloak.png', 132, 215),
+  new SpriteConfig('enemy-test','/sprites/characters/redgirl.png', 82, 200),
 ];
 
 class SpriteLoader {

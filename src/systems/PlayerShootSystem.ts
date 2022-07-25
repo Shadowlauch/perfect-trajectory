@@ -24,8 +24,8 @@ export const createPlayerShootSystem = () => {
       addComponent(world, SpriteComponent, bullet);
       addComponent(world, CollisionComponent, bullet);
       addComponent(world, BulletComponent, bullet);
-      SpriteComponent.spriteIndex[bullet] = spriteLoader.getIndex('bullet26');
-      SpriteComponent.scale[bullet] = 0.2;
+      SpriteComponent.spriteIndex[bullet] = spriteLoader.getIndex('needle01');
+      SpriteComponent.scale[bullet] = 1;
 
       Transform.position.x[bullet] = Transform.position.x[pid];
       Transform.position.y[bullet] = Transform.position.y[pid] - 40;

@@ -16,7 +16,7 @@ export const spawnBullet = (world: World, x: number, y: number, rotation: number
   addComponent(world, SpriteComponent, bullet);
   addComponent(world, CollisionComponent, bullet);
   addComponent(world, BulletComponent, bullet);
-  SpriteComponent.spriteIndex[bullet] = spriteLoader.getIndex('bullet01');
+  SpriteComponent.spriteIndex[bullet] = spriteLoader.getIndex('red01');
   SpriteComponent.zIndex[bullet] = 30;
   SpriteComponent.scale[bullet] = 0.5;
 
