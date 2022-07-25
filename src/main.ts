@@ -1,4 +1,4 @@
-import {Application, Container, Graphics, Sprite} from 'pixi.js';
+import {Application, Container, Graphics} from 'pixi.js';
 import './style.css';
 import {addComponent, addEntity, createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
