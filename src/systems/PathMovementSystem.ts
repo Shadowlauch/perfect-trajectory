@@ -8,7 +8,7 @@ import {PathPoint} from '../configs/enemies/EnemyConfig';
 import {lerp} from '../utils/math';
 
 export const createPathMovementSystem = () => {
-  const pathQuery = defineQuery([TransformComponent, EnemyComponent]);
+  const pathQuery = defineQuery([TransformComponent, EnemyComponent, PathComponent]);
 
   return (world: World) => {
     const {time: {elapsed}} = world;

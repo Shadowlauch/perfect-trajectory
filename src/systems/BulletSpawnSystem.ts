@@ -26,7 +26,7 @@ export const createBulletSpawnSystem = () => {
       const infiniteLoop = typeof config.loop === "boolean" && config.loop;
       const loopTimes = config.loop === false ? 0 : config.loop;
 
-      if (!infiniteLoop && loopTimes < loopedTimes) continue;
+      if (!infiniteLoop && loopTimes <= loopedTimes) continue;
 
       if (intraLoopTime - delta <= 0) config.onLoop?.(world, bulletSpawn);
 
@@ -35,6 +35,9 @@ export const createBulletSpawnSystem = () => {
         const bulletSpawns = config.onBurst(world, bulletSpawn, currentBurstCount);
         for (const bulletSpawn of bulletSpawns) {
           const bullet = spawnBullet(world, bulletSpawn.x, bulletSpawn.y, bulletSpawn.rotation, bulletSpawn.speed);
+          if (config.onSpawn !== undefined) {
+            config.onSpawn(world, bullet);
+          }
           BulletComponent.damage[bullet] = 1;
         }
       }
