@@ -1,4 +1,4 @@
-import {defineQuery, enterQuery, exitQuery, hasComponent, removeEntity} from 'bitecs';
+import {addComponent, defineQuery, enterQuery, exitQuery, hasComponent, removeEntity} from 'bitecs';
 import {Transform} from '../components/Transform';
 import {World} from '../main';
 import {CollisionComponent} from '../components/Collision';
@@ -6,6 +6,10 @@ import {Circle, System, Body} from 'detect-collisions';
 import {EnemyComponent} from '../components/EnemyComponent';
 import {BulletComponent} from '../components/Bullet';
 import {eventManager} from '../events/EventManager';
+import {TweenComponent} from '../components/TweenComponent';
+import {configManager} from '../configs/ConfigManager';
+import {TweenConfig} from './TweenSystem';
+import {SpriteComponent} from '../components/Sprite';
 
 export const createCollisionSystem = () => {
   const collisionQuery = defineQuery([Transform, CollisionComponent]);
@@ -55,6 +59,22 @@ export const createCollisionSystem = () => {
           if (hasComponent(world, EnemyComponent, target) && hasComponent(world, BulletComponent, potEid)){
             removeEntity(world, potEid);
             EnemyComponent.hp[target] -= BulletComponent.damage[potEid];
+
+            if (!hasComponent(world, TweenComponent, target)) {
+              addComponent(world, TweenComponent, target);
+              TweenComponent.tweenConfigIndex[target] = configManager.add<TweenConfig>({
+                startValue: 0,
+                endValue: 0.5,
+                onUpdate: (currentValue, eid) => {
+                  SpriteComponent.darkR[eid] = currentValue;
+                  SpriteComponent.darkG[eid] = currentValue;
+                  SpriteComponent.darkB[eid] = currentValue;
+                },
+                duration: 100,
+                yoyo: true
+              })
+            }
+
           }
         }
       }

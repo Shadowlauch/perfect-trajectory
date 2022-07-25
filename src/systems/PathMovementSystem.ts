@@ -5,10 +5,7 @@ import { EnemyComponent } from '../components/EnemyComponent';
 import {configManager} from '../configs/ConfigManager';
 import {PathComponent} from '../components/Path';
 import {PathPoint} from '../configs/enemies/EnemyConfig';
-
-const lerp = (a: number, b: number, t: number) => {
-  return a * (1 - t) + b * t
-}
+import {lerp} from '../utils/math';
 
 export const createPathMovementSystem = () => {
   const pathQuery = defineQuery([Transform, EnemyComponent]);

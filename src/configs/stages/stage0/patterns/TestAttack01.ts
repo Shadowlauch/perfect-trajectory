@@ -1,4 +1,4 @@
-import { addEntity, addComponent, Types } from 'bitecs';
+import { addEntity, addComponent } from 'bitecs';
 import { EntityPrefabWorld, World } from '../../../../main';
 import { Transform } from '../../../../components/Transform';
 import { AngularSpeed, Speed, Velocity} from '../../../../components/Physics';
