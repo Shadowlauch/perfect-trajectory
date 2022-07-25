@@ -24,7 +24,7 @@ export const createBulletSpawnSystem = () => {
       const intraLoopTime = lifeTime % timePerLoop;
       const loopedTimes = Math.floor(lifeTime / timePerLoop);
       const infiniteLoop = typeof config.loop === "boolean" && config.loop;
-      const loopTimes = config.loop === false ? 0 : config.loop
+      const loopTimes = config.loop === false ? 0 : config.loop;
 
       if (!infiniteLoop && loopTimes < loopedTimes) continue;
 

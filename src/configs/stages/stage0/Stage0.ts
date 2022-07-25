@@ -1,6 +1,6 @@
 import {addComponent, addEntity, defineQuery} from 'bitecs';
 import {Transform} from '../../../components/Transform';
-import {AngularSpeed, Speed, Velocity} from '../../../components/Physics';
+import {AngularSpeed, Velocity} from '../../../components/Physics';
 import {EnemyComponent} from '../../../components/EnemyComponent';
 import {CollisionComponent} from '../../../components/Collision';
 import {GraphicsCircle} from '../../../components/GraphicsCircle';
