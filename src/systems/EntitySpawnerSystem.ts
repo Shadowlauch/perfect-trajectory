@@ -52,7 +52,7 @@ export const entitySpawnerSystem = (epworld: EntityPrefabWorld) => {
           continue;
         }
         // Spawner becomes parent of child
-        if (hasComponent(world, AttachmentComponent, eid) && EntitySpawner.parentOfSpawned[eid]) {
+        if (EntitySpawner.parentOfSpawned[eid]) {
           addComponent(world, AttachmentComponent, spawnedEnt);
           AttachmentComponent.applyParentRotation[spawnedEnt] = 1;
           AttachmentComponent.attachedTo[spawnedEnt] = eid;
