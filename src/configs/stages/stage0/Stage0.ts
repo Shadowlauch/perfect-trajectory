@@ -7,9 +7,7 @@ import {GraphicsCircle} from '../../../components/GraphicsCircle';
 import {configManager} from '../../ConfigManager';
 import {TimelineComponent} from '../../../components/Timeline';
 import {entityPrefabWorld, World} from '../../../main';
-import {EntitySpawner} from '../../../components/EntitySpawner';
 import {SpriteComponent} from '../../../components/Sprite';
-import {BulletComponent} from '../../../components/Bullet';
 import {PathComponent} from '../../../components/Path';
 import {PathPoint} from '../../enemies/EnemyConfig';
 import {AttachmentComponent} from '../../../components/Attachment';
@@ -20,7 +18,7 @@ import {PlayerComponent} from '../../../components/PlayerComponent';
 import {createPlayerTargetLoop} from '../../bullets/spawn/loop/PlayerTarget';
 import {BossComponent} from '../../../components/BossComponent';
 import {spriteLoader} from '../../../loader/Loader';
-import { arcShooter, TestAttack01 } from './patterns/TestAttack01';
+import { TestAttack01 } from './patterns/TestAttack01';
 
 export interface TimelineEntry {
   delay: number;
