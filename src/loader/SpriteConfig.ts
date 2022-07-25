@@ -1,20 +1,22 @@
-export class SpriteConfig {
-  constructor(public key: string, public url: string, private _offsetX?: number, private _offsetY?: number) {
-  }
+import {Resource, Texture} from 'pixi.js';
 
-  get offsetX() {
-    return this._offsetX ?? 0;
-  }
+export interface SpriteLoadConfig {
+  key: string;
+  url: string;
+  offsetX?: number;
+  offsetY?: number;
+}
 
-  set offsetX(value: number) {
-    this._offsetX = value;
-  }
+export interface SpriteConfig extends Omit<Required<SpriteLoadConfig>, 'url'> {
+  texture?: Texture<Resource>;
+}
 
-  get offsetY() {
-    return this._offsetY ?? 0;
-  }
+export interface AnimationFrameConfig {
+  key: string;
+  texture: Texture<Resource>;
+  duration: number;
+}
 
-  set offsetY(value: number) {
-    this._offsetX = value;
-  }
+export interface AnimationSpriteConfig extends SpriteConfig {
+  frames: AnimationFrameConfig[];
 }

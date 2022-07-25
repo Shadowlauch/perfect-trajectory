@@ -15,7 +15,7 @@ export const createSpriteSystem = (container: Container) => {
   return (world: World) => {
     for (const eid of enterSpriteQuery(world)) {
       const spriteConfig = spriteLoader.getConfig(SpriteComponent.spriteIndex[eid]);
-      const sprite = new SpriteH(spriteLoader.getResource(spriteConfig.key));
+      const sprite = new SpriteH(spriteConfig.texture);
       const scale = SpriteComponent.scale[eid] ?? 1;
       sprite.scale = {x: scale, y: scale};
       sprite.anchor.x = spriteConfig.offsetX / sprite.width * scale;

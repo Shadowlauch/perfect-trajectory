@@ -1,17 +1,18 @@
-import {Loader, Resource, Texture} from 'pixi.js';
-import {SpriteConfig} from './SpriteConfig';
+import {Loader} from 'pixi.js';
+import {AnimationSpriteConfig, SpriteConfig, SpriteLoadConfig} from './SpriteConfig';
 
-const sprites: SpriteConfig[] = [
-  new SpriteConfig('bullet01','/sprites/bullets/01.png', 67, 60),
-  new SpriteConfig('red01','/sprites/bullets/test/red.png', 25, 16),
-  new SpriteConfig('white01','/sprites/bullets/test/white.png', 25, 16),
-  new SpriteConfig('needle01','/sprites/bullets/test/needle.png', 27, 16),
-  new SpriteConfig('bullet02','/sprites/bullets/02.png', 67, 60),
-  new SpriteConfig('bullet03','/sprites/bullets/03.png', 67, 60),
-  new SpriteConfig('bullet26','/sprites/bullets/26.png', 162, 43),
-  new SpriteConfig('background1','/sprites/backgrounds/1.png'),
-  new SpriteConfig('player-test','/sprites/characters/$silverstar.png', 133, 156),
-  new SpriteConfig('enemy-test','/sprites/characters/redgirl.png', 82, 200),
+const sprites: SpriteLoadConfig[] = [
+  {key: 'bullet01', url: '/sprites/bullets/01.png', offsetX: 67, offsetY: 60},
+  {key: 'red01', url: '/sprites/bullets/test/red.png', offsetX: 25, offsetY: 16},
+  {key: 'white01', url: '/sprites/bullets/test/white.png', offsetX: 25, offsetY: 16},
+  {key: 'needle01', url: '/sprites/bullets/test/needle.png', offsetX: 27, offsetY: 16},
+  {key: 'bullet02', url: '/sprites/bullets/02.png', offsetX: 67, offsetY: 60},
+  {key: 'bullet03', url: '/sprites/bullets/03.png', offsetX: 67, offsetY: 60},
+  {key: 'bullet26', url: '/sprites/bullets/26.png', offsetX: 162, offsetY: 43},
+  {key: 'background1', url: '/sprites/backgrounds/1.png'},
+  {key: 'player-test', url: '/sprites/characters/$silverstar.png', offsetX: 133, offsetY: 156},
+  {key: 'enemy-test', url: '/sprites/characters/redgirl.png', offsetX: 82, offsetY: 200},
+  {key: 'explosion', url: '/sprites/effects/explosion.json', offsetX: 64, offsetY: 64},
 ];
 
 class SpriteLoader {
@@ -19,6 +20,7 @@ class SpriteLoader {
   #keyToIndex: Map<string, number> = new Map();
   #indexToKey: Map<number, string> = new Map();
   #currentIndex = 0;
+  #spritesToLoad: SpriteLoadConfig[] = [];
 
   loader: Loader;
 
@@ -26,24 +28,26 @@ class SpriteLoader {
     this.loader = new Loader();
   }
 
-  add(sprite: SpriteConfig) {
-    const index = this.#currentIndex++;
-    this.#keyToIndex.set(sprite.key, index);
-    this.#indexToKey.set(index, sprite.key);
-    this.#sprites.set(sprite.key, sprite);
+  add(sprite: SpriteLoadConfig) {
+    this.#spritesToLoad.push(sprite);
+    this.loader.add(sprite.key, sprite.url);
   }
 
-  getResource(index: number): Texture<Resource>;
-  getResource(key: string): Texture<Resource>;
-  getResource(v: string | number) {
-    const key: string = typeof v === "number" ? this.getKey(v) : v;
+  getAnimationConfig(index: number): AnimationSpriteConfig;
+  getAnimationConfig(key: string): AnimationSpriteConfig;
+  getAnimationConfig(v: string | number) {
+    const key: string = typeof v === 'number' ? this.getKey(v) : v;
+    const animationConfig = this.#sprites.get(key) as AnimationSpriteConfig;
+    if (!animationConfig.frames) throw new Error(`Sprite with key ${key} has no animations`);
 
-    return this.loader.resources[key].texture;
+    return animationConfig;
   }
 
-  getConfig(index: number): SpriteConfig {
+  getConfig(index: number): Required<SpriteConfig> {
     const key = this.getKey(index);
-    return this.#sprites.get(key)!;
+    const config = this.#sprites.get(key)!;
+    if (!config.texture) throw new Error(`The sprite with key ${key} is probably an animation`);
+    return config as any;
   }
 
   getKey(index: number) {
@@ -56,12 +60,65 @@ class SpriteLoader {
     return this.#keyToIndex.get(key)!;
   }
 
-  async load() {
-    for (const [key, {url}] of this.#sprites) {
-      this.loader.add(key, url)
-    }
+  #addSprite(sprite: SpriteConfig) {
+    const index = this.#currentIndex++;
+    this.#keyToIndex.set(sprite.key, index);
+    this.#indexToKey.set(index, sprite.key);
+    this.#sprites.set(sprite.key, sprite);
+  }
 
-    return new Promise<Loader>(resolve => this.loader.load((loader) => resolve(loader)));
+  async load() {
+    return new Promise<Loader>(resolve => this.loader.load((loader) => {
+      for (const sprite of this.#spritesToLoad) {
+        if (loader.resources[sprite.key].spritesheet) {
+          const sheet = loader.resources[sprite.key].spritesheet!;
+          // @ts-ignore
+          const tags = sheet.data.meta.frameTags as { name: string, from: number, to: number, direction: string }[];
+          this.#addSprite({
+            frames: Object.entries(sheet.textures).map(([key, frame]) => {
+              return {
+                texture: frame,
+                key,
+                // @ts-ignore
+                duration: sheet.data.frames[key].duration ?? 0
+              };
+            }),
+            key: sprite.key + ".base",
+            offsetX: sprite.offsetX ?? 0,
+            offsetY: sprite.offsetY ?? 0,
+          } as AnimationSpriteConfig);
+
+          for (const tag of tags) {
+            this.#addSprite({
+              frames: Object.entries(sheet.textures).slice(tag.from, tag.to + 1).map(([key, frame]) => {
+                  return {
+                    texture: frame,
+                    key,
+                    // @ts-ignore
+                    duration: sheet.data.frames[key].duration ?? 0
+                  };
+                }
+              ),
+              key: sprite.key + "." + tag.name,
+              offsetX: sprite.offsetX ?? 0,
+              offsetY: sprite.offsetY ?? 0,
+            } as AnimationSpriteConfig);
+          }
+        } else {
+          this.#addSprite({
+            texture: loader.resources[sprite.key].texture!,
+            key: sprite.key,
+            offsetX: sprite.offsetX ?? 0,
+            offsetY: sprite.offsetY ?? 0,
+          });
+        }
+      }
+
+      this.#spritesToLoad = [];
+
+
+      resolve(loader);
+    }));
   }
 }
 
