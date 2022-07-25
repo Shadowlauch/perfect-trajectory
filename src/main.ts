@@ -31,6 +31,7 @@ import {killSystem} from './systems/KillSystem';
 import {removeComponentSystem} from './systems/RemoveComponentSystem';
 import {createPlayerHitSystem} from './systems/PlayerHitSystem';
 import {createTweenSystem} from './systems/TweenSystem';
+import {Stage1} from './configs/stages/Stage1';
 import {createAnimatedSpriteSystem} from './systems/AnimatedSpriteSystem';
 import {createEventListenerCleanupSystem} from './systems/EventListenerCleanupSystem';
 
