@@ -12,6 +12,7 @@ import {spriteLoader} from './loader/Loader';
 import {createSpriteSystem} from './systems/SpriteSystem';
 import {createKeyboardSystem} from './systems/KeyboardSystem';
 import {createCollisionSystem} from './systems/CollisionSystem';
+import {createCollisionDebugSystem} from './systems/CollisionDebugSystem';
 import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
@@ -22,7 +23,7 @@ import {entitySpawnerSystem} from './systems/EntitySpawnerSystem';
 import {createTimelineSystem} from './systems/TimelineSystem';
 import {TimelineComponent} from './components/Timeline';
 import {configManager} from './configs/ConfigManager';
-import {Stage0, Timeline} from './configs/stages/Stage0';
+import {Stage0, Timeline} from './configs/stages/stage0/Stage0';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
 import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
@@ -103,13 +104,11 @@ export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
 const pipeline = pipe(
   createKeyboardSystem(world),
   createPlayerMovementSystem(),
-  //createEnemySpawnSystem(),
   createEnemyDeSpawnSystem(),
   createTimelineSystem(),
   createPlayerMovementSystem(),
   createPlayerShootSystem(),
   createPathMovementSystem(),
-  // testSystem(world, entityPrefabWorld),
   entitySpawnerSystem(entityPrefabWorld),
 
   // Movement and reference transform must happen in this order
@@ -131,7 +130,7 @@ const pipeline = pipe(
   createBossHpUiSystem(gameUiContainer),
   createGraphicsCircleSystem(gameContainer),
   createSpriteSystem(gameContainer),
-  //createCollisionDebugSystem(container),
+  // createCollisionDebugSystem(gameContainer),
   createShowFpsSystem(app),
   createTimeSystem(app.ticker),
   createInfoBoxSystem(infoBoxContainer, size.width - gameSize.width - gameSize.padding * 2),
