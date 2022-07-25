@@ -1,5 +1,4 @@
 import {defineQuery, entityExists, exitQuery, hasComponent, removeEntity} from 'bitecs';
-import {Velocity} from '../components/Physics';
 import {Transform} from '../components/Transform';
 import {EnemyComponent} from '../components/EnemyComponent';
 import {World} from '../main';
