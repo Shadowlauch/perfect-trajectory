@@ -9,11 +9,6 @@ import { CollisionComponent } from '../../../../components/Collision';
 import  {BulletComponent } from '../../../../components/Bullet';
 import { AttachmentComponent } from '../../../../components/Attachment';
 
-// How to use EntitySpawner:
-// Add a pre-defined entity to an EntityPrefabWorld
-// Create another entity with EntitySpawner component in the main world
-// Give the entity spawner the pre-defined entity's eid
-
 /** Generic spread-style shooter */
 const arcShooter = (
     world: World,
@@ -25,13 +20,14 @@ const arcShooter = (
     burstBulletCount: number, // number of 'streams' in a burst
     angleSpread: number       // rotation between each 'stream'
   ): number[] => {
+  // The actual bullet fired
   const bulletBlue = addEntity(epworld);
   addComponent(epworld, Transform, bulletBlue);
   addComponent(epworld, Velocity, bulletBlue);
   addComponent(epworld, Speed, bulletBlue);
-  Transform.position.x[bulletBlue] = 0; // initial displacement 0 means that
-  Transform.position.y[bulletBlue] = 0; // spawned entity will be spawned at location of spawner
-  Transform.rotation[bulletBlue] = 0; // This however will spawn this entity at a 90 deg rotation to spawner's rotation
+  Transform.position.x[bulletBlue] = 0; // Initial displacement 0 means that
+  Transform.position.y[bulletBlue] = 0; // spawned entity will be spawned at location of spawner.
+  Transform.rotation[bulletBlue] = 0;   // Will be fired in direction of spawner.
   Speed.val[bulletBlue] = 0.1;
   addComponent(epworld, SpriteComponent, bulletBlue);
   addComponent(epworld, CollisionComponent, bulletBlue);
@@ -41,50 +37,46 @@ const arcShooter = (
   CollisionComponent.group[bulletBlue] = 0b000001;
   CollisionComponent.radius[bulletBlue] = 2;
 
-  // Shoot purple bullets clockwise
+  // Shoot short rapid-fire bursts
   const burst = addEntity(epworld);
   addComponent(epworld, Transform, burst);
   addComponent(epworld, Velocity, burst);
   Transform.position.x[burst] = 0;
   Transform.position.y[burst] = 0;
   Transform.rotation[burst] = 0;
-  // spawn purple bullets
+  // Spawn blue bullets
   addComponent(epworld, EntitySpawner, burst);
   EntitySpawner.templateEntity[burst] = bulletBlue;
   EntitySpawner.delay[burst] = 0;
   EntitySpawner.loop[burst] = burstCount-1;
   EntitySpawner.loopInterval[burst] = burstDelay;
-  EntitySpawner.killAfterLastLoop[burst] = 1;
-  EntitySpawner.parentOfSpawned[burst] = 0;
-  addComponent(epworld, CollisionComponent, burst);
-  CollisionComponent.group[burst] = 0b000001;
-  CollisionComponent.radius[burst] = 15;
+  EntitySpawner.killAfterLastLoop[burst] = 1;   // Kill this spawner after it's finished shooting
+  EntitySpawner.parentOfSpawned[burst] = 0;     // The bullets won't be parented to the spawner
 
   let newArcSpawners = [];
+  // Fan out centered at shooting direction
   const halfRotation = (angleSpread * burstBulletCount)/2;
   const actualLoopDelay = loopDelay + (burstDelay * burstCount);
   for (let i = 0; i < burstBulletCount; i++) {
-    // Shoot purple bullets clockwise, opposite side of bulletSpawner
+    // Loop through shooting of rapid fire bursts
     const bulletSpawner = addEntity(world);
     addComponent(world, Transform, bulletSpawner);
     addComponent(world, Velocity, bulletSpawner);
     Transform.position.x[bulletSpawner] = 0;
     Transform.position.y[bulletSpawner] = 0;
     Transform.rotation[bulletSpawner] = -halfRotation + angleSpread*i;
-    addComponent(world, CollisionComponent, bulletSpawner);
-    CollisionComponent.group[bulletSpawner] = 0b000001;
-    CollisionComponent.radius[bulletSpawner] = 20;
-    // spawn purple bullets
+    // spawn bursts
     addComponent(world, EntitySpawner, bulletSpawner);
     EntitySpawner.templateEntity[bulletSpawner] = burst;
     EntitySpawner.delay[bulletSpawner] = 0;
     EntitySpawner.loop[bulletSpawner] = loop-1;
     EntitySpawner.loopInterval[bulletSpawner] = actualLoopDelay;
     EntitySpawner.killAfterLastLoop[burst] = 1;
-    EntitySpawner.parentOfSpawned[bulletSpawner] = 1;
+    EntitySpawner.parentOfSpawned[bulletSpawner] = 1; // Bursts track parent
+
     newArcSpawners.push(bulletSpawner);
   }
-
+  // Return eids for further manipulation
   return newArcSpawners;
 }
 
