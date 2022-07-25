@@ -1,15 +1,24 @@
 import {World} from '../main';
-import {addComponent, defineQuery, enterQuery, removeComponent} from 'bitecs';
+import {defineQuery, enterQuery, removeComponent} from 'bitecs';
 import {TweenComponent} from '../components/TweenComponent';
 import {configManager} from '../configs/ConfigManager';
 import {lerp} from '../utils/math';
 
 export interface TweenConfig {
+  delay?: number;
+  completeDelay?: number;
   startValue: number;
   endValue: number;
-  onUpdate: (currentValue: number, eid: number) => void;
+  onInit?: (entity: number) => void;
+  onUpdate: (entity: number, currentValue: number) => void;
+  onLoop?: (entity: number) => void;
+  onComplete?: (entity: number) =>void;
+  loop?: number | boolean;
+  loopDelay?: number;
   duration: number;
   yoyo?: boolean;
+  yoyoEase?: (t: number) => number
+  ease?: (t: number) => number
 }
 
 export const createTweenSystem = () => {
@@ -17,33 +26,58 @@ export const createTweenSystem = () => {
   const enterTweenQuery = enterQuery(tweenQuery);
 
   return (world: World) => {
-    const {time: {elapsed}} = world;
+    const {time: {elapsed, delta}} = world;
 
     for (const tween of enterTweenQuery(world)) {
+      const config = configManager.get<TweenConfig>(TweenComponent.tweenConfigIndex[tween]);
       TweenComponent.startTime[tween] = elapsed;
+      config.onInit?.(tween);
     }
 
     for (const tweenEntity of tweenQuery(world)) {
       const config = configManager.get<TweenConfig>(TweenComponent.tweenConfigIndex[tweenEntity]);
-      const startTime = TweenComponent.startTime[tweenEntity];
+      const delay = config?.delay ?? 0;
+      const completeDelay = config?.completeDelay ?? 0;
+      const startTime = TweenComponent.startTime[tweenEntity] + delay;
       const aliveTime = elapsed - startTime;
-      config.onUpdate(lerp(config.startValue, config.endValue, Math.min(aliveTime / config.duration, 1)), tweenEntity);
 
-      if (aliveTime >= config.duration) {
-        configManager.remove(TweenComponent.tweenConfigIndex[tweenEntity]);
-        removeComponent(world, TweenComponent, tweenEntity, true);
+      if (aliveTime < 0) continue;
 
-        if (config.yoyo) {
-          addComponent(world, TweenComponent, tweenEntity);
-          TweenComponent.tweenConfigIndex[tweenEntity] = configManager.add<TweenConfig>({
-            ...config,
-            yoyo: false,
-            startValue: config.endValue,
-            endValue: config.startValue
-          })
-        }
+      const loopDelay = config.loopDelay ?? 0;
+      const loopDuration = config.duration + loopDelay;
+
+      const intraLoopTime = aliveTime % loopDuration;
+      const loopedTimes = Math.floor(aliveTime / loopDuration);
+      const loop = config.loop ?? 0;
+      const infiniteLoop = typeof loop === "boolean" && loop;
+      const loopTimes = loop === false ? 0 : loop;
+
+      if (infiniteLoop || loopTimes >= loopedTimes) {
+        const easingFunction = config.ease ?? ((t: number) => t);
+        const yoyoEasingFunction = config.yoyoEase ?? ((t: number) => 1 - easingFunction(t));
+        const yoyo = config.yoyo ?? false;
+        const oneWayDuration = yoyo ? config.duration / 2 : config.duration;
+
+        const isYoyo = intraLoopTime > oneWayDuration;
+        const currentWayAliveTime = isYoyo ? intraLoopTime - oneWayDuration : intraLoopTime;
+        const startValue = config.startValue;
+        const endValue = config.endValue;
+        const currentEasingFunction = isYoyo ? yoyoEasingFunction : easingFunction;
+
+        const easedT = currentEasingFunction(Math.min(currentWayAliveTime / oneWayDuration, 1))
+        config.onUpdate(lerp(startValue, endValue, easedT), tweenEntity);
       }
 
+      if (intraLoopTime - delta < 0 && loop !== 0) {
+        config.onLoop?.(tweenEntity);
+      }
+
+
+      if (aliveTime >= config.duration + completeDelay) {
+        configManager.remove(TweenComponent.tweenConfigIndex[tweenEntity]);
+        config.onComplete?.(tweenEntity);
+        removeComponent(world, TweenComponent, tweenEntity, true);
+      }
     }
 
     return world;

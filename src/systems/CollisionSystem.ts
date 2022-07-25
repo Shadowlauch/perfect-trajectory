@@ -60,7 +60,7 @@ export const createCollisionSystem = () => {
             removeEntity(world, potEid);
             EnemyComponent.hp[target] -= BulletComponent.damage[potEid];
 
-            if (!hasComponent(world, TweenComponent, target)) {
+            if (!hasComponent(world, TweenComponent, target) && hasComponent(world, SpriteComponent, target)) {
               addComponent(world, TweenComponent, target);
               TweenComponent.tweenConfigIndex[target] = configManager.add<TweenConfig>({
                 startValue: 0,
@@ -70,7 +70,7 @@ export const createCollisionSystem = () => {
                   SpriteComponent.darkG[eid] = currentValue;
                   SpriteComponent.darkB[eid] = currentValue;
                 },
-                duration: 100,
+                duration: 1000,
                 yoyo: true
               })
             }
