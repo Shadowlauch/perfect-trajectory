@@ -33,6 +33,7 @@ import { killSystem } from './systems/KillSystem';
 import { removeComponentSystem } from './systems/RemoveComponentSystem';
 import {createPlayerHitSystem} from './systems/PlayerHitSystem';
 import {createTweenSystem} from './systems/TweenSystem';
+import { Stage1 } from './configs/stages/Stage1';
 
 
 export interface World extends IWorld {
@@ -145,7 +146,7 @@ const stage = addEntity(world);
 addComponent(world, StageComponent, stage);
 StageComponent.stageIndex[stage] = 0;
 addComponent(world, TimelineComponent, stage);
-TimelineComponent.configIndex[stage] = configManager.add<Timeline>(Stage0);
+TimelineComponent.configIndex[stage] = configManager.add<Timeline>(Stage1);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'p') {
