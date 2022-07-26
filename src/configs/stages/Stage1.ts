@@ -136,6 +136,7 @@ const addTrident = (world: World, initX: number, initY: number, moveRight:boolea
   PathComponent.starTime[eid] = world.time.elapsed;
   PathComponent.startX[eid] = x;
   PathComponent.startY[eid] = y;
+  PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([])
 
   addComponent(world, TimelineComponent, eid);
   
@@ -208,6 +209,7 @@ const addSprayer = (world: World, initX: number, initY: number, moveRight:boolea
   PathComponent.startX[eid] = x;
   PathComponent.startY[eid] = y;
 
+  PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([])
   addComponent(world, TimelineComponent, eid);
   TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
     {
@@ -278,6 +280,8 @@ const addPyro = (world: World, initX: number, initY: number, moveRight:boolean=t
   PathComponent.startX[eid] = x;
   PathComponent.startY[eid] = y;
 
+  PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([])
+
   addComponent(world, TimelineComponent, eid);
   TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
     {
@@ -325,43 +329,43 @@ export const Stage1: Timeline = [
   {
     delay: 1000,
     onTime: (world) => {
-      addPyro(world, 100, 100);
-      // addTrident(world, 440, 50, false);
-      // addTrident(world, 240, 0);
+      addTrident(world, 100, 100);
+      addTrident(world, 440, 50, false);
+      addTrident(world, 240, 0);
 
     }
   },
   {
     delay: 6000,
     onTime: (world) => {
-      // addTrident(world, 140, 0);
-      // addTrident(world, 400, 0);
-      // addTrident(world, 200, 0, false);
+      addTrident(world, 140, 0);
+      addTrident(world, 400, 0);
+      addTrident(world, 200, 0, false);
 
     }
   },
   {
     delay: 6000,
     onTime: (world) => {
-      // addTrident(world, 140, 0);
-      // addTrident(world, 400, 0);
-      // addTrident(world, 200, 0);
+      addTrident(world, 140, 0);
+      addTrident(world, 400, 0);
+      addTrident(world, 200, 0);
 
     }
   },
   {
     delay: 2000,
     onTime: (world) => {
-      // addSprayer(world, 100, 0);
-      // addSprayer(world, 250, 0);
-      // addSprayer(world, 400, 0);
+      addSprayer(world, 100, 0);
+      addSprayer(world, 250, 0);
+      addSprayer(world, 400, 0);
 
     }
   },
   {
     delay: 6000,
     onTime: (world) => {
-      // addPyro(world, 100, 0);
+      addPyro(world, 100, 0);
 
     }
   }
