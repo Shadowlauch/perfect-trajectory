@@ -2,7 +2,7 @@ import { addComponent, removeEntity } from 'bitecs';
 import { BulletSpawnComponent } from '../../../../components/BulletSpawn';
 import { TimelineComponent } from '../../../../components/Timeline';
 import { configManager } from '../../../ConfigManager';
-import { Timeline } from '../../../stages/Stage0';
+import { Timeline } from '../../../stages/stage0/Stage0';
 import { spawnBullet } from '../../spawnBullet';
 import { BulletSpawnConfig } from '../BulletSpawnConfig';
 import { createArcBurst } from '../burst/Arc';
