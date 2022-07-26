@@ -3,6 +3,7 @@ import { BulletSpawnComponent } from '../../../../components/BulletSpawn';
 import { TimelineComponent } from '../../../../components/Timeline';
 import { configManager } from '../../../ConfigManager';
 import { Timeline } from '../../../stages/Stage0';
+import { spawnBullet } from '../../spawnBullet';
 import { BulletSpawnConfig } from '../BulletSpawnConfig';
 import { createArcBurst } from '../burst/Arc';
 import {BulletSpawnCallback} from './BulletSpawnCallback';
@@ -16,22 +17,16 @@ export const addExplosionTimer = (delay: number, numberOfBullets: number): Bulle
       {
         delay: delay,
         onTime: () => {
+          
+          const bullets = createArcBurst(numberOfBullets, 360)(world, bullet, 0)
+          for (const bullet of bullets) {
+            spawnBullet(world, bullet.x, bullet.y, bullet.rotation, bullet.speed)
 
-          addComponent(world, BulletSpawnComponent, bullet);
-        
-          BulletSpawnComponent.startTime[bullet] = world.time.elapsed;
-          BulletSpawnComponent.configIndex[bullet] = configManager.add<BulletSpawnConfig>({
-            loop: 1,
-            burstCount: 1,
-            burstDelay: 1,
-            loopDelay: 1,
-            onBurst: createArcBurst(numberOfBullets, 360)
-          })  
-
+          }
         }
       },
       {
-        delay: 100,
+        delay: 150,
         onTime: () => {
           removeEntity(world, bullet)
         }
