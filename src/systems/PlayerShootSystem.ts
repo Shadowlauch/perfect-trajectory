@@ -10,7 +10,7 @@ import {spriteLoader} from '../loader/Loader';
 
 export const createPlayerShootSystem = () => {
   const playerQuery = defineQuery([PlayerComponent]);
-  const cooldown = 800;
+  const cooldown = 80;
 
   return (world: World) => {
     const { time: {elapsed, delta} } = world
