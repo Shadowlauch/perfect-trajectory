@@ -15,10 +15,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "pixi-heaven": ["./types/pixi-heaven.d.ts"]
-    }
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src"]
 }
