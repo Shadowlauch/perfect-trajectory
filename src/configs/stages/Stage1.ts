@@ -1,65 +1,54 @@
-import {addComponent, addEntity, defineQuery, removeComponent, removeEntity} from 'bitecs';
-import {Transform} from '../../components/Transform';
-import {AngularSpeed, Speed, Velocity} from '../../components/Physics';
-import {EnemyComponent} from '../../components/EnemyComponent';
-import {CollisionComponent} from '../../components/Collision';
-import {GraphicsCircle} from '../../components/GraphicsCircle';
+import {addEntity, defineQuery, removeEntity} from 'bitecs';
+import {addTransformComponent, TransformComponent} from '../../components/TransformComponent';
+import {addVelocityComponent} from '../../components/Physics';
+import {addEnemyComponent} from '../../components/EnemyComponent';
+import {addCollisionComponent} from '../../components/CollisionComponent';
+import {addGraphicsCircleComponent} from '../../components/GraphicsCircleComponent';
 import {configManager} from '../ConfigManager';
-import {TimelineComponent} from '../../components/Timeline';
-import {entityPrefabWorld, World} from '../../main';
-import {EntitySpawner} from '../../components/EntitySpawner';
-import {SpriteComponent} from '../../components/Sprite';
-import {BulletComponent} from '../../components/Bullet';
-import {PathComponent} from '../../components/Path';
+import {addTimelineComponent, Timeline} from '../../components/TimelineComponent';
+import {World} from '../../main';
+import {PathComponent} from '../../components/PathComponent';
 import {PathPoint} from '../enemies/EnemyConfig';
-import {AttachmentComponent} from '../../components/Attachment';
-import {BulletSpawnComponent} from '../../components/BulletSpawn';
-import {BulletSpawnConfig} from '../bullets/spawn/BulletSpawnConfig';
 import {createArcBurst} from '../bullets/spawn/burst/Arc';
 import {PlayerComponent} from '../../components/PlayerComponent';
 import {createPlayerTargetLoop} from '../bullets/spawn/loop/PlayerTarget';
-import { Timeline } from './Stage0';
-import { createSprayBurst } from '../bullets/spawn/burst/Spray';
-import { addExplosionTimer } from '../bullets/spawn/spawn/ExplosionTimer';
-import { createSingleBurst } from '../bullets/spawn/burst/Single';
+import {createSprayBurst} from '../bullets/spawn/burst/Spray';
+import {addExplosionTimer} from '../bullets/spawn/spawn/ExplosionTimer';
+import {createSingleBurst} from '../bullets/spawn/burst/Single';
+import {congaPathPoints} from '../paths/CongaPath';
+import {addBulletSpawnComponent} from '../../components/BulletSpawnComponent';
+import {addPathComponent} from '../../components/PathComponent';
 
-
-const enemyQuery = defineQuery([EnemyComponent]);
 const playerQuery = defineQuery([PlayerComponent]);
-
 
 const shootTrident = (world: World, eid: number) => {
   const player = playerQuery(world)[0]
 
-  addComponent(world, BulletSpawnComponent, eid);
-  const targetX = Transform.globalPosition.x[player];
-  const targetY = Transform.globalPosition.y[player];
+  const targetX = TransformComponent.globalPosition.x[player];
+  const targetY = TransformComponent.globalPosition.y[player];
 
-  const distanceX = targetX - Transform.globalPosition.x[eid];
-  const distanceY = targetY - Transform.globalPosition.y[eid];
+  const distanceX = targetX - TransformComponent.globalPosition.x[eid];
+  const distanceY = targetY - TransformComponent.globalPosition.y[eid];
 
-  Transform.rotation[eid] = Math.atan2(distanceY, distanceX);
-  BulletSpawnComponent.startTime[eid] = world.time.elapsed;
-  BulletSpawnComponent.configIndex[eid] = configManager.add<BulletSpawnConfig>({
+  TransformComponent.rotation[eid] = Math.atan2(distanceY, distanceX);
+
+  addBulletSpawnComponent(world, eid, {
     loop: 3,
     burstCount: 3,
     burstDelay: 200,
     loopDelay: 800,
     onLoop: createPlayerTargetLoop(player),
     onBurst: createArcBurst(3, 40)
-  })  
+  })
 }
 
 
 const shootSpray = (world: World, eid: number) => {
-
   const player = playerQuery(world)[0]
 
-  addComponent(world, BulletSpawnComponent, eid);
-  BulletSpawnComponent.startTime[eid] = world.time.elapsed;
-  BulletSpawnComponent.configIndex[eid] = configManager.add<BulletSpawnConfig>({
+  addBulletSpawnComponent(world, eid, {
     loop: 3,
-    burstCount: 3*6+1,
+    burstCount: 3 * 6 + 1,
     burstDelay: 50,
     loopDelay: 1000,
     onLoop: createPlayerTargetLoop(player),
@@ -72,18 +61,15 @@ const shootPyro = (world: World, eid: number) => {
 
   const player = playerQuery(world)[0]
 
-  addComponent(world, BulletSpawnComponent, eid);
-  const targetX = Transform.globalPosition.x[player];
-  const targetY = Transform.globalPosition.y[player];
+  const targetX = TransformComponent.globalPosition.x[player];
+  const targetY = TransformComponent.globalPosition.y[player];
 
-  const distanceX = targetX - Transform.globalPosition.x[eid];
-  const distanceY = targetY - Transform.globalPosition.y[eid];
+  const distanceX = targetX - TransformComponent.globalPosition.x[eid];
+  const distanceY = targetY - TransformComponent.globalPosition.y[eid];
 
-  Transform.rotation[eid] = Math.atan2(distanceY, distanceX);
+  TransformComponent.rotation[eid] = Math.atan2(distanceY, distanceX);
 
-
-  BulletSpawnComponent.startTime[eid] = world.time.elapsed;
-  BulletSpawnComponent.configIndex[eid] = configManager.add<BulletSpawnConfig>({
+  addBulletSpawnComponent(world, eid, {
     loop: 2,
     burstCount: 1,
     burstDelay: 50,
@@ -95,52 +81,54 @@ const shootPyro = (world: World, eid: number) => {
 }
 
 
-
-
-
 const updatePathLine = (world: World, eid: number, x: number, y: number, delay: number) => {
   PathComponent.starTime[eid] = world.time.elapsed;
-  PathComponent.startX[eid] = Transform.position.x[eid];
-  PathComponent.startY[eid] = Transform.position.y[eid];
+  PathComponent.startX[eid] = TransformComponent.position.x[eid];
+  PathComponent.startY[eid] = TransformComponent.position.y[eid];
+  PathComponent.speed[eid] = 1;
+
+  // const path = configManager.get<PathPoint[]>(PathComponent.configIndex[eid]);
+  // path.push({
+  //     x: x,
+  //     y: y,
+  //     delay: delay
+  //   }
+  // )
   PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([{
     x: x,
     y: y,
     delay: delay
   }])
+
+
+
+  const path = configManager.get<PathPoint[]>(PathComponent.configIndex[eid]);
+
+  console.log("path", path, eid)
+
+
+  console.log("start ", PathComponent.starTime[eid])
+  console.log("speed ", PathComponent.speed[eid])
+  console.log("delay ", delay)
+
 }
 
 
-const addTrident = (world: World, initX: number, initY: number, moveRight:boolean=true) => {
+const addTrident = (world: World, initX: number, initY: number, moveRight: boolean = true) => {
   const eid = addEntity(world);
   const [x, y] = [initX, initY];
 
-  const sideMovementSign = moveRight?1:-1;
+  const sideMovementSign = moveRight ? 1 : -1;
 
-  addComponent(world, Transform, eid);
-  addComponent(world, Velocity, eid);
-  addComponent(world, EnemyComponent, eid);
-  addComponent(world, CollisionComponent, eid);
-  CollisionComponent.filter[eid] = 0b000010;
-  Transform.position.x[eid] = x;
-  Transform.position.y[eid] = y;
+  addTransformComponent(world, eid, x, y);
+  addVelocityComponent(world, eid);
+  addEnemyComponent(world, eid, 10);
+  addCollisionComponent(world, eid, 12, {filter: 0b000010})
+  addGraphicsCircleComponent(world, eid, 10, 0x00ff00, 0) // 0 is zIndex, picked at random
 
-  EnemyComponent.spawnTime[eid] = world.time.elapsed;
-  EnemyComponent.hp[eid] = 10;
-  CollisionComponent.radius[eid] = 8;
+  addPathComponent(world, eid, x, y, [], 1)
 
-  addComponent(world, GraphicsCircle, eid);
-  GraphicsCircle.color[eid] = 0x00ff00;
-  GraphicsCircle.radius[eid] = 10;
-
-  addComponent(world, PathComponent, eid);
-  PathComponent.starTime[eid] = world.time.elapsed;
-  PathComponent.startX[eid] = x;
-  PathComponent.startY[eid] = y;
-  PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([])
-
-  addComponent(world, TimelineComponent, eid);
-  
-  TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
+  const timeline = [
     {
       delay: 0,
       onTime: () => {
@@ -156,7 +144,7 @@ const addTrident = (world: World, initX: number, initY: number, moveRight:boolea
     {
       delay: 1000,
       onTime: () => {
-        updatePathLine(world, eid, 100*sideMovementSign, 0, 1000)
+        updatePathLine(world, eid, 100 * sideMovementSign, 0, 1000)
       }
     },
     {
@@ -173,45 +161,31 @@ const addTrident = (world: World, initX: number, initY: number, moveRight:boolea
     },
     {
       delay: 5000,
-      onTime: ()=> {
+      onTime: () => {
         removeEntity(world, eid)
       }
     }
-  ])
+  ] as Timeline
+
+  addTimelineComponent(world, eid, timeline);
 }
 
 
-
-const addSprayer = (world: World, initX: number, initY: number, moveRight:boolean=true) => {
+const addSprayer = (world: World, initX: number, initY: number, moveRight: boolean = true) => {
   const eid = addEntity(world);
   const [x, y] = [initX, initY];
 
-  const sideMovementSign = moveRight?1:-1;
+  const sideMovementSign = moveRight ? 1 : -1;
 
-  addComponent(world, Transform, eid);
-  addComponent(world, Velocity, eid);
-  addComponent(world, EnemyComponent, eid);
-  addComponent(world, CollisionComponent, eid);
-  CollisionComponent.filter[eid] = 0b000010;
-  Transform.position.x[eid] = x;
-  Transform.position.y[eid] = y;
+  addTransformComponent(world, eid, x, y);
+  addVelocityComponent(world, eid);
+  addEnemyComponent(world, eid, 10);
+  addCollisionComponent(world, eid, 15, {filter: 0b000010});
+  addGraphicsCircleComponent(world, eid, 12, 0x5500aa, 0);
 
-  EnemyComponent.spawnTime[eid] = world.time.elapsed;
-  EnemyComponent.hp[eid] = 10;
-  CollisionComponent.radius[eid] = 8;
+  addPathComponent(world, eid, x, y, [])
 
-  addComponent(world, GraphicsCircle, eid);
-  GraphicsCircle.color[eid] = 0x5500aa;
-  GraphicsCircle.radius[eid] = 12;
-
-  addComponent(world, PathComponent, eid);
-  PathComponent.starTime[eid] = world.time.elapsed;
-  PathComponent.startX[eid] = x;
-  PathComponent.startY[eid] = y;
-
-  PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([])
-  addComponent(world, TimelineComponent, eid);
-  TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
+  const timeline = [
     {
       delay: 0,
       onTime: () => {
@@ -227,7 +201,7 @@ const addSprayer = (world: World, initX: number, initY: number, moveRight:boolea
     {
       delay: 1000,
       onTime: () => {
-        updatePathLine(world, eid, 100*sideMovementSign, 0, 1000)
+        updatePathLine(world, eid, 100 * sideMovementSign, 0, 1000)
       }
     },
     {
@@ -244,46 +218,31 @@ const addSprayer = (world: World, initX: number, initY: number, moveRight:boolea
     },
     {
       delay: 5000,
-      onTime: ()=> {
+      onTime: () => {
         removeEntity(world, eid)
       }
     }
-  ])
+  ] as Timeline;
+  addTimelineComponent(world, eid, timeline);
 
 }
 
 
-const addPyro = (world: World, initX: number, initY: number, moveRight:boolean=true) => {
+const addPyro = (world: World, initX: number, initY: number, moveRight: boolean = true) => {
   const eid = addEntity(world);
   const [x, y] = [initX, initY];
 
-  const sideMovementSign = moveRight?1:-1;
+  const sideMovementSign = moveRight ? 1 : -1;
 
-  addComponent(world, Transform, eid);
-  addComponent(world, Velocity, eid);
-  addComponent(world, EnemyComponent, eid);
-  addComponent(world, CollisionComponent, eid);
-  CollisionComponent.filter[eid] = 0b000010;
-  Transform.position.x[eid] = x;
-  Transform.position.y[eid] = y;
+  addTransformComponent(world, eid, x, y);
+  addVelocityComponent(world, eid);
+  addEnemyComponent(world, eid, 10);
+  addCollisionComponent(world, eid, 25, {filter: 0b000010});
+  addGraphicsCircleComponent(world, eid, 20, 0xaaaa22, 0);
 
-  EnemyComponent.spawnTime[eid] = world.time.elapsed;
-  EnemyComponent.hp[eid] = 10;
-  CollisionComponent.radius[eid] = 8;
+  addPathComponent(world, eid, x, y, [])
 
-  addComponent(world, GraphicsCircle, eid);
-  GraphicsCircle.color[eid] = 0xaaaa22;
-  GraphicsCircle.radius[eid] = 20;
-
-  addComponent(world, PathComponent, eid);
-  PathComponent.starTime[eid] = world.time.elapsed;
-  PathComponent.startX[eid] = x;
-  PathComponent.startY[eid] = y;
-
-  PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([])
-
-  addComponent(world, TimelineComponent, eid);
-  TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
+  const timeline = [
     {
       delay: 0,
       onTime: () => {
@@ -299,7 +258,7 @@ const addPyro = (world: World, initX: number, initY: number, moveRight:boolean=t
     {
       delay: 1000,
       onTime: () => {
-        updatePathLine(world, eid, 100*sideMovementSign, 0, 1000)
+        updatePathLine(world, eid, 100 * sideMovementSign, 0, 1000)
       }
     },
     {
@@ -316,13 +275,45 @@ const addPyro = (world: World, initX: number, initY: number, moveRight:boolean=t
     },
     {
       delay: 5000,
-      onTime: ()=> {
+      onTime: () => {
         removeEntity(world, eid)
       }
     }
-  ])
+  ] as Timeline;
+
+  addTimelineComponent(world, eid, timeline);
 }
 
+
+const addConga = (world: World, initX: number, initY: number) => {
+  const eid = addEntity(world);
+  const [x, y] = [initX, initY];
+
+  addTransformComponent(world, eid, x, y);
+  addVelocityComponent(world, eid);
+  addEnemyComponent(world, eid, 5);
+  addCollisionComponent(world, eid, 15, {filter: 0b000010});
+  addGraphicsCircleComponent(world, eid, 15, 0xcc55cc, 0);
+
+  addPathComponent(world, eid, x, y, congaPathPoints, 1.5)
+
+  const timeline = [
+    {
+      delay: 1000,
+      onTime: () => {
+        shootPyro(world, eid)
+      }
+    },
+    {
+      delay: 5000,
+      onTime: () => {
+        removeEntity(world, eid)
+      }
+    }
+  ] as Timeline
+
+  addTimelineComponent(world, eid, timeline);
+}
 
 
 export const Stage1: Timeline = [
@@ -332,7 +323,7 @@ export const Stage1: Timeline = [
       addTrident(world, 100, 100);
       addTrident(world, 440, 50, false);
       addTrident(world, 240, 0);
-
+      addConga(world, 10, 10);
     }
   },
   {
@@ -366,7 +357,6 @@ export const Stage1: Timeline = [
     delay: 6000,
     onTime: (world) => {
       addPyro(world, 100, 0);
-
     }
   }
 ];
