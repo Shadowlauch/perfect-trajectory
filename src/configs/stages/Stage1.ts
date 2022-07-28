@@ -86,31 +86,11 @@ const updatePathLine = (world: World, eid: number, x: number, y: number, delay: 
   PathComponent.startX[eid] = TransformComponent.position.x[eid];
   PathComponent.startY[eid] = TransformComponent.position.y[eid];
   PathComponent.speed[eid] = 1;
-
-  // const path = configManager.get<PathPoint[]>(PathComponent.configIndex[eid]);
-  // path.push({
-  //     x: x,
-  //     y: y,
-  //     delay: delay
-  //   }
-  // )
   PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([{
     x: x,
     y: y,
     delay: delay
   }])
-
-
-
-  const path = configManager.get<PathPoint[]>(PathComponent.configIndex[eid]);
-
-  console.log("path", path, eid)
-
-
-  console.log("start ", PathComponent.starTime[eid])
-  console.log("speed ", PathComponent.speed[eid])
-  console.log("delay ", delay)
-
 }
 
 
@@ -126,7 +106,7 @@ const addTrident = (world: World, initX: number, initY: number, moveRight: boole
   addCollisionComponent(world, eid, 12, {filter: 0b000010})
   addGraphicsCircleComponent(world, eid, 10, 0x00ff00, 0) // 0 is zIndex, picked at random
 
-  addPathComponent(world, eid, x, y, [], 1)
+  addPathComponent(world, eid, x, y, []);
 
   const timeline = [
     {
@@ -285,27 +265,40 @@ const addPyro = (world: World, initX: number, initY: number, moveRight: boolean 
 }
 
 
-const addConga = (world: World, initX: number, initY: number) => {
+const addConga = (world: World, initX: number, initY: number, initialDelay: number) => {
   const eid = addEntity(world);
   const [x, y] = [initX, initY];
 
   addTransformComponent(world, eid, x, y);
   addVelocityComponent(world, eid);
-  addEnemyComponent(world, eid, 5);
+  addEnemyComponent(world, eid, 2);
   addCollisionComponent(world, eid, 15, {filter: 0b000010});
   addGraphicsCircleComponent(world, eid, 15, 0xcc55cc, 0);
 
-  addPathComponent(world, eid, x, y, congaPathPoints, 1.5)
+  addPathComponent(world, eid, x, y, [
+    {
+      x: x,
+      y: y,
+      delay: 150,
+    }
+    ], 1.5)
 
   const timeline = [
     {
-      delay: 1000,
+      delay: initialDelay,
       onTime: () => {
-        shootPyro(world, eid)
+        PathComponent.starTime[eid] = world.time.elapsed;
+        PathComponent.configIndex[eid] = configManager.add<PathPoint[]>(congaPathPoints)
       }
     },
     {
-      delay: 5000,
+      delay: 1000 + initialDelay,
+      onTime: () => {
+        shootTrident(world, eid)
+      }
+    },
+    {
+      delay: 4000 + initialDelay,
       onTime: () => {
         removeEntity(world, eid)
       }
@@ -316,14 +309,20 @@ const addConga = (world: World, initX: number, initY: number) => {
 }
 
 
+const addCongaChain = (world: World, initX: number, initY: number, chainLength: number) => {
+  const deltaDelay = 50
+  let currentDelay = 0
+  for (let i = 0; i < chainLength; ++i) {
+    addConga(world, initX, initY, currentDelay)
+    currentDelay += deltaDelay
+  }
+}
+
 export const Stage1: Timeline = [
   {
     delay: 1000,
     onTime: (world) => {
-      addTrident(world, 100, 100);
-      addTrident(world, 440, 50, false);
-      addTrident(world, 240, 0);
-      addConga(world, 10, 10);
+      addCongaChain(world, 10, 10, 10);
     }
   },
   {
