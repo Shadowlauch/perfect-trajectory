@@ -143,7 +143,7 @@ const pipeline = pipe(
 createPlayerEntity(world);
 const stage = addEntity(world);
 addStageComponent(world, stage, 0);
-addTimelineComponent(world, stage, Stage0);
+addTimelineComponent(world, stage, Stage1);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'p') {

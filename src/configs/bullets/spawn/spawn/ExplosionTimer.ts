@@ -1,19 +1,13 @@
-import { addComponent, removeEntity } from 'bitecs';
-import { BulletSpawnComponent } from '../../../../components/BulletSpawn';
-import { TimelineComponent } from '../../../../components/Timeline';
-import { configManager } from '../../../ConfigManager';
-import { Timeline } from '../../../stages/stage0/Stage0';
+import { removeEntity } from 'bitecs';
+import { Timeline, addTimelineComponent } from '../../../../components/TimelineComponent';
 import { spawnBullet } from '../../spawnBullet';
-import { BulletSpawnConfig } from '../BulletSpawnConfig';
 import { createArcBurst } from '../burst/Arc';
 import {BulletSpawnCallback} from './BulletSpawnCallback';
 
 export const addExplosionTimer = (delay: number, numberOfBullets: number): BulletSpawnCallback => {
   return (world, bullet) => {
 
-
-    addComponent(world, TimelineComponent, bullet);
-    TimelineComponent.configIndex[bullet] = configManager.add<Timeline>([
+    addTimelineComponent(world, bullet, [
       {
         delay: delay,
         onTime: () => {
@@ -31,7 +25,6 @@ export const addExplosionTimer = (delay: number, numberOfBullets: number): Bulle
           removeEntity(world, bullet)
         }
       }
-    ])
-
+    ] as Timeline)
   }
 }
