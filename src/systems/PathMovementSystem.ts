@@ -27,8 +27,9 @@ export const createPathMovementSystem = () => {
         y: 0,
         delay: 0
       }
+      const timeFactor = 1 / PathComponent.speed[pathEntity]
       for (const point of path) {
-        targetTime += point.delay
+        targetTime += point.delay * timeFactor
 
         if (aliveTime < targetTime) {
           const relativeTime = (aliveTime - prevPointAbsTime) / point.delay

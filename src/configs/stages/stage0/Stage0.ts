@@ -62,6 +62,7 @@ export const Stage0: Timeline = [
       PathComponent.starTime[eid] = world.time.elapsed;
       PathComponent.startX[eid] = x;
       PathComponent.startY[eid] = y;
+      PathComponent.speed[eid] = 1;
       PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([
         {
           x: 0,
@@ -124,6 +125,7 @@ export const Stage0: Timeline = [
       PathComponent.starTime[eid] = world.time.elapsed;
       PathComponent.startX[eid] = x;
       PathComponent.startY[eid] = y;
+      PathComponent.speed[eid] = 1;
       PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([
         {
           x: 0,
