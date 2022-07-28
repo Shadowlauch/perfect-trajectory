@@ -329,7 +329,7 @@ const addPyro = (world: World, initX: number, initY: number, moveRight: boolean 
 }
 
 
-const addConga = (world: World, initX: number, initY: number) => {
+const addConga = (world: World, initX: number, initY: number, initialDelay: number) => {
   const eid = addEntity(world);
   const [x, y] = [initX, initY];
 
@@ -342,7 +342,7 @@ const addConga = (world: World, initX: number, initY: number) => {
   Transform.position.y[eid] = y;
 
   EnemyComponent.spawnTime[eid] = world.time.elapsed;
-  EnemyComponent.hp[eid] = 5;
+  EnemyComponent.hp[eid] = 2;
   CollisionComponent.radius[eid] = 15;
 
   addComponent(world, GraphicsCircle, eid);
@@ -355,18 +355,31 @@ const addConga = (world: World, initX: number, initY: number) => {
   PathComponent.startY[eid] = y;
   PathComponent.speed[eid] = 1.5;
 
-  PathComponent.configIndex[eid] = configManager.add<PathPoint[]>(congaPathPoints)
+  PathComponent.configIndex[eid] = configManager.add<PathPoint[]>([
+  {
+    x: x,
+    y: y,
+    delay: 150,
+  }
+  ])
 
   addComponent(world, TimelineComponent, eid);
   TimelineComponent.configIndex[eid] = configManager.add<Timeline>([
     {
-      delay: 1000,
+      delay: initialDelay,
       onTime: () => {
-        shootPyro(world, eid)
+        PathComponent.starTime[eid] = world.time.elapsed;
+        PathComponent.configIndex[eid] = configManager.add<PathPoint[]>(congaPathPoints)
       }
     },
     {
-      delay: 5000,
+      delay: 1000 + initialDelay,
+      onTime: () => {
+        shootTrident(world, eid)
+      }
+    },
+    {
+      delay: 4000 + initialDelay,
       onTime: () => {
         removeEntity(world, eid)
       }
@@ -375,14 +388,20 @@ const addConga = (world: World, initX: number, initY: number) => {
 }
 
 
+const addCongaChain = (world: World, initX: number, initY: number, chainLength: number) => {
+  const deltaDelay = 50
+  let currentDelay = 0
+  for (let i = 0; i < chainLength; ++i) {
+    addConga(world, initX, initY, currentDelay)
+    currentDelay += deltaDelay
+  }
+}
+
 export const Stage1: Timeline = [
   {
     delay: 1000,
     onTime: (world) => {
-      addTrident(world, 100, 100);
-      addTrident(world, 440, 50, false);
-      addTrident(world, 240, 0);
-      addConga(world, 10, 10);
+      addCongaChain(world, 10, 10, 10);
     }
   },
   {
