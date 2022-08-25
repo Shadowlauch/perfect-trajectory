@@ -50,8 +50,8 @@ export const Stage0: Timeline = [
       Transform.position.y[eid] = y;
 
       EnemyComponent.spawnTime[eid] = world.time.elapsed;
-      EnemyComponent.hp[eid] = 100;
-      EnemyComponent.maxHp[eid] = 100;
+      EnemyComponent.hp[eid] = 30;
+      EnemyComponent.maxHp[eid] = 30;
 
       addComponent(world, SpriteComponent, eid);
       SpriteComponent.spriteIndex[eid] = spriteLoader.getIndex('enemy-test');
@@ -95,8 +95,8 @@ export const Stage0: Timeline = [
         }
       ]);
 
-      addEventListenerEntity(world, eid, {
-        onDeath: () => {
+      addEventListenerEntity(world, eid,'death',  {
+        callback: () => {
           const explosion = addEntity(world);
           addComponent(world, Transform, explosion);
           Transform.position.x[explosion] = Transform.position.x[eid];

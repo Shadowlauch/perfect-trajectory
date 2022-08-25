@@ -33,6 +33,7 @@ import {removeComponentSystem} from './systems/RemoveComponentSystem';
 import {createPlayerHitSystem} from './systems/PlayerHitSystem';
 import {createTweenSystem} from './systems/TweenSystem';
 import {createAnimatedSpriteSystem} from './systems/AnimatedSpriteSystem';
+import {createEventListenerCleanupSystem} from './systems/EventListenerCleanupSystem';
 
 export interface World extends IWorld {
   time: {
@@ -136,6 +137,7 @@ const pipeline = pipe(
   createTimeSystem(app.ticker),
   createInfoBoxSystem(infoBoxContainer, size.width - gameSize.width - gameSize.padding * 2),
   removeComponentSystem(),
+  createEventListenerCleanupSystem()
 );
 
 createPlayerEntity(world);

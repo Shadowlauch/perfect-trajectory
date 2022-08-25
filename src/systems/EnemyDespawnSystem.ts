@@ -4,7 +4,7 @@ import {EnemyComponent} from '../components/EnemyComponent';
 import {World} from '../main';
 import {StageComponent} from '../components/Stage';
 import {AttachmentComponent} from '../components/Attachment';
-import {EventListenerComponent, EventConfig} from '../components/EventListenerComponent';
+import {EventListenerComponent, EventConfig, EventTypes} from '../components/EventListenerComponent';
 import {configManager} from '../configs/ConfigManager';
 
 export const createEnemyDeSpawnSystem = () => {
@@ -53,9 +53,8 @@ export const createEnemyDeSpawnSystem = () => {
     for (const enemy of enemyQuery(world)) {
       if (stageExit || EnemyComponent.hp[enemy] <= 0) {
         for (const onDeathEntity of onDeathEntities) {
-          if (EventListenerComponent.eid[onDeathEntity] === enemy) {
-            configManager.get<EventConfig>(EventListenerComponent.configIndex[onDeathEntity]).onDeath?.();
-            removeEntity(world, onDeathEntity);
+          if (EventListenerComponent.eid[onDeathEntity] === enemy && EventListenerComponent.type[onDeathEntity] === EventTypes.DEATH) {
+            configManager.get<EventConfig>(EventListenerComponent.configIndex[onDeathEntity]).callback();
           }
         }
         removeEntity(world, enemy);
