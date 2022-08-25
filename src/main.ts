@@ -101,9 +101,9 @@ world.size = gameSize;
 //Todo: Exporting this for now as a workaround should probably be changed?!
 export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
 
+
 const pipeline = pipe(
   createKeyboardSystem(world),
-  createPlayerMovementSystem(),
   createEnemyDeSpawnSystem(),
   createTimelineSystem(),
   createPlayerMovementSystem(),
@@ -124,7 +124,6 @@ const pipeline = pipe(
   createBulletCleanUpSystem(),
   createPlayerBoundarySystem(),
   createCollisionSystem(),
-  createTimeScoreSystem(),
   createTimeScoreSystem(),
   createPlayerHitSystem(world),
   createBossHpUiSystem(gameUiContainer),
@@ -158,6 +157,44 @@ document.addEventListener('keydown', (e) => {
 
 // some sample script to stick somewhere else eventually
 
+/*
+const p = defineQuery([PlayerComponent])(world)[0];
+const p1 = {x: 500, y: 500};
+const p3 = {x: Transform.position.x[p], y: Transform.position.y[p]};
+const t = -0.1
+const p2 = {x: (p1.x+p3.x)/2 - t*(p3.y-p1.y), y: (p1.y+p3.y)/2 + t*(p3.x-p1.x)}
+
+const b = new Bezier(p1, p2, p3);
+
+const g = new Graphics();
+const test = addEntity(world);
+addComponent(world, TweenComponent, test);
+
+const sectionLength = 0.3;
+const halfSectionLength = sectionLength / 2;
+TweenComponent.tweenConfigIndex[test] = configManager.add<TweenConfig>({
+  startValue:  0 - halfSectionLength,
+  endValue: 1 + halfSectionLength,
+  onUpdate: (_entity, currentValue) => {
+    const from = Math.max(0, currentValue - halfSectionLength);
+    const to = Math.min(1, currentValue + halfSectionLength);
+    if (from === 0 && to === 0) return;
+    const split = b.split(from, to)
+    g.clear();
+    const [p1, p2, p3] = split.points;
+    g.moveTo(p1.x, p1.y);
+    g.lineStyle(2, 0xffffff);
+    g.quadraticCurveTo(p2.x, p2.y, p3.x, p3.y);
+    g.endFill();
+  },
+  onComplete: () => g.clear(),
+  duration: 4000
+})
+
+
+g.zIndex = 100;
+gameContainer.addChild(g)
+*/
 
 // Add a ticker callback to move the sprite back and forth
 app.ticker.add(() => {

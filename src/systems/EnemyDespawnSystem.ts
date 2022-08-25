@@ -1,15 +1,17 @@
-import {addComponent, addEntity, defineQuery, entityExists, exitQuery, hasComponent, removeEntity} from 'bitecs';
+import {defineQuery, entityExists, exitQuery, hasComponent, removeEntity} from 'bitecs';
 import {Transform} from '../components/Transform';
 import {EnemyComponent} from '../components/EnemyComponent';
 import {World} from '../main';
 import {StageComponent} from '../components/Stage';
 import {AttachmentComponent} from '../components/Attachment';
-import {addAnimatedSpriteComponent} from '../components/Sprite';
+import {EventListenerComponent, EventConfig} from '../components/EventListenerComponent';
+import {configManager} from '../configs/ConfigManager';
 
 export const createEnemyDeSpawnSystem = () => {
   const attachmentQuery = defineQuery([AttachmentComponent]);
   const enemyQuery = defineQuery([Transform, EnemyComponent]);
   const stageQuery = defineQuery([StageComponent]);
+  const onDeathQuery = defineQuery([EventListenerComponent]);
   const exitStageQuery = exitQuery(stageQuery);
 
   const getImmediateChildren = (world: World, current: number, target: number): number[] | null => {
@@ -45,17 +47,17 @@ export const createEnemyDeSpawnSystem = () => {
   };
 
   return (world: World) => {
+    const onDeathEntities = onDeathQuery(world);
+
     const stageExit = exitStageQuery(world).length > 0;
     for (const enemy of enemyQuery(world)) {
       if (stageExit || EnemyComponent.hp[enemy] <= 0) {
-        const explosion = addEntity(world);
-        addComponent(world, Transform, explosion);
-        Transform.position.x[explosion] = Transform.position.x[enemy];
-        Transform.position.y[explosion] = Transform.position.y[enemy];
-        addAnimatedSpriteComponent(world, explosion, 'explosion', 'base', {
-          zIndex: 30
-        });
-
+        for (const onDeathEntity of onDeathEntities) {
+          if (EventListenerComponent.eid[onDeathEntity] === enemy) {
+            configManager.get<EventConfig>(EventListenerComponent.configIndex[onDeathEntity]).onDeath?.();
+            removeEntity(world, onDeathEntity);
+          }
+        }
         removeEntity(world, enemy);
 
         // First remove immediate children of enemy
@@ -70,5 +72,5 @@ export const createEnemyDeSpawnSystem = () => {
       }
     }
     return world;
-  }
-}
+  };
+};

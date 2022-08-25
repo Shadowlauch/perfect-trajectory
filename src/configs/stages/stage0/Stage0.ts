@@ -6,7 +6,7 @@ import {CollisionComponent} from '../../../components/Collision';
 import {configManager} from '../../ConfigManager';
 import {TimelineComponent} from '../../../components/Timeline';
 import {entityPrefabWorld, World} from '../../../main';
-import {SpriteComponent} from '../../../components/Sprite';
+import {addAnimatedSpriteComponent, SpriteComponent} from '../../../components/Sprite';
 import {PathComponent} from '../../../components/Path';
 import {PathPoint} from '../../enemies/EnemyConfig';
 import {AttachmentComponent} from '../../../components/Attachment';
@@ -18,6 +18,7 @@ import {createPlayerTargetLoop} from '../../bullets/spawn/loop/PlayerTarget';
 import {BossComponent} from '../../../components/BossComponent';
 import {spriteLoader} from '../../../loader/Loader';
 import { TestAttack01 } from './patterns/TestAttack01';
+import {addEventListenerEntity} from '../../../components/EventListenerComponent';
 
 export interface TimelineEntry {
   delay: number;
@@ -93,6 +94,19 @@ export const Stage0: Timeline = [
           }
         }
       ]);
+
+      addEventListenerEntity(world, eid, {
+        onDeath: () => {
+          const explosion = addEntity(world);
+          addComponent(world, Transform, explosion);
+          Transform.position.x[explosion] = Transform.position.x[eid];
+          Transform.position.y[explosion] = Transform.position.y[eid];
+          addAnimatedSpriteComponent(world, explosion, 'explosion', 'base', {
+            zIndex: 30
+          });
+
+        }
+      })
     }
   },
   {

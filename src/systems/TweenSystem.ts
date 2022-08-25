@@ -65,7 +65,7 @@ export const createTweenSystem = () => {
         const currentEasingFunction = isYoyo ? yoyoEasingFunction : easingFunction;
 
         const easedT = currentEasingFunction(Math.min(currentWayAliveTime / oneWayDuration, 1))
-        config.onUpdate(lerp(startValue, endValue, easedT), tweenEntity);
+        config.onUpdate(tweenEntity, lerp(startValue, endValue, easedT));
       }
 
       if (intraLoopTime - delta < 0 && loop !== 0) {
