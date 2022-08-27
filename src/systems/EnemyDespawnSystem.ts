@@ -2,7 +2,6 @@ import {defineQuery, entityExists, exitQuery, hasComponent, removeEntity} from '
 import {TransformComponent} from '../components/TransformComponent';
 import {EnemyComponent} from '../components/EnemyComponent';
 import {World} from '../main';
-import {StageComponent} from '../components/StageComponent';
 import {AttachmentComponent} from '../components/AttachmentComponent';
 import {EventListenerComponent, EventConfig, EventTypes} from '../components/EventListenerComponent';
 import {configManager} from '../configs/ConfigManager';
@@ -10,9 +9,7 @@ import {configManager} from '../configs/ConfigManager';
 export const createEnemyDeSpawnSystem = () => {
   const attachmentQuery = defineQuery([AttachmentComponent]);
   const enemyQuery = defineQuery([TransformComponent, EnemyComponent]);
-  const stageQuery = defineQuery([StageComponent]);
   const onDeathQuery = defineQuery([EventListenerComponent]);
-  const exitStageQuery = exitQuery(stageQuery);
 
   const getImmediateChildren = (world: World, current: number, target: number): number[] | null => {
     const rec = hasComponent(world, AttachmentComponent, current) ? getImmediateChildren(world, AttachmentComponent.attachedTo[current], target) : null;
@@ -48,10 +45,10 @@ export const createEnemyDeSpawnSystem = () => {
 
   return (world: World) => {
     const onDeathEntities = onDeathQuery(world);
+    const attachments = attachmentQuery(world);
 
-    const stageExit = exitStageQuery(world).length > 0;
     for (const enemy of enemyQuery(world)) {
-      if (stageExit || EnemyComponent.hp[enemy] <= 0) {
+      if (EnemyComponent.hp[enemy] <= 0) {
         for (const onDeathEntity of onDeathEntities) {
           if (EventListenerComponent.eid[onDeathEntity] === enemy && EventListenerComponent.type[onDeathEntity] === EventTypes.DEATH) {
             configManager.get<EventConfig>(EventListenerComponent.configIndex[onDeathEntity]).callback();
@@ -60,7 +57,7 @@ export const createEnemyDeSpawnSystem = () => {
         removeEntity(world, enemy);
 
         // First remove immediate children of enemy
-        for (const attached of attachmentQuery(world)) {
+        for (const attached of attachments) {
           for (const child of getImmediateChildren(world, attached, enemy) ?? []) {
             if (entityExists(world, child)) removeEntity(world, child);
           }

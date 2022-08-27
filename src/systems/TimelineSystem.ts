@@ -1,4 +1,4 @@
-import {defineQuery, enterQuery, exitQuery} from 'bitecs';
+import {defineQuery, enterQuery, entityExists, exitQuery} from 'bitecs';
 import {World} from '../main';
 import {TimelineComponent, Timeline} from '../components/TimelineComponent';
 import {configManager} from '../configs/ConfigManager';
@@ -50,6 +50,7 @@ export const createTimelineSystem = () => {
     }
 
     for (const entity of timelineExitQuery(world)) {
+      if (entityExists(world, entity)) console.log('yes')
       configManager.remove(TimelineComponent.configIndex[entity]);
     }
 

@@ -1,6 +1,6 @@
 import {Application, Container, Graphics} from 'pixi.js';
 import './style.css';
-import {addEntity, createWorld, IWorld, pipe} from 'bitecs';
+import {createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
 import {createTimeSystem} from './systems/TimeSystem';
 import {createGraphicsCircleSystem} from './systems/GraphicsCircleSystem';
@@ -16,12 +16,9 @@ import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createPlayerShootSystem} from './systems/PlayerShootSystem';
-import {addStageComponent} from './components/StageComponent';
 import {createPathMovementSystem} from './systems/PathMovementSystem';
 import {entitySpawnerSystem} from './systems/EntitySpawnerSystem';
 import {createTimelineSystem} from './systems/TimelineSystem';
-import {addTimelineComponent} from './components/TimelineComponent';
-// import {Stage0} from './configs/stages/stage0/Stage0';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
 import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
@@ -31,9 +28,10 @@ import {killSystem} from './systems/KillSystem';
 import {removeComponentSystem} from './systems/RemoveComponentSystem';
 import {createPlayerHitSystem} from './systems/PlayerHitSystem';
 import {createTweenSystem} from './systems/TweenSystem';
-import {Stage1} from './configs/stages/Stage1';
 import {createAnimatedSpriteSystem} from './systems/AnimatedSpriteSystem';
 import {createEventListenerCleanupSystem} from './systems/EventListenerCleanupSystem';
+import {startStage} from './configs/stages/Stages';
+import {createStageSystem} from './systems/StageSystem';
 
 export interface World extends IWorld {
   time: {
@@ -105,6 +103,7 @@ export const entityPrefabWorld = createWorld() as EntityPrefabWorld;
 
 const pipeline = pipe(
   createKeyboardSystem(world),
+  createStageSystem(),
   createEnemyDeSpawnSystem(),
   createTimelineSystem(),
   createPlayerMovementSystem(),
@@ -141,9 +140,7 @@ const pipeline = pipe(
 );
 
 createPlayerEntity(world);
-const stage = addEntity(world);
-addStageComponent(world, stage, 0);
-addTimelineComponent(world, stage, Stage1);
+startStage(world, 1);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'p') {
@@ -152,6 +149,8 @@ document.addEventListener('keydown', (e) => {
   } else if (e.key === 'r') {
     if (mediaRecorder.state === 'recording') mediaRecorder.stop();
     else mediaRecorder.start();
+  } else if (e.key === 't') {
+    startStage(world);
   }
 });
 
@@ -201,6 +200,9 @@ app.ticker.add(() => {
   pipeline(world, entityPrefabWorld);
 });
 
-
+//global functions
+(window as any).pt = {
+  loadStage: (index: number) => startStage(world, index)
+};
 
 

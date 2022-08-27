@@ -59,9 +59,8 @@ export const createTweenSystem = () => {
 
 
       if (aliveTime >= config.duration + completeDelay) {
-        configManager.remove(TweenComponent.tweenConfigIndex[tweenEntity]);
         config.onComplete?.(tweenEntity);
-        removeComponent(world, TweenComponent, tweenEntity, true);
+        removeComponent(world, TweenComponent, tweenEntity, false);
       }
     }
 

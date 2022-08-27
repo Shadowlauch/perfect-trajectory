@@ -62,7 +62,7 @@ export const createCollisionSystem = () => {
               addTweenComponent(world, target, {
                 startValue: 0,
                 endValue: 0.5,
-                onUpdate: (currentValue, eid) => {
+                onUpdate: (eid, currentValue) => {
                   SpriteComponent.darkR[eid] = currentValue;
                   SpriteComponent.darkG[eid] = currentValue;
                   SpriteComponent.darkB[eid] = currentValue;

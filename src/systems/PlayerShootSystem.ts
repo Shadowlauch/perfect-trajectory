@@ -19,7 +19,7 @@ export const createPlayerShootSystem = () => {
 
       addTransformComponent(world, bullet, TransformComponent.position.x[pid], TransformComponent.position.y[pid], 3 * Math.PI / 2);
       addVelocityComponent(world, bullet);
-      addSpeedComponent(world, bullet, 0.7);
+      addSpeedComponent(world, bullet, 1.4);
       addSpriteComponent(world, bullet, 'needle01');
       addCollisionComponent(world, bullet, 2, {group: 0b000010});
       addBulletComponent(world, bullet, pid, 1);
