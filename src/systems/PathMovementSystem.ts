@@ -15,7 +15,6 @@ export const createPathMovementSystem = () => {
     for (const pathEntity of pathQuery(world)) {
 
       const path = configManager.get<PathPoint[]>(PathComponent.configIndex[pathEntity]);
-      console.log("path", path, pathEntity)
       if (path === undefined) continue
 
       const spawnTime = PathComponent.starTime[pathEntity];
@@ -32,7 +31,6 @@ export const createPathMovementSystem = () => {
       for (const point of path) {
         targetTime += point.delay * timeFactor
 
-        // console.log(aliveTime, targetTime)
         if (aliveTime < targetTime) {
           const relativeTime = (aliveTime - prevPointAbsTime) / point.delay
 
