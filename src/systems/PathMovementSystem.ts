@@ -1,4 +1,4 @@
-import {defineQuery} from 'bitecs';
+import {defineQuery, exitQuery} from 'bitecs';
 import { TransformComponent } from '../components/TransformComponent';
 import {World} from '../main';
 import { EnemyComponent } from '../components/EnemyComponent';
@@ -9,6 +9,7 @@ import {lerp} from '../utils/math';
 
 export const createPathMovementSystem = () => {
   const pathQuery = defineQuery([TransformComponent, EnemyComponent, PathComponent]);
+  const pathExitQuery = exitQuery(pathQuery);
 
   return (world: World) => {
     const {time: {elapsed}} = world;
@@ -44,6 +45,11 @@ export const createPathMovementSystem = () => {
         prevPointAbsTime = targetTime
       }
     }
+
+    for (const entity of pathExitQuery(world)) {
+      configManager.remove(PathComponent.configIndex[entity]);
+    }
+
     return world;
   }
 }

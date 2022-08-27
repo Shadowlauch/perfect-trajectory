@@ -1,4 +1,4 @@
-import {defineQuery} from 'bitecs';
+import {defineQuery, exitQuery} from 'bitecs';
 import {TransformComponent} from '../components/TransformComponent';
 import {World} from '../main';
 import {spawnBullet} from '../configs/bullets/spawnBullet';
@@ -9,6 +9,7 @@ import {BulletSpawnConfig} from '../configs/bullets/spawn/BulletSpawnConfig';
 
 export const createBulletSpawnSystem = () => {
   const bulletSpawnQuery = defineQuery([TransformComponent, BulletSpawnComponent]);
+  const bulletSpawnExitQuery = exitQuery(bulletSpawnQuery);
 
   return (world: World) => {
     const {time: {elapsed, delta}} = world;
@@ -16,14 +17,14 @@ export const createBulletSpawnSystem = () => {
       const config = configManager.get<BulletSpawnConfig>(BulletSpawnComponent.configIndex[bulletSpawn]);
       const spawnTime = BulletSpawnComponent.startTime[bulletSpawn];
       const startTime = elapsed - spawnTime - (config.startDelay ?? 0);
-      const lifeTime = elapsed - spawnTime
+      const lifeTime = elapsed - spawnTime;
 
       if (startTime < 0) continue;
 
       const timePerLoop = (config.burstDelay * config.burstCount) + (config.loopDelay ?? 0);
       const intraLoopTime = lifeTime % timePerLoop;
       const loopedTimes = Math.floor(lifeTime / timePerLoop);
-      const infiniteLoop = typeof config.loop === "boolean" && config.loop;
+      const infiniteLoop = typeof config.loop === 'boolean' && config.loop;
       const loopTimes = config.loop === false ? 0 : config.loop;
 
       if (!infiniteLoop && loopTimes <= loopedTimes) continue;
@@ -31,7 +32,7 @@ export const createBulletSpawnSystem = () => {
       if (intraLoopTime - delta <= 0) config.onLoop?.(world, bulletSpawn);
 
       const currentBurstCount = Math.floor(intraLoopTime / config.burstDelay);
-      if (currentBurstCount < config.burstCount && (intraLoopTime - (currentBurstCount * config.burstDelay) - delta) <= 0){
+      if (currentBurstCount < config.burstCount && (intraLoopTime - (currentBurstCount * config.burstDelay) - delta) <= 0) {
         const bulletSpawns = config.onBurst(world, bulletSpawn, currentBurstCount);
         for (const bulletSpawn of bulletSpawns) {
           const bullet = spawnBullet(world, bulletSpawn.x, bulletSpawn.y, bulletSpawn.rotation, bulletSpawn.speed);
@@ -41,9 +42,13 @@ export const createBulletSpawnSystem = () => {
           BulletComponent.damage[bullet] = 1;
         }
       }
-
-
     }
+
+
+    for (const entity of bulletSpawnExitQuery(world)) {
+      configManager.remove(BulletSpawnComponent.configIndex[entity]);
+    }
+
     return world;
-  }
-}
+  };
+};

@@ -1,5 +1,5 @@
 import {World} from '../main';
-import {defineQuery, enterQuery, removeComponent} from 'bitecs';
+import {defineQuery, enterQuery, exitQuery, removeComponent} from 'bitecs';
 import {TweenComponent, TweenConfig} from '../components/TweenComponent';
 import {configManager} from '../configs/ConfigManager';
 import {lerp} from '../utils/math';
@@ -8,6 +8,7 @@ import {lerp} from '../utils/math';
 export const createTweenSystem = () => {
   const tweenQuery = defineQuery([TweenComponent]);
   const enterTweenQuery = enterQuery(tweenQuery);
+  const exitTweenQuery = exitQuery(tweenQuery);
 
   return (world: World) => {
     const {time: {elapsed, delta}} = world;
@@ -62,6 +63,10 @@ export const createTweenSystem = () => {
         config.onComplete?.(tweenEntity);
         removeComponent(world, TweenComponent, tweenEntity, true);
       }
+    }
+
+    for (const entity of exitTweenQuery(world)) {
+      configManager.remove(TweenComponent.tweenConfigIndex[entity]);
     }
 
     return world;

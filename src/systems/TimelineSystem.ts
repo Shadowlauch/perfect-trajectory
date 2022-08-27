@@ -1,4 +1,4 @@
-import {defineQuery, enterQuery} from 'bitecs';
+import {defineQuery, enterQuery, exitQuery} from 'bitecs';
 import {World} from '../main';
 import {TimelineComponent, Timeline} from '../components/TimelineComponent';
 import {configManager} from '../configs/ConfigManager';
@@ -6,6 +6,7 @@ import {configManager} from '../configs/ConfigManager';
 export const createTimelineSystem = () => {
   const timelineQuery = defineQuery([TimelineComponent]);
   const timelineEnterQuery = enterQuery(timelineQuery);
+  const timelineExitQuery = exitQuery(timelineQuery);
 
   const initializeTimelines = (world: World) => {
     for (const timeline of timelineEnterQuery(world)) {
@@ -47,6 +48,11 @@ export const createTimelineSystem = () => {
         } else break;
       }
     }
+
+    for (const entity of timelineExitQuery(world)) {
+      configManager.remove(TimelineComponent.configIndex[entity]);
+    }
+
     return world;
   }
 }
