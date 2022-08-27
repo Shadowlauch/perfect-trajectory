@@ -1,6 +1,6 @@
 import {Application, Container, Graphics} from 'pixi.js';
 import './style.css';
-import {addComponent, addEntity, createWorld, IWorld, pipe} from 'bitecs';
+import {addEntity, createWorld, IWorld, pipe} from 'bitecs';
 import {createMovementSystem} from './systems/MovementSystem';
 import {createTimeSystem} from './systems/TimeSystem';
 import {createGraphicsCircleSystem} from './systems/GraphicsCircleSystem';
@@ -16,13 +16,12 @@ import {createBulletCleanUpSystem} from './systems/BulletCleanUpSystem';
 import {createMediaRecorder} from './utils/recordVideo';
 import {createBulletSpawnSystem} from './systems/BulletSpawnSystem';
 import {createPlayerShootSystem} from './systems/PlayerShootSystem';
-import {StageComponent} from './components/Stage';
+import {addStageComponent} from './components/StageComponent';
 import {createPathMovementSystem} from './systems/PathMovementSystem';
 import {entitySpawnerSystem} from './systems/EntitySpawnerSystem';
 import {createTimelineSystem} from './systems/TimelineSystem';
-import {TimelineComponent} from './components/Timeline';
-import {configManager} from './configs/ConfigManager';
-import {Stage0, Timeline} from './configs/stages/stage0/Stage0';
+import {addTimelineComponent} from './components/TimelineComponent';
+import {Stage0} from './configs/stages/stage0/Stage0';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
 import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
@@ -142,10 +141,8 @@ const pipeline = pipe(
 
 createPlayerEntity(world);
 const stage = addEntity(world);
-addComponent(world, StageComponent, stage);
-StageComponent.stageIndex[stage] = 0;
-addComponent(world, TimelineComponent, stage);
-TimelineComponent.configIndex[stage] = configManager.add<Timeline>(Stage0);
+addStageComponent(world, stage, 0);
+addTimelineComponent(world, stage, Stage0);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'p') {

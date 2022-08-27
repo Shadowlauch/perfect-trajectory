@@ -1,5 +1,5 @@
 import {defineQuery} from 'bitecs';
-import {Velocity} from '../components/Physics';
+import {VelocityComponent} from '../components/Physics';
 import {World} from '../main';
 import {PlayerComponent} from '../components/PlayerComponent';
 import Flatten from '@flatten-js/core';
@@ -27,8 +27,8 @@ export const createPlayerMovementSystem = () => {
     const {x: velX, y: velY} = dX !== 0 || dY !== 0 ? vector(dX, dY).normalize() : {x: 0, y: 0};
     const moveSpeed = 0.2;
 
-    Velocity.x[pid] = Math.abs(dX) * velX * moveSpeed;
-    Velocity.y[pid] = Math.abs(dY) * velY * moveSpeed;
+    VelocityComponent.x[pid] = Math.abs(dX) * velX * moveSpeed;
+    VelocityComponent.y[pid] = Math.abs(dY) * velY * moveSpeed;
 
 
     return world

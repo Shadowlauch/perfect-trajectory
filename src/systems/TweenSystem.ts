@@ -1,25 +1,9 @@
 import {World} from '../main';
 import {defineQuery, enterQuery, removeComponent} from 'bitecs';
-import {TweenComponent} from '../components/TweenComponent';
+import {TweenComponent, TweenConfig} from '../components/TweenComponent';
 import {configManager} from '../configs/ConfigManager';
 import {lerp} from '../utils/math';
 
-export interface TweenConfig {
-  delay?: number;
-  completeDelay?: number;
-  startValue: number;
-  endValue: number;
-  onInit?: (entity: number) => void;
-  onUpdate: (entity: number, currentValue: number) => void;
-  onLoop?: (entity: number) => void;
-  onComplete?: (entity: number) =>void;
-  loop?: number | boolean;
-  loopDelay?: number;
-  duration: number;
-  yoyo?: boolean;
-  yoyoEase?: (t: number) => number
-  ease?: (t: number) => number
-}
 
 export const createTweenSystem = () => {
   const tweenQuery = defineQuery([TweenComponent]);

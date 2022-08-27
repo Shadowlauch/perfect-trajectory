@@ -1,14 +1,14 @@
 import {defineQuery} from 'bitecs';
-import {Transform} from '../components/Transform';
+import {TransformComponent} from '../components/TransformComponent';
 import {World} from '../main';
 import {spawnBullet} from '../configs/bullets/spawnBullet';
-import {BulletComponent} from '../components/Bullet';
-import {BulletSpawnComponent} from '../components/BulletSpawn';
+import {BulletComponent} from '../components/BulletComponent';
+import {BulletSpawnComponent} from '../components/BulletSpawnComponent';
 import {configManager} from '../configs/ConfigManager';
 import {BulletSpawnConfig} from '../configs/bullets/spawn/BulletSpawnConfig';
 
 export const createBulletSpawnSystem = () => {
-  const bulletSpawnQuery = defineQuery([Transform, BulletSpawnComponent]);
+  const bulletSpawnQuery = defineQuery([TransformComponent, BulletSpawnComponent]);
 
   return (world: World) => {
     const {time: {elapsed, delta}} = world;

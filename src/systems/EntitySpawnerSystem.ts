@@ -1,13 +1,13 @@
 import { addComponent, defineDeserializer, defineQuery, defineSerializer, DESERIALIZE_MODE, hasComponent } from 'bitecs';
 import { EntityPrefabWorld, World } from '../main';
 import { EntitySpawner } from '../components/EntitySpawner';
-import { Transform } from '../components/Transform';
+import { TransformComponent } from '../components/TransformComponent';
 import { KillAfter, RemoveAttachment } from '../components/KillAfter';
 import { INT8MAX } from '../components/Common';
-import { AttachmentComponent } from '../components/Attachment';
+import { AttachmentComponent } from '../components/AttachmentComponent';
 
 export const entitySpawnerSystem = (epworld: EntityPrefabWorld) => {
-  const entitySpawnerQuery = defineQuery([Transform, EntitySpawner]);
+  const entitySpawnerQuery = defineQuery([TransformComponent, EntitySpawner]);
   // world is the main world, epworld holds premade entities for spawner to spawn
   // Copy from epworld into world
   const prefabSerializer = defineSerializer(epworld);

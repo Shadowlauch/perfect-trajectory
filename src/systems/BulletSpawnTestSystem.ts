@@ -1,9 +1,9 @@
 import {addEntity, addComponent} from 'bitecs';
-import {Velocity} from '../components/Physics';
-import {Transform} from '../components/Transform';
+import {VelocityComponent} from '../components/Physics';
+import {TransformComponent} from '../components/TransformComponent';
 import {World} from '../main';
-import {SpriteComponent} from '../components/Sprite';
-import {CollisionComponent} from '../components/Collision';
+import {SpriteComponent} from '../components/SpriteComponent';
+import {CollisionComponent} from '../components/CollisionComponent';
 import {spriteLoader} from '../loader/Loader';
 
 export const createBulletSpawnTestSystem = () => {
@@ -20,17 +20,17 @@ export const createBulletSpawnTestSystem = () => {
             // create the player tank
         const bullet = addEntity(world)
 
-        addComponent(world, Transform, bullet)
-        addComponent(world, Velocity, bullet)
+        addComponent(world, TransformComponent, bullet)
+        addComponent(world, VelocityComponent, bullet)
         addComponent(world, SpriteComponent, bullet);
         addComponent(world, CollisionComponent, bullet);
         SpriteComponent.spriteIndex[bullet] = spriteLoader.getIndex('bullet01');
         CollisionComponent.group[bullet] = 0b000001;
 
-        Transform.position.x[bullet] = -20
-        Transform.position.y[bullet] = y
-        Velocity.x[bullet] = 0.1
-        Velocity.y[bullet] = 0
+        TransformComponent.position.x[bullet] = -20
+        TransformComponent.position.y[bullet] = y
+        VelocityComponent.x[bullet] = 0.1
+        VelocityComponent.y[bullet] = 0
 
 
       }

@@ -1,14 +1,14 @@
 import {defineQuery} from 'bitecs';
-import { Transform } from '../components/Transform';
+import { TransformComponent } from '../components/TransformComponent';
 import {World} from '../main';
 import { EnemyComponent } from '../components/EnemyComponent';
 import {configManager} from '../configs/ConfigManager';
-import {PathComponent} from '../components/Path';
+import {PathComponent} from '../components/PathComponent';
 import {PathPoint} from '../configs/enemies/EnemyConfig';
 import {lerp} from '../utils/math';
 
 export const createPathMovementSystem = () => {
-  const pathQuery = defineQuery([Transform, EnemyComponent]);
+  const pathQuery = defineQuery([TransformComponent, EnemyComponent]);
 
   return (world: World) => {
     const {time: {elapsed}} = world;
@@ -34,9 +34,9 @@ export const createPathMovementSystem = () => {
           const relativeTime = (aliveTime - prevPointAbsTime) / point.delay
 
           const shiftX = lerp(prevPoint.x, point.x, relativeTime)
-          Transform.position.x[pathEntity] = PathComponent.startX[pathEntity] + shiftX
+          TransformComponent.position.x[pathEntity] = PathComponent.startX[pathEntity] + shiftX
           const shiftY = lerp(prevPoint.y, point.y, relativeTime)
-          Transform.position.y[pathEntity] = PathComponent.startY[pathEntity] + shiftY
+          TransformComponent.position.y[pathEntity] = PathComponent.startY[pathEntity] + shiftY
           break
         }
         prevPoint = point

@@ -1,6 +1,6 @@
 import {defineQuery, enterQuery} from 'bitecs';
 import {World} from '../main';
-import {TimelineComponent} from '../components/Timeline';
+import {TimelineComponent} from '../components/TimelineComponent';
 import {configManager} from '../configs/ConfigManager';
 import {Timeline} from '../configs/stages/stage0/Stage0';
 

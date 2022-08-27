@@ -1,12 +1,12 @@
 import { addEntity, addComponent } from 'bitecs';
 import { EntityPrefabWorld, World } from '../../../../main';
-import { Transform } from '../../../../components/Transform';
-import { AngularSpeed, Speed, Velocity} from '../../../../components/Physics';
+import { TransformComponent } from '../../../../components/TransformComponent';
+import { AngularSpeedComponent, SpeedComponent, VelocityComponent} from '../../../../components/Physics';
 import { EntitySpawner } from '../../../../components/EntitySpawner';
-import { SpriteComponent } from '../../../../components/Sprite';
-import { CollisionComponent } from '../../../../components/Collision';
-import  {BulletComponent } from '../../../../components/Bullet';
-import { AttachmentComponent } from '../../../../components/Attachment';
+import { SpriteComponent } from '../../../../components/SpriteComponent';
+import { CollisionComponent } from '../../../../components/CollisionComponent';
+import  {BulletComponent } from '../../../../components/BulletComponent';
+import { AttachmentComponent } from '../../../../components/AttachmentComponent';
 import {spriteLoader} from '../../../../loader/Loader';
 
 /** Generic spread-style shooter */
@@ -22,13 +22,13 @@ const arcShooter = (
   ): number[] => {
   // The actual bullet fired
   const bulletBlue = addEntity(epworld);
-  addComponent(epworld, Transform, bulletBlue);
-  addComponent(epworld, Velocity, bulletBlue);
-  addComponent(epworld, Speed, bulletBlue);
-  Transform.position.x[bulletBlue] = 0; // Initial displacement 0 means that
-  Transform.position.y[bulletBlue] = 0; // spawned entity will be spawned at location of spawner.
-  Transform.rotation[bulletBlue] = 0;   // Will be fired in direction of spawner.
-  Speed.val[bulletBlue] = 0.1;
+  addComponent(epworld, TransformComponent, bulletBlue);
+  addComponent(epworld, VelocityComponent, bulletBlue);
+  addComponent(epworld, SpeedComponent, bulletBlue);
+  TransformComponent.position.x[bulletBlue] = 0; // Initial displacement 0 means that
+  TransformComponent.position.y[bulletBlue] = 0; // spawned entity will be spawned at location of spawner.
+  TransformComponent.rotation[bulletBlue] = 0;   // Will be fired in direction of spawner.
+  SpeedComponent.val[bulletBlue] = 0.1;
   addComponent(epworld, SpriteComponent, bulletBlue);
   addComponent(epworld, CollisionComponent, bulletBlue);
   addComponent(epworld, BulletComponent, bulletBlue);
@@ -39,11 +39,11 @@ const arcShooter = (
 
   // Shoot short rapid-fire bursts
   const burst = addEntity(epworld);
-  addComponent(epworld, Transform, burst);
-  addComponent(epworld, Velocity, burst);
-  Transform.position.x[burst] = 0;
-  Transform.position.y[burst] = 0;
-  Transform.rotation[burst] = 0;
+  addComponent(epworld, TransformComponent, burst);
+  addComponent(epworld, VelocityComponent, burst);
+  TransformComponent.position.x[burst] = 0;
+  TransformComponent.position.y[burst] = 0;
+  TransformComponent.rotation[burst] = 0;
   // Spawn blue bullets
   addComponent(epworld, EntitySpawner, burst);
   EntitySpawner.templateEntity[burst] = bulletBlue;
@@ -60,11 +60,11 @@ const arcShooter = (
   for (let i = 0; i < burstBulletCount; i++) {
     // Loop through shooting of rapid fire bursts
     const bulletSpawner = addEntity(world);
-    addComponent(world, Transform, bulletSpawner);
-    addComponent(world, Velocity, bulletSpawner);
-    Transform.position.x[bulletSpawner] = 0;
-    Transform.position.y[bulletSpawner] = 0;
-    Transform.rotation[bulletSpawner] = -halfRotation + angleSpread*i;
+    addComponent(world, TransformComponent, bulletSpawner);
+    addComponent(world, VelocityComponent, bulletSpawner);
+    TransformComponent.position.x[bulletSpawner] = 0;
+    TransformComponent.position.y[bulletSpawner] = 0;
+    TransformComponent.rotation[bulletSpawner] = -halfRotation + angleSpread*i;
     // spawn bursts
     addComponent(world, EntitySpawner, bulletSpawner);
     EntitySpawner.templateEntity[bulletSpawner] = burst;
@@ -83,11 +83,11 @@ const arcShooter = (
 /** Creates a new entity that is a child for the given entity */
 const entityTracker = (world: World, entityToTrack: number): number => {
   const eid = addEntity(world);
-  addComponent(world, Transform, eid);
+  addComponent(world, TransformComponent, eid);
   addComponent(world, AttachmentComponent, eid);
-  Transform.position.x[eid] = 0;
-  Transform.position.y[eid] = 0;
-  Transform.rotation[eid] = 0;
+  TransformComponent.position.x[eid] = 0;
+  TransformComponent.position.y[eid] = 0;
+  TransformComponent.rotation[eid] = 0;
   AttachmentComponent.applyParentRotation[eid] = 1;
   AttachmentComponent.attachedTo[eid] = entityToTrack;
 
@@ -98,16 +98,16 @@ export const TestAttack01 = (world: World, epworld: EntityPrefabWorld, eid: numb
   // Track boss location
   const bossPos = entityTracker(world, eid);
   // Slowly rotate
-  addComponent(world, AngularSpeed, bossPos);
-  AngularSpeed.val[bossPos] = 0.01;
+  addComponent(world, AngularSpeedComponent, bossPos);
+  AngularSpeedComponent.val[bossPos] = 0.01;
 
   // Red orb orbits around boss's position
   const orbitingPet = addEntity(world);
-  addComponent(world, Transform, orbitingPet);
-  addComponent(world, Velocity, orbitingPet);
-  Transform.position.x[orbitingPet] = 50;
-  Transform.position.y[orbitingPet] = 0;
-  Transform.rotation[orbitingPet] = 0;
+  addComponent(world, TransformComponent, orbitingPet);
+  addComponent(world, VelocityComponent, orbitingPet);
+  TransformComponent.position.x[orbitingPet] = 50;
+  TransformComponent.position.y[orbitingPet] = 0;
+  TransformComponent.rotation[orbitingPet] = 0;
   addComponent(world, AttachmentComponent, orbitingPet);
   AttachmentComponent.attachedTo[orbitingPet] = bossPos;
   AttachmentComponent.applyParentRotation[orbitingPet] = 1;

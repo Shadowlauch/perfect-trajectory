@@ -1,15 +1,15 @@
 import {defineQuery, entityExists, exitQuery, hasComponent, removeEntity} from 'bitecs';
-import {Transform} from '../components/Transform';
+import {TransformComponent} from '../components/TransformComponent';
 import {EnemyComponent} from '../components/EnemyComponent';
 import {World} from '../main';
-import {StageComponent} from '../components/Stage';
-import {AttachmentComponent} from '../components/Attachment';
+import {StageComponent} from '../components/StageComponent';
+import {AttachmentComponent} from '../components/AttachmentComponent';
 import {EventListenerComponent, EventConfig, EventTypes} from '../components/EventListenerComponent';
 import {configManager} from '../configs/ConfigManager';
 
 export const createEnemyDeSpawnSystem = () => {
   const attachmentQuery = defineQuery([AttachmentComponent]);
-  const enemyQuery = defineQuery([Transform, EnemyComponent]);
+  const enemyQuery = defineQuery([TransformComponent, EnemyComponent]);
   const stageQuery = defineQuery([StageComponent]);
   const onDeathQuery = defineQuery([EventListenerComponent]);
   const exitStageQuery = exitQuery(stageQuery);

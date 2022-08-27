@@ -2,7 +2,7 @@ import {Container, Graphics} from 'pixi.js';
 import {defineQuery, enterQuery, entityExists, exitQuery, hasComponent} from 'bitecs';
 import {World} from '../../main';
 import {BossComponent} from '../../components/BossComponent';
-import {Transform} from '../../components/Transform';
+import {TransformComponent} from '../../components/TransformComponent';
 import {EnemyComponent} from '../../components/EnemyComponent';
 
 const color = 0xff0000;
@@ -36,8 +36,8 @@ export const createBossHpUiSystem = (ui: Container) => {
       const enemyId = BossComponent.stageEid[boss];
       container.visible = entityExists(world, enemyId) && hasComponent(world, EnemyComponent, enemyId);
 
-      container.x = Transform.position.x[enemyId];
-      container.y = Transform.position.y[enemyId];
+      container.x = TransformComponent.position.x[enemyId];
+      container.y = TransformComponent.position.y[enemyId];
 
       if (container.visible) {
         const hpRotation = (1 - (EnemyComponent.hp[enemyId] / EnemyComponent.maxHp[enemyId])) * Math.PI * 2 || Math.PI * 4;

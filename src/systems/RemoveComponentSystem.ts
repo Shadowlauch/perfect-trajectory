@@ -1,7 +1,7 @@
 import {defineQuery, removeComponent} from 'bitecs';
 import {World} from '../main';
 import { RemoveAttachment } from '../components/KillAfter';
-import { AttachmentComponent } from '../components/Attachment';
+import { AttachmentComponent } from '../components/AttachmentComponent';
 
 /** Remove components from an entity that has been marked with removal tags at the end of the frame. */
 export const removeComponentSystem = () => {

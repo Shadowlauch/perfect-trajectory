@@ -1,29 +1,29 @@
 import {defineQuery, hasComponent, Not} from 'bitecs';
-import {Transform} from '../components/Transform';
+import {TransformComponent} from '../components/TransformComponent';
 import {World} from '../main';
-import {AttachmentComponent} from '../components/Attachment';
+import {AttachmentComponent} from '../components/AttachmentComponent';
 
 export const referenceTransformSystem = () => {
-  const attachmentQuery = defineQuery([Transform, AttachmentComponent]);
-  const nonAttachedQuery = defineQuery([Transform, Not(AttachmentComponent)]);
+  const attachmentQuery = defineQuery([TransformComponent, AttachmentComponent]);
+  const nonAttachedQuery = defineQuery([TransformComponent, Not(AttachmentComponent)]);
   let done: number[] = [];
 
   const computeFinalPos = (eid: number) => {
     // Rotate local point about origin by theta, gets the displacement in parent's frame (if any)
     let c = 1;
     let s = 0;
-    let rotatedX = Transform.position.x[eid];
-    let rotatedY = Transform.position.y[eid];
-    if (Transform.frameRotation[eid] !== 0) {
-      s = Math.sin(Transform.frameRotation[eid]);
-      c = Math.cos(Transform.frameRotation[eid]);
+    let rotatedX = TransformComponent.position.x[eid];
+    let rotatedY = TransformComponent.position.y[eid];
+    if (TransformComponent.frameRotation[eid] !== 0) {
+      s = Math.sin(TransformComponent.frameRotation[eid]);
+      c = Math.cos(TransformComponent.frameRotation[eid]);
       [rotatedX, rotatedY] = [rotatedX * c - rotatedY * s, rotatedX * s + rotatedY * c];
     }
     // Offset own displacement by parent's displacement, gets the final global position
-    Transform.globalPosition.x[eid] = rotatedX + Transform.origin.x[eid];
-    Transform.globalPosition.y[eid] = rotatedY + Transform.origin.y[eid];
+    TransformComponent.globalPosition.x[eid] = rotatedX + TransformComponent.origin.x[eid];
+    TransformComponent.globalPosition.y[eid] = rotatedY + TransformComponent.origin.y[eid];
     // Resultant global rotation
-    Transform.globalRotation[eid] = Transform.rotation[eid] + Transform.frameRotation[eid];
+    TransformComponent.globalRotation[eid] = TransformComponent.rotation[eid] + TransformComponent.frameRotation[eid];
   };
 
   const updatePosition = (world: World, eid: number) => {
@@ -35,10 +35,10 @@ export const referenceTransformSystem = () => {
       updatePosition(world, pid);
 
       // Entity's local reference frame is parent's final transforms
-      Transform.origin.x[eid] = Transform.globalPosition.x[pid];
-      Transform.origin.y[eid] = Transform.globalPosition.y[pid];
+      TransformComponent.origin.x[eid] = TransformComponent.globalPosition.x[pid];
+      TransformComponent.origin.y[eid] = TransformComponent.globalPosition.y[pid];
       if (AttachmentComponent.applyParentRotation[eid]) {
-        Transform.frameRotation[eid] = Transform.globalRotation[pid];
+        TransformComponent.frameRotation[eid] = TransformComponent.globalRotation[pid];
       }
 
       // Compute final positions of this entity after all reference frame manipulations.

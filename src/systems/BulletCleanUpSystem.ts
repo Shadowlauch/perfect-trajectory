@@ -1,10 +1,10 @@
 import {defineQuery, removeEntity} from 'bitecs';
-import {Transform} from '../components/Transform';
+import {TransformComponent} from '../components/TransformComponent';
 import {World} from '../main';
-import {BulletComponent} from '../components/Bullet';
+import {BulletComponent} from '../components/BulletComponent';
 
 export const createBulletCleanUpSystem = () => {
-    const bulletQuery = defineQuery([Transform, BulletComponent]);
+    const bulletQuery = defineQuery([TransformComponent, BulletComponent]);
 
     return (world: World) => {
       const {size: {width, height}} = world;
@@ -12,8 +12,8 @@ export const createBulletCleanUpSystem = () => {
       const offset = 100;
       const bullets = bulletQuery(world);
       for (const bulletId of bullets) {
-        const x = Transform.globalPosition.x[bulletId];
-        const y = Transform.globalPosition.y[bulletId];
+        const x = TransformComponent.globalPosition.x[bulletId];
+        const y = TransformComponent.globalPosition.y[bulletId];
         if (x < -offset || x > width + offset || y < -offset || y > height + offset) removeEntity(world, bulletId);
 
       }

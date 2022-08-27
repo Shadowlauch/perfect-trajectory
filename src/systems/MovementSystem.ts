@@ -1,13 +1,13 @@
 import {defineQuery} from 'bitecs';
-import {Accel, AngularSpeed, Speed, Velocity} from '../components/Physics';
-import {Transform} from '../components/Transform';
+import {AccelComponent, AngularSpeedComponent, SpeedComponent, VelocityComponent} from '../components/Physics';
+import {TransformComponent} from '../components/TransformComponent';
 import {World} from '../main';
 
 export const createMovementSystem = () => {
-  const accelQuery = defineQuery([Accel, Speed]);
-  const angspdQuery = defineQuery([AngularSpeed, Transform]);
-  const speedQuery = defineQuery([Speed, Velocity, Transform]);
-  const movementQuery = defineQuery([Velocity, Transform]);
+  const accelQuery = defineQuery([AccelComponent, SpeedComponent]);
+  const angspdQuery = defineQuery([AngularSpeedComponent, TransformComponent]);
+  const speedQuery = defineQuery([SpeedComponent, VelocityComponent, TransformComponent]);
+  const movementQuery = defineQuery([VelocityComponent, TransformComponent]);
 
   return (world: World) => {
     const { time: { delta } } = world;
@@ -19,24 +19,24 @@ export const createMovementSystem = () => {
     // Modify higher order derivatives first
     for (let i = 0; i < accel.length; i++) {
       const eid = accel[i];
-      Speed.val[eid] += Accel.val[eid];
+      SpeedComponent.val[eid] += AccelComponent.val[eid];
     }
 
     for (let i = 0; i < angspd.length; i++) {
       const eid = angspd[i];
-      Transform.rotation[eid] += AngularSpeed.val[eid];
+      TransformComponent.rotation[eid] += AngularSpeedComponent.val[eid];
     }
 
     for (let i = 0; i < speed.length; i++) {
       const eid = speed[i];
-      Velocity.x[eid] = Math.cos(Transform.rotation[eid]) * Speed.val[eid];
-      Velocity.y[eid] = Math.sin(Transform.rotation[eid]) * Speed.val[eid];
+      VelocityComponent.x[eid] = Math.cos(TransformComponent.rotation[eid]) * SpeedComponent.val[eid];
+      VelocityComponent.y[eid] = Math.sin(TransformComponent.rotation[eid]) * SpeedComponent.val[eid];
     }
 
     for (let i = 0; i < move.length; i++) {
       const eid = move[i];
-      Transform.position.x[eid] += Velocity.x[eid] * delta;
-      Transform.position.y[eid] += Velocity.y[eid] * delta;
+      TransformComponent.position.x[eid] += VelocityComponent.x[eid] * delta;
+      TransformComponent.position.y[eid] += VelocityComponent.y[eid] * delta;
     }
     return world;
   }
