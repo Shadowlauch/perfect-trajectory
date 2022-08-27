@@ -1,8 +1,7 @@
 import {defineQuery, enterQuery} from 'bitecs';
 import {World} from '../main';
-import {TimelineComponent} from '../components/TimelineComponent';
+import {TimelineComponent, Timeline} from '../components/TimelineComponent';
 import {configManager} from '../configs/ConfigManager';
-import {Timeline} from '../configs/stages/stage0/Stage0';
 
 export const createTimelineSystem = () => {
   const timelineQuery = defineQuery([TimelineComponent]);
