@@ -21,7 +21,7 @@ import {createPathMovementSystem} from './systems/PathMovementSystem';
 import {entitySpawnerSystem} from './systems/EntitySpawnerSystem';
 import {createTimelineSystem} from './systems/TimelineSystem';
 import {addTimelineComponent} from './components/TimelineComponent';
-import {Stage0} from './configs/stages/stage0/Stage0';
+// import {Stage0} from './configs/stages/stage0/Stage0';
 import {createEnemyDeSpawnSystem} from './systems/EnemyDespawnSystem';
 import {createBossHpUiSystem} from './systems/ui/BossHpUiSystem';
 import {createInfoBoxSystem} from './systems/ui/InfoboxSystem';
