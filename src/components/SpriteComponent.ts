@@ -9,7 +9,8 @@ const spriteComponent = {
     spriteIndex: Types.ui16,
     darkG: Types.f32,
     darkB: Types.f32,
-    darkR: Types.f32
+    darkR: Types.f32,
+    alpha: Types.f32
 };
 
 /** Give the entity a graphic */
@@ -20,6 +21,7 @@ export const addSpriteComponent = (world: World, entity: number, key: string,
                                            options: Partial<Record<keyof SpriteOptions, number>> = {}) => {
     addComponent(world, SpriteComponent, entity);
     SpriteComponent.scale[entity] = 1;
+    SpriteComponent.alpha[entity] = 1;
 
     for (const [arg, value] of Object.entries(options)) {
         // @ts-ignore
@@ -41,6 +43,7 @@ export const addAnimatedSpriteComponent = (world: World, entity: number, key: st
                                            options: Partial<Record<keyof AnimatedSpriteOptions, number>>) => {
     addComponent(world, AnimatedSpriteComponent, entity);
     AnimatedSpriteComponent.scale[entity] = 1;
+    AnimatedSpriteComponent.alpha[entity] = 1;
 
     for (const [arg, value] of Object.entries(options)) {
         // @ts-ignore

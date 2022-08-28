@@ -36,6 +36,7 @@ export const createSpriteSystem = (container: Container) => {
       sprite.color.darkR = SpriteComponent.darkR[eid];
       sprite.color.darkG = SpriteComponent.darkG[eid];
       sprite.color.darkB = SpriteComponent.darkB[eid];
+      sprite.alpha = SpriteComponent.alpha[eid];
     }
 
     for (const eid of exitSpriteQuery(world)) {

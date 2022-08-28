@@ -13,6 +13,7 @@ const sprites: SpriteLoadConfig[] = [
   {key: 'player-test', url: '/sprites/characters/$silverstar.png', offsetX: 133, offsetY: 156},
   {key: 'enemy-test', url: '/sprites/characters/redgirl.png', offsetX: 82, offsetY: 200},
   {key: 'explosion', url: '/sprites/effects/explosion.json', offsetX: 64, offsetY: 64},
+  {key: 'characters.bullets.cards', url: '/sprites/characters/bullets/cards.json', offsetX: 16, offsetY: 16},
 ];
 
 class SpriteLoader {
@@ -87,6 +88,16 @@ class SpriteLoader {
             offsetX: sprite.offsetX ?? 0,
             offsetY: sprite.offsetY ?? 0,
           } as AnimationSpriteConfig);
+
+          for (const [key, texture] of Object.entries(sheet.textures)) {
+            console.log(texture.width, texture.height)
+            this.#addSprite({
+              texture,
+              key: `${sprite.key}.frame.${key}`,
+              offsetX: sprite.offsetX ?? 0,
+              offsetY: sprite.offsetY ?? 0,
+            } as SpriteConfig);
+          }
 
           for (const tag of tags) {
             this.#addSprite({

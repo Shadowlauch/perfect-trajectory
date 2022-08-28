@@ -16,6 +16,10 @@ export class ConfigManager {
   }
 
   remove(i: number) {
+    if (this.#emptyIndexes.includes(i)) {
+      console.warn(`Trying to remove index ${i} even though it is already deleted`);
+      return;
+    }
     this.#configs[i] = undefined;
     this.#emptyIndexes.push(i);
   }
