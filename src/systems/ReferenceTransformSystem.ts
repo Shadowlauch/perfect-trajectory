@@ -35,8 +35,10 @@ export const referenceTransformSystem = () => {
       updatePosition(world, pid);
 
       // Entity's local reference frame is parent's final transforms
-      TransformComponent.origin.x[eid] = TransformComponent.globalPosition.x[pid];
-      TransformComponent.origin.y[eid] = TransformComponent.globalPosition.y[pid];
+      if (AttachmentComponent.applyParentPosition[eid]) {
+        TransformComponent.origin.x[eid] = TransformComponent.globalPosition.x[pid];
+        TransformComponent.origin.y[eid] = TransformComponent.globalPosition.y[pid];
+      }
       if (AttachmentComponent.applyParentRotation[eid]) {
         TransformComponent.frameRotation[eid] = TransformComponent.globalRotation[pid];
       }

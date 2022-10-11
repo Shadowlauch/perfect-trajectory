@@ -140,7 +140,7 @@ const pipeline = pipe(
 );
 
 createPlayerEntity(world);
-startStage(world, 1);
+startStage(world, 0);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'p') {

@@ -10,10 +10,12 @@ export const AttachmentComponent = defineComponent({
     attachedTo: Types.eid,
     /** Boolean, if true, applies parent's rotation to local reference frame */
     applyParentRotation: Types.i8,
+    applyParentPosition: Types.i8
 });
 
-export const addAttachmentComponent = (world: World, entity: number, attachedTo: number, applyParentRotation = false) => {
+export const addAttachmentComponent = (world: World, entity: number, attachedTo: number, applyParentRotation = false, applyParentPosition = true) => {
     addComponent(world, AttachmentComponent, entity);
     AttachmentComponent.attachedTo[entity] = attachedTo;
     AttachmentComponent.applyParentRotation[entity] = !applyParentRotation ? 0 : 1;
+    AttachmentComponent.applyParentPosition[entity] = !applyParentPosition ? 0 : 1;
 };

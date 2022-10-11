@@ -8,6 +8,7 @@ export interface BulletSpawnConfig {
   loopDelay?: number;
   burstCount: number;
   burstDelay: number;
+  onStart?: LoopFunction;
   onLoop?: LoopFunction;
   onBurst: BurstFunction;
   onSpawn?: BulletSpawnCallback;

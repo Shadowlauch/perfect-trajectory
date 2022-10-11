@@ -29,7 +29,10 @@ export const createBulletSpawnSystem = () => {
 
       if (!infiniteLoop && loopTimes <= loopedTimes) continue;
 
-      if (intraLoopTime - delta <= 0) config.onLoop?.(world, bulletSpawn);
+      if (intraLoopTime - delta <= 0) {
+        if (loopedTimes === 0) config.onStart?.(world, bulletSpawn);
+        config.onLoop?.(world, bulletSpawn);
+      }
 
       const currentBurstCount = Math.floor(intraLoopTime / config.burstDelay);
       if (currentBurstCount < config.burstCount && (intraLoopTime - (currentBurstCount * config.burstDelay) - delta) <= 0) {
