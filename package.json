@@ -14,12 +14,12 @@
     "@types/bezier-js": "^4.1.0",
     "bezier-js": "^6.1.0",
     "bitecs": "^0.3.38",
-    "detect-collisions": "^6.0.2",
+    "detect-collisions": "^7.0.0",
     "just-curves": "^0.2.0",
-    "pixi-filters": "^4.1.6",
-    "pixi-heaven": "^0.3.1",
-    "pixi.js": "^6.4.2",
+    "pixi-filters": "^5.1.1",
+    "pixi.js": "^7.1.2",
     "typescript": "^4.6.4",
-    "vite": "^3.0.0"
+    "vite": "^4.1.1",
+    "vite-plugin-checker": "^0.5.5"
   }
 }

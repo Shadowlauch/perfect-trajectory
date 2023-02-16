@@ -1,6 +1,6 @@
 import {Application} from 'pixi.js';
 
-export const createMediaRecorder = (app: Application) => {
+export const createMediaRecorder = (app: Application<HTMLCanvasElement>) => {
   const videoStream = app.view.captureStream(30);
   const mediaRecorder = new MediaRecorder(videoStream);
 

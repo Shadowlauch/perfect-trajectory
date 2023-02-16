@@ -1,4 +1,4 @@
-import {Loader} from 'pixi.js';
+import {Assets, Spritesheet, Texture} from 'pixi.js';
 import {AnimationSpriteConfig, SpriteConfig, SpriteLoadConfig} from './SpriteConfig';
 
 const sprites: SpriteLoadConfig[] = [
@@ -23,15 +23,12 @@ class SpriteLoader {
   #currentIndex = 0;
   #spritesToLoad: SpriteLoadConfig[] = [];
 
-  loader: Loader;
 
   constructor() {
-    this.loader = new Loader();
   }
 
   add(sprite: SpriteLoadConfig) {
     this.#spritesToLoad.push(sprite);
-    this.loader.add(sprite.key, sprite.url);
   }
 
   getAnimationConfig(index: number): AnimationSpriteConfig;
@@ -69,67 +66,64 @@ class SpriteLoader {
   }
 
   async load() {
-    return new Promise<Loader>(resolve => this.loader.load((loader) => {
-      for (const sprite of this.#spritesToLoad) {
-        if (loader.resources[sprite.key].spritesheet) {
-          const sheet = loader.resources[sprite.key].spritesheet!;
-          // @ts-ignore
-          const tags = sheet.data.meta.frameTags as { name: string, from: number, to: number, direction: string }[];
+    const resources: [SpriteLoadConfig, any][] = await Promise.all(this.#spritesToLoad.map(async (l) => ([l, await Assets.load(l.url)])));
+
+    for (const [sprite, resource] of resources) {
+      if (resource instanceof Spritesheet) {
+        const sheet = resource!;
+        // @ts-ignore
+        const tags = sheet.data.meta.frameTags as { name: string, from: number, to: number, direction: string }[];
+        this.#addSprite({
+          frames: Object.entries(sheet.textures).map(([key, frame]) => {
+            return {
+              texture: frame,
+              key,
+              // @ts-ignore
+              duration: sheet.data.frames[key].duration ?? 0
+            };
+          }),
+          key: sprite.key + ".base",
+          offsetX: sprite.offsetX ?? 0,
+          offsetY: sprite.offsetY ?? 0,
+        } as AnimationSpriteConfig);
+
+        for (const [key, texture] of Object.entries<Texture>(sheet.textures)) {
+          console.log(texture.width, texture.height)
           this.#addSprite({
-            frames: Object.entries(sheet.textures).map(([key, frame]) => {
-              return {
-                texture: frame,
-                key,
-                // @ts-ignore
-                duration: sheet.data.frames[key].duration ?? 0
-              };
-            }),
-            key: sprite.key + ".base",
+            texture,
+            key: `${sprite.key}.frame.${key}`,
+            offsetX: sprite.offsetX ?? 0,
+            offsetY: sprite.offsetY ?? 0,
+          } as SpriteConfig);
+        }
+
+        for (const tag of tags) {
+          this.#addSprite({
+            frames: Object.entries(sheet.textures).slice(tag.from, tag.to + 1).map(([key, frame]) => {
+                return {
+                  texture: frame,
+                  key,
+                  // @ts-ignore
+                  duration: sheet.data.frames[key].duration ?? 0
+                };
+              }
+            ),
+            key: sprite.key + "." + tag.name,
             offsetX: sprite.offsetX ?? 0,
             offsetY: sprite.offsetY ?? 0,
           } as AnimationSpriteConfig);
-
-          for (const [key, texture] of Object.entries(sheet.textures)) {
-            console.log(texture.width, texture.height)
-            this.#addSprite({
-              texture,
-              key: `${sprite.key}.frame.${key}`,
-              offsetX: sprite.offsetX ?? 0,
-              offsetY: sprite.offsetY ?? 0,
-            } as SpriteConfig);
-          }
-
-          for (const tag of tags) {
-            this.#addSprite({
-              frames: Object.entries(sheet.textures).slice(tag.from, tag.to + 1).map(([key, frame]) => {
-                  return {
-                    texture: frame,
-                    key,
-                    // @ts-ignore
-                    duration: sheet.data.frames[key].duration ?? 0
-                  };
-                }
-              ),
-              key: sprite.key + "." + tag.name,
-              offsetX: sprite.offsetX ?? 0,
-              offsetY: sprite.offsetY ?? 0,
-            } as AnimationSpriteConfig);
-          }
-        } else {
-          this.#addSprite({
-            texture: loader.resources[sprite.key].texture!,
-            key: sprite.key,
-            offsetX: sprite.offsetX ?? 0,
-            offsetY: sprite.offsetY ?? 0,
-          });
         }
+      } else {
+        this.#addSprite({
+          texture: resource,
+          key: sprite.key,
+          offsetX: sprite.offsetX ?? 0,
+          offsetY: sprite.offsetY ?? 0,
+        });
       }
+    }
 
-      this.#spritesToLoad = [];
-
-
-      resolve(loader);
-    }));
+    this.#spritesToLoad = [];
   }
 }
 

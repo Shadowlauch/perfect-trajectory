@@ -52,10 +52,7 @@ export interface EntityPrefabWorld extends IWorld {
 
 const size = {width: 1280, height: 800};
 const gameSize = {width: 640, height: 760, padding: 20};
-const app = new Application({
-  ...size,
-  powerPreference: 'high-performance'
-});
+const app = new Application<HTMLCanvasElement>(size);
 document.body.appendChild(app.view);
 const mediaRecorder = createMediaRecorder(app);
 
